@@ -17,13 +17,23 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Nom de l'application", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Accueil", "Index", "Home")</li>
-                    <li>@Html.ActionLink("À propos de", "About", "Home")</li>
+                    <li>@Html.ActionLink("Information", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Contenu", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li id="dropdownNav">
+                        @Html.DropDownList("Pays",new SelectList(new List<SelectListItem>
+                        {
+                            new SelectListItem { Selected = true, Text = string.Empty, Value = "0"},
+                            new SelectListItem { Selected = false, Text = "Homeowner", Value = "1"},
+                            new SelectListItem { Selected = false, Text = "Contractor", Value = "3"},
+
+                        }),"Select Gender",new { @class = "form-control" })
+
+                    </li>
                 </ul>
             </div>
         </div>

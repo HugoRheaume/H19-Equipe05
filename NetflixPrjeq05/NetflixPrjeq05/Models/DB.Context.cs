@@ -25,5 +25,6 @@ namespace NetflixPrjeq05.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Serie> Serie { get; set; }
     }
 }
