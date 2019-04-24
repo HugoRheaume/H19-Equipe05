@@ -15,9 +15,61 @@ namespace NetflixPrjeq05.Controllers
         private Entities db = new Entities();
 
         // GET: Contenus
-        public ActionResult Index()
+        public ActionResult Index(int paysId)
         {
-            return View(db.Contenu.ToList());
+            ViewBag.Region = new List<string>() { "Ca", "Fr", "Eu" };
+            var queryContenu = from C in db.Contenu
+                               join CR in db.ContenuPays on C.ContenuId equals CR.ContenuId
+                               where CR.PaysId == paysId
+                               orderby C.Date_de_sortie descending
+                               select C;
+
+            List<Contenu> colContenu = queryContenu.ToList();
+
+            //foreach (var contenu in colContenu)
+            //{
+            //    var queryLangue = from C in db.Contenu
+            //                      join CL in db.Contenu_Langue on C.contenuId equals CL.contenuId
+            //                      join L in db.Langue on CL.langueId equals L.langueId
+            //                      where C.contenuId = contenu.contenuId
+            //                      select L;
+            //}
+
+
+            //List<Contenu> colContenu = db.Contenu.ToList().OrderByDescending(c => c.Date_de_sortie);
+
+
+            return View(colContenu);
+
+        }
+
+        public ActionResult Contenu()
+        {
+            int paysId = 2;
+            ViewBag.Region = new List<string>() { "Ca", "Fr", "Eu" };
+            var queryContenu = from C in db.Contenu
+                               join CR in db.ContenuPays on C.ContenuId equals CR.ContenuId
+                               where CR.PaysId == paysId
+                               orderby C.Date_de_sortie descending
+                               select C;
+
+            List<Contenu> colContenu = queryContenu.ToList();
+
+            //foreach (var contenu in colContenu)
+            //{
+            //    var queryLangue = from C in db.Contenu
+            //                      join CL in db.Contenu_Langue on C.contenuId equals CL.contenuId
+            //                      join L in db.Langue on CL.langueId equals L.langueId
+            //                      where C.contenuId = contenu.contenuId
+            //                      select L;
+            //}
+
+
+            //List<Contenu> colContenu = db.Contenu.ToList().OrderByDescending(c => c.Date_de_sortie);
+
+
+            return View(colContenu);
+
         }
 
         // GET: Contenus/Details/5
