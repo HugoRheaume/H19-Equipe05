@@ -21,9 +21,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Information", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Contenu", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Information", "Index", "Contenus")</li>
+                    <li>@Html.ActionLink("Contenu", "Contenu", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Contenus")</li>
                     <li id="dropdownNav">
                         @Html.DropDownList("Pays",new SelectList(ViewBag.Region),"Choisir un pays",new { @class = "form-control" })
 

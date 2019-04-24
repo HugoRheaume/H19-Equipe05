@@ -4,12 +4,12 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="H19_Projet_eq05Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Contenu">
           <Key>
-            <PropertyRef Name="id" />
+            <PropertyRef Name="ContenuId" />
           </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContenuId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Affiche" Type="nvarchar" MaxLength="255" />
           <Property Name="Cote_moyenne" Type="numeric" Precision="2" Scale="1" />
@@ -20,74 +20,173 @@
           <Property Name="Date_de_sortie" Type="date" />
           <Property Name="Duree" Type="int" />
         </EntityType>
-        <EntityType Name="Serie">
+        <EntityType Name="ContenuPays">
           <Key>
-            <PropertyRef Name="id" />
+            <PropertyRef Name="ContenuPaysId" />
           </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="nom" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="ContenuPaysId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContenuId" Type="int" Nullable="false" />
+          <Property Name="PaysId" Type="int" Nullable="false" />
         </EntityType>
-        <EntityContainer Name="H19_Projet_eq05ModelStoreContainer">
-          <EntitySet Name="Contenu" EntityType="Self.Contenu" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Serie" EntityType="Self.Serie" Schema="dbo" store:Type="Tables" />
+        <EntityType Name="Pays">
+          <Key>
+            <PropertyRef Name="PaysId" />
+          </Key>
+          <Property Name="PaysId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code_ISO3166" Type="nvarchar" MaxLength="3" />
+          <Property Name="Nom" Type="nvarchar" MaxLength="16" />
+        </EntityType>
+        <Association Name="FK__ContenuPa__Conte__5165187F">
+          <End Role="Contenu" Type="Self.Contenu" Multiplicity="1" />
+          <End Role="ContenuPays" Type="Self.ContenuPays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contenu">
+              <PropertyRef Name="ContenuId" />
+            </Principal>
+            <Dependent Role="ContenuPays">
+              <PropertyRef Name="ContenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ContenuPa__PaysI__52593CB8">
+          <End Role="Pays" Type="Self.Pays" Multiplicity="1" />
+          <End Role="ContenuPays" Type="Self.ContenuPays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pays">
+              <PropertyRef Name="PaysId" />
+            </Principal>
+            <Dependent Role="ContenuPays">
+              <PropertyRef Name="PaysId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBModelStoreContainer">
+          <EntitySet Name="Contenu" EntityType="Self.Contenu" Schema="Contenus" store:Type="Tables" />
+          <EntitySet Name="ContenuPays" EntityType="Self.ContenuPays" Schema="Contenus" store:Type="Tables" />
+          <EntitySet Name="Pays" EntityType="Self.Pays" Schema="Contenus" store:Type="Tables" />
+          <AssociationSet Name="FK__ContenuPa__Conte__5165187F" Association="Self.FK__ContenuPa__Conte__5165187F">
+            <End Role="Contenu" EntitySet="Contenu" />
+            <End Role="ContenuPays" EntitySet="ContenuPays" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ContenuPa__PaysI__52593CB8" Association="Self.FK__ContenuPa__PaysI__52593CB8">
+            <End Role="Pays" EntitySet="Pays" />
+            <End Role="ContenuPays" EntitySet="ContenuPays" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="H19_Projet_eq05Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="H19_Projet_eq05Entities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="Serie" EntityType="H19_Projet_eq05Model.Serie" />
-          <EntitySet Name="Contenu" EntityType="H19_Projet_eq05Model.Contenu" />
-        </EntityContainer>
-        <EntityType Name="Serie">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="nom" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-        </EntityType>
+      <Schema Namespace="DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Contenu">
           <Key>
-            <PropertyRef Name="id" />
+            <PropertyRef Name="ContenuId" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContenuId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Affiche" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Cote_moyenne" Type="Decimal" Precision="2" Scale="1" />
           <Property Name="Nombre_de_Cote" Type="Int32" />
           <Property Name="Status" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Budget" Type="Int32" />
-          <Property Name="Titre_Original" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Titre_Original" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Date_de_sortie" Type="DateTime" Precision="0" />
           <Property Name="Duree" Type="Int32" />
+          <NavigationProperty Name="ContenuPays" Relationship="Self.FK__ContenuPa__Conte__5165187F" FromRole="Contenu" ToRole="ContenuPays" />
         </EntityType>
+        <EntityType Name="ContenuPays">
+          <Key>
+            <PropertyRef Name="ContenuPaysId" />
+          </Key>
+          <Property Name="ContenuPaysId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContenuId" Type="Int32" Nullable="false" />
+          <Property Name="PaysId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Contenu" Relationship="Self.FK__ContenuPa__Conte__5165187F" FromRole="ContenuPays" ToRole="Contenu" />
+          <NavigationProperty Name="Pays" Relationship="Self.FK__ContenuPa__PaysI__52593CB8" FromRole="ContenuPays" ToRole="Pays" />
+        </EntityType>
+        <EntityType Name="Pays">
+          <Key>
+            <PropertyRef Name="PaysId" />
+          </Key>
+          <Property Name="PaysId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code_ISO3166" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="Nom" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ContenuPays" Relationship="Self.FK__ContenuPa__PaysI__52593CB8" FromRole="Pays" ToRole="ContenuPays" />
+        </EntityType>
+        <Association Name="FK__ContenuPa__Conte__5165187F">
+          <End Role="Contenu" Type="Self.Contenu" Multiplicity="1" />
+          <End Role="ContenuPays" Type="Self.ContenuPays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contenu">
+              <PropertyRef Name="ContenuId" />
+            </Principal>
+            <Dependent Role="ContenuPays">
+              <PropertyRef Name="ContenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ContenuPa__PaysI__52593CB8">
+          <End Role="Pays" Type="Self.Pays" Multiplicity="1" />
+          <End Role="ContenuPays" Type="Self.ContenuPays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pays">
+              <PropertyRef Name="PaysId" />
+            </Principal>
+            <Dependent Role="ContenuPays">
+              <PropertyRef Name="PaysId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Contenu" EntityType="Self.Contenu" />
+          <EntitySet Name="ContenuPays" EntityType="Self.ContenuPays" />
+          <EntitySet Name="Pays" EntityType="Self.Pays" />
+          <AssociationSet Name="FK__ContenuPa__Conte__5165187F" Association="Self.FK__ContenuPa__Conte__5165187F">
+            <End Role="Contenu" EntitySet="Contenu" />
+            <End Role="ContenuPays" EntitySet="ContenuPays" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ContenuPa__PaysI__52593CB8" Association="Self.FK__ContenuPa__PaysI__52593CB8">
+            <End Role="Pays" EntitySet="Pays" />
+            <End Role="ContenuPays" EntitySet="ContenuPays" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="H19_Projet_eq05ModelStoreContainer" CdmEntityContainer="H19_Projet_eq05Entities" >
-          <EntitySetMapping Name="Serie">
-            <EntityTypeMapping TypeName="H19_Projet_eq05Model.Serie">
-              <MappingFragment StoreEntitySet="Serie">
-                <ScalarProperty Name="nom" ColumnName="nom" />
-                <ScalarProperty Name="id" ColumnName="id" />
+        <EntityContainerMapping StorageEntityContainer="DBModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Contenu">
+            <EntityTypeMapping TypeName="DBModel.Contenu">
+              <MappingFragment StoreEntitySet="Contenu">
+                <ScalarProperty Name="ContenuId" ColumnName="ContenuId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Affiche" ColumnName="Affiche" />
+                <ScalarProperty Name="Cote_moyenne" ColumnName="Cote_moyenne" />
+                <ScalarProperty Name="Nombre_de_Cote" ColumnName="Nombre_de_Cote" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Budget" ColumnName="Budget" />
+                <ScalarProperty Name="Titre_Original" ColumnName="Titre_Original" />
+                <ScalarProperty Name="Date_de_sortie" ColumnName="Date_de_sortie" />
+                <ScalarProperty Name="Duree" ColumnName="Duree" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Contenu">
-            <EntityTypeMapping TypeName="H19_Projet_eq05Model.Contenu">
-              <MappingFragment StoreEntitySet="Contenu">
-                <ScalarProperty Name="Duree" ColumnName="Duree" />
-                <ScalarProperty Name="Date_de_sortie" ColumnName="Date_de_sortie" />
-                <ScalarProperty Name="Titre_Original" ColumnName="Titre_Original" />
-                <ScalarProperty Name="Budget" ColumnName="Budget" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Nombre_de_Cote" ColumnName="Nombre_de_Cote" />
-                <ScalarProperty Name="Cote_moyenne" ColumnName="Cote_moyenne" />
-                <ScalarProperty Name="Affiche" ColumnName="Affiche" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="id" ColumnName="id" />
+          <EntitySetMapping Name="ContenuPays">
+            <EntityTypeMapping TypeName="DBModel.ContenuPays">
+              <MappingFragment StoreEntitySet="ContenuPays">
+                <ScalarProperty Name="ContenuPaysId" ColumnName="ContenuPaysId" />
+                <ScalarProperty Name="ContenuId" ColumnName="ContenuId" />
+                <ScalarProperty Name="PaysId" ColumnName="PaysId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pays">
+            <EntityTypeMapping TypeName="DBModel.Pays">
+              <MappingFragment StoreEntitySet="Pays">
+                <ScalarProperty Name="PaysId" ColumnName="PaysId" />
+                <ScalarProperty Name="Code_ISO3166" ColumnName="Code_ISO3166" />
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

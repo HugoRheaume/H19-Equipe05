@@ -12,9 +12,19 @@ namespace NetflixPrjeq05.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Serie
+    public partial class Pays
     {
-        public int id { get; set; }
-        public string nom { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Pays()
+        {
+            this.ContenuPays = new HashSet<ContenuPays>();
+        }
+    
+        public int PaysId { get; set; }
+        public string Code_ISO3166 { get; set; }
+        public string Nom { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ContenuPays> ContenuPays { get; set; }
     }
 }

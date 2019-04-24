@@ -13,10 +13,10 @@ namespace NetflixPrjeq05.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class H19_Projet_eq05Entities : DbContext
+    public partial class Entities : DbContext
     {
-        public H19_Projet_eq05Entities()
-            : base("name=H19_Projet_eq05Entities")
+        public Entities()
+            : base("name=Entities")
         {
         }
     
@@ -25,7 +25,8 @@ namespace NetflixPrjeq05.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Serie> Serie { get; set; }
         public virtual DbSet<Contenu> Contenu { get; set; }
+        public virtual DbSet<ContenuPays> ContenuPays { get; set; }
+        public virtual DbSet<Pays> Pays { get; set; }
     }
 }

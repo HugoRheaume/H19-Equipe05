@@ -14,7 +14,13 @@ namespace NetflixPrjeq05.Models
     
     public partial class Contenu
     {
-        public int id { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Contenu()
+        {
+            this.ContenuPays = new HashSet<ContenuPays>();
+        }
+    
+        public int ContenuId { get; set; }
         public string Description { get; set; }
         public string Affiche { get; set; }
         public Nullable<decimal> Cote_moyenne { get; set; }
@@ -24,5 +30,8 @@ namespace NetflixPrjeq05.Models
         public string Titre_Original { get; set; }
         public Nullable<System.DateTime> Date_de_sortie { get; set; }
         public Nullable<int> Duree { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ContenuPays> ContenuPays { get; set; }
     }
 }
