@@ -7,24 +7,11 @@
 
 <h2>Contenu</h2>
 <p>
-
-
-
-   
-
-
-
-
     @using (Html.BeginForm("Contenu", "Contenus", FormMethod.Post))
     {
     @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();"})
     
     }
-
-
-
-
-
 </p>
 
 
