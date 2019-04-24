@@ -164,7 +164,7 @@
     <Compile Include="Models\Contenu.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ContenuPays.cs">
+    <Compile Include="Models\ContenuLangue.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ContenuVM.cs" />
@@ -182,6 +182,15 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DB.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Langue.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OffrePays.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OriginePays.cs">
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Pays.cs">
       <DependentUpon>DB.tt</DependentUpon>

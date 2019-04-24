@@ -17,7 +17,9 @@ namespace NetflixPrjeq05.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Contenu()
         {
-            this.ContenuPays = new HashSet<ContenuPays>();
+            this.ContenuLangue = new HashSet<ContenuLangue>();
+            this.OffrePays = new HashSet<OffrePays>();
+            this.OriginePays = new HashSet<OriginePays>();
         }
     
         public int ContenuId { get; set; }
@@ -32,6 +34,10 @@ namespace NetflixPrjeq05.Models
         public Nullable<int> Duree { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ContenuPays> ContenuPays { get; set; }
+        public virtual ICollection<ContenuLangue> ContenuLangue { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OffrePays> OffrePays { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OriginePays> OriginePays { get; set; }
     }
 }

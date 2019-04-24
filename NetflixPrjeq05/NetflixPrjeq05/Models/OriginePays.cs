@@ -12,9 +12,9 @@ namespace NetflixPrjeq05.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ContenuPays
+    public partial class OriginePays
     {
-        public int ContenuPaysId { get; set; }
+        public int OriginePaysId { get; set; }
         public int ContenuId { get; set; }
         public int PaysId { get; set; }
     

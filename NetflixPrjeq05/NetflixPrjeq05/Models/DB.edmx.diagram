@@ -6,11 +6,18 @@
     <edmx:Diagrams>
       <Diagram DiagramId="05f6b54d820c4ae3b35fc3d5d6dca8f3" Name="Diagram1">
         <EntityTypeShape EntityType="DBModel.Contenu" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.ContenuPays" Width="1.5" PointX="3" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBModel.Pays" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
-        <AssociationConnector Association="DBModel.FK__ContenuPa__Conte__5165187F" ManuallyRouted="false" />
-        <AssociationConnector Association="DBModel.FK__ContenuPa__PaysI__52593CB8" ManuallyRouted="false" />
-      </Diagram>
+        <EntityTypeShape EntityType="DBModel.Langue" Width="1.5" PointX="0.75" PointY="9" />
+        <EntityTypeShape EntityType="DBModel.OffrePays" Width="1.5" PointX="6" PointY="3.375" />
+        <EntityTypeShape EntityType="DBModel.OriginePays" Width="1.5" PointX="6" PointY="6.375" />
+        <EntityTypeShape EntityType="DBModel.ContenuLangue" Width="1.5" PointX="3" PointY="4.875" />
+        <AssociationConnector Association="DBModel.FK__ContenuLa__Conte__5812160E" />
+        <AssociationConnector Association="DBModel.FK__OffrePays__Conte__5AEE82B9" />
+        <AssociationConnector Association="DBModel.FK__OriginePa__Conte__5FB337D6" />
+        <AssociationConnector Association="DBModel.FK__ContenuLa__Langu__571DF1D5" />
+        <EntityTypeShape EntityType="DBModel.Pays" Width="1.5" PointX="8.375" PointY="0.875" />
+        <AssociationConnector Association="DBModel.FK__OffrePays__PaysI__5BE2A6F2" />
+        <AssociationConnector Association="DBModel.FK__OriginePa__PaysI__60A75C0F" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
