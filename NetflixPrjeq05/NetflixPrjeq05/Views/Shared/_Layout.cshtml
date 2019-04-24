@@ -25,13 +25,7 @@
                     <li>@Html.ActionLink("Contenu", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     <li id="dropdownNav">
-                        @Html.DropDownList("Pays",new SelectList(new List<SelectListItem>
-                        {
-                            new SelectListItem { Selected = true, Text = string.Empty, Value = "0"},
-                            new SelectListItem { Selected = false, Text = "Homeowner", Value = "1"},
-                            new SelectListItem { Selected = false, Text = "Contractor", Value = "3"},
-
-                        }),"Select Gender",new { @class = "form-control" })
+                        @Html.DropDownList("Pays",new SelectList(ViewBag.Region),"Choisir une region",new { @class = "form-control" })
 
                     </li>
                 </ul>
