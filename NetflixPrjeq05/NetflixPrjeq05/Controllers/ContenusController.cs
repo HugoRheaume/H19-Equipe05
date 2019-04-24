@@ -19,7 +19,7 @@ namespace NetflixPrjeq05.Controllers
         {
             ViewBag.Region = new List<string>() { "Ca", "Fr", "Eu" };
             var queryContenu = from C in db.Contenu
-                               join CR in db.ContenuPays on C.ContenuId equals CR.ContenuId
+                               join CR in db.OffrePays on C.ContenuId equals CR.ContenuId
                                where CR.PaysId == paysId
                                orderby C.Date_de_sortie descending
                                select C;
@@ -31,7 +31,8 @@ namespace NetflixPrjeq05.Controllers
 
         public ActionResult Contenu()
         {
-            int paysId = 2;          
+            int paysId = 2;
+            List<Pays> pay6s = db.Pays.ToList();
             ViewBag.Region = new SelectList(db.Pays.ToList(), "PaysId", "Nom");
             //ViewBag.Region = new List<string>() { "Ca", "Fr", "Eu" };
             //var queryContenu = from C in db.Contenu

@@ -19,6 +19,7 @@ namespace NetflixPrjeq05.Models
             DateSortie = (DateTime)contenu.Date_de_sortie;           
             Duree = (int)contenu.Duree;           
             Titre = contenu.Titre_Original;
+            Affiche = contenu.Affiche;
         }
 
 

@@ -250,8 +250,6 @@
         <EntityType Name="ContenuLangue">
           <Key>
             <PropertyRef Name="ContenuLangueId" />
-            <PropertyRef Name="ContenuId" />
-            <PropertyRef Name="LangueId" />
           </Key>
           <Property Name="ContenuLangueId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ContenuId" Type="Int32" Nullable="false" />
