@@ -17,7 +17,7 @@ namespace NetflixPrjeq05.Models
         {                
             ContenuId = contenu.ContenuId;                        
             DateSortie = (DateTime)contenu.Date_de_sortie;           
-            Duree = (int)contenu.Duree;           
+            Duree = contenu.Duree;           
             Titre = contenu.Titre_Original;
             Affiche = contenu.Affiche;
         }
@@ -41,7 +41,7 @@ namespace NetflixPrjeq05.Models
 
         public string Description { get; set; }
 
-        public int Duree { get; set; }
+        public int? Duree { get; set; }
     
         public int NbCotes { get; set; }
                      

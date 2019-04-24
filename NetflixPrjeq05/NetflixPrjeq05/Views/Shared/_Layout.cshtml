@@ -24,7 +24,19 @@
                     <li>@Html.ActionLink("Information", "Index", "Contenus")</li>
                     <li>@Html.ActionLink("Contenu", "Contenu", "Contenus")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Contenus")</li>
-                  
+                    <li id="dropdownNav">
+                        @Html.DropDownList("viewDataItem", ViewBag.Pays as SelectList,
+                        new { onchange = "SelectionChanged()"
+                        } )
+
+                        <script>
+                            function SelectionChanged()
+                            {
+                                var url = '@Html.Raw(Url.Action("Contenu", "Contenus", new { paysId=2}))';
+                                window.location = url;
+                            }
+                        </script>
+                    </li>
                 </ul>
             </div>
         </div>
