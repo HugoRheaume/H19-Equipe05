@@ -70,6 +70,51 @@ namespace NetflixPrjeq05.Controllers
             return View(colContenuVM); //colContenu
 
         }
+        [HttpPost]
+        public ActionResult Contenu(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            ViewBag.Pays = new SelectList(db.Pays.ToList(), "PaysId", "Nom",id.Value);
+            var queryContenu = from C in db.Contenu
+                               join CR in db.OffrePays on C.ContenuId equals CR.ContenuId
+                               where CR.PaysId == id.Value
+                               orderby C.Date_de_sortie descending
+                               select C;
+
+            List<Contenu> colContenu = queryContenu.ToList();
+            List<ContenuVM> colContenuVM = new List<ContenuVM>();
+            foreach (var item in colContenu)
+            {
+                ContenuVM contenuVM = new ContenuVM(item);
+                //Doublages              
+                var queryLangue = from C in db.Contenu
+                                  join CL in db.ContenuLangue on C.ContenuId equals CL.ContenuId
+                                  join L in db.Langue on CL.LangueId equals L.LangueId
+                                  where C.ContenuId == contenuVM.ContenuId
+                                  select L.Nom;
+                string langues = string.Join(", ", queryLangue.ToList());
+                contenuVM.Doublages = langues;
+                //Origines             
+                var queryOrigines = from C in db.Contenu
+                                    join OP in db.OriginePays on C.ContenuId equals OP.ContenuId
+                                    join L in db.Pays on OP.PaysId equals L.PaysId
+                                    where C.ContenuId == contenuVM.ContenuId
+                                    select L.Nom;
+                string origines = string.Join(", ", queryOrigines.ToList());
+                contenuVM.Origines = origines;
+                colContenuVM.Add(contenuVM);
+            }
+            /*
+            if (contenu == null)
+            {
+                return HttpNotFound();
+            }*/
+            return View(colContenuVM);
+        }
 
         // GET: Contenus/Details/5
         public ActionResult Details(int? id)
