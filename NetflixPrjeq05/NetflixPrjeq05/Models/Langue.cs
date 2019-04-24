@@ -12,22 +12,19 @@ namespace NetflixPrjeq05.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Pays
+    public partial class Langue
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Pays()
+        public Langue()
         {
-            this.OffrePays = new HashSet<OffrePays>();
-            this.OriginePays = new HashSet<OriginePays>();
+            this.ContenuLangue = new HashSet<ContenuLangue>();
         }
     
-        public int PaysId { get; set; }
-        public string Code_ISO3166 { get; set; }
+        public int LangueId { get; set; }
+        public string Code_ISO639 { get; set; }
         public string Nom { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OffrePays> OffrePays { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OriginePays> OriginePays { get; set; }
+        public virtual ICollection<ContenuLangue> ContenuLangue { get; set; }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Contenu">
           <Key>
             <PropertyRef Name="ContenuId" />
@@ -20,11 +20,35 @@
           <Property Name="Date_de_sortie" Type="date" />
           <Property Name="Duree" Type="int" />
         </EntityType>
-        <EntityType Name="ContenuPays">
+        <EntityType Name="ContenuLangue">
           <Key>
-            <PropertyRef Name="ContenuPaysId" />
+            <PropertyRef Name="ContenuLangueId" />
           </Key>
-          <Property Name="ContenuPaysId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContenuLangueId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContenuId" Type="int" Nullable="false" />
+          <Property Name="LangueId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Langue">
+          <Key>
+            <PropertyRef Name="LangueId" />
+          </Key>
+          <Property Name="LangueId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code_ISO639" Type="nvarchar" MaxLength="2" />
+          <Property Name="Nom" Type="nvarchar" MaxLength="17" />
+        </EntityType>
+        <EntityType Name="OffrePays">
+          <Key>
+            <PropertyRef Name="OffrePaysId" />
+          </Key>
+          <Property Name="OffrePaysId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContenuId" Type="int" Nullable="false" />
+          <Property Name="PaysId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OriginePays">
+          <Key>
+            <PropertyRef Name="OriginePaysId" />
+          </Key>
+          <Property Name="OriginePaysId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ContenuId" Type="int" Nullable="false" />
           <Property Name="PaysId" Type="int" Nullable="false" />
         </EntityType>
@@ -36,45 +60,111 @@
           <Property Name="Code_ISO3166" Type="nvarchar" MaxLength="3" />
           <Property Name="Nom" Type="nvarchar" MaxLength="16" />
         </EntityType>
-        <Association Name="FK__ContenuPa__Conte__5165187F">
+        <Association Name="FK__ContenuLa__Conte__5812160E">
           <End Role="Contenu" Type="Self.Contenu" Multiplicity="1" />
-          <End Role="ContenuPays" Type="Self.ContenuPays" Multiplicity="*" />
+          <End Role="ContenuLangue" Type="Self.ContenuLangue" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Contenu">
               <PropertyRef Name="ContenuId" />
             </Principal>
-            <Dependent Role="ContenuPays">
+            <Dependent Role="ContenuLangue">
               <PropertyRef Name="ContenuId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ContenuPa__PaysI__52593CB8">
+        <Association Name="FK__ContenuLa__Langu__571DF1D5">
+          <End Role="Langue" Type="Self.Langue" Multiplicity="1" />
+          <End Role="ContenuLangue" Type="Self.ContenuLangue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Langue">
+              <PropertyRef Name="LangueId" />
+            </Principal>
+            <Dependent Role="ContenuLangue">
+              <PropertyRef Name="LangueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OffrePays__Conte__5AEE82B9">
+          <End Role="Contenu" Type="Self.Contenu" Multiplicity="1" />
+          <End Role="OffrePays" Type="Self.OffrePays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contenu">
+              <PropertyRef Name="ContenuId" />
+            </Principal>
+            <Dependent Role="OffrePays">
+              <PropertyRef Name="ContenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OffrePays__PaysI__5BE2A6F2">
           <End Role="Pays" Type="Self.Pays" Multiplicity="1" />
-          <End Role="ContenuPays" Type="Self.ContenuPays" Multiplicity="*" />
+          <End Role="OffrePays" Type="Self.OffrePays" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Pays">
               <PropertyRef Name="PaysId" />
             </Principal>
-            <Dependent Role="ContenuPays">
+            <Dependent Role="OffrePays">
+              <PropertyRef Name="PaysId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OriginePa__Conte__5FB337D6">
+          <End Role="Contenu" Type="Self.Contenu" Multiplicity="1" />
+          <End Role="OriginePays" Type="Self.OriginePays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contenu">
+              <PropertyRef Name="ContenuId" />
+            </Principal>
+            <Dependent Role="OriginePays">
+              <PropertyRef Name="ContenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OriginePa__PaysI__60A75C0F">
+          <End Role="Pays" Type="Self.Pays" Multiplicity="1" />
+          <End Role="OriginePays" Type="Self.OriginePays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pays">
+              <PropertyRef Name="PaysId" />
+            </Principal>
+            <Dependent Role="OriginePays">
               <PropertyRef Name="PaysId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="DBModelStoreContainer">
           <EntitySet Name="Contenu" EntityType="Self.Contenu" Schema="Contenus" store:Type="Tables" />
-          <EntitySet Name="ContenuPays" EntityType="Self.ContenuPays" Schema="Contenus" store:Type="Tables" />
+          <EntitySet Name="ContenuLangue" EntityType="Self.ContenuLangue" Schema="Contenus" store:Type="Tables" />
+          <EntitySet Name="Langue" EntityType="Self.Langue" Schema="Contenus" store:Type="Tables" />
+          <EntitySet Name="OffrePays" EntityType="Self.OffrePays" Schema="Contenus" store:Type="Tables" />
+          <EntitySet Name="OriginePays" EntityType="Self.OriginePays" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="Pays" EntityType="Self.Pays" Schema="Contenus" store:Type="Tables" />
-          <AssociationSet Name="FK__ContenuPa__Conte__5165187F" Association="Self.FK__ContenuPa__Conte__5165187F">
+          <AssociationSet Name="FK__ContenuLa__Conte__5812160E" Association="Self.FK__ContenuLa__Conte__5812160E">
             <End Role="Contenu" EntitySet="Contenu" />
-            <End Role="ContenuPays" EntitySet="ContenuPays" />
+            <End Role="ContenuLangue" EntitySet="ContenuLangue" />
           </AssociationSet>
-          <AssociationSet Name="FK__ContenuPa__PaysI__52593CB8" Association="Self.FK__ContenuPa__PaysI__52593CB8">
+          <AssociationSet Name="FK__ContenuLa__Langu__571DF1D5" Association="Self.FK__ContenuLa__Langu__571DF1D5">
+            <End Role="Langue" EntitySet="Langue" />
+            <End Role="ContenuLangue" EntitySet="ContenuLangue" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OffrePays__Conte__5AEE82B9" Association="Self.FK__OffrePays__Conte__5AEE82B9">
+            <End Role="Contenu" EntitySet="Contenu" />
+            <End Role="OffrePays" EntitySet="OffrePays" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OffrePays__PaysI__5BE2A6F2" Association="Self.FK__OffrePays__PaysI__5BE2A6F2">
             <End Role="Pays" EntitySet="Pays" />
-            <End Role="ContenuPays" EntitySet="ContenuPays" />
+            <End Role="OffrePays" EntitySet="OffrePays" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OriginePa__Conte__5FB337D6" Association="Self.FK__OriginePa__Conte__5FB337D6">
+            <End Role="Contenu" EntitySet="Contenu" />
+            <End Role="OriginePays" EntitySet="OriginePays" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OriginePa__PaysI__60A75C0F" Association="Self.FK__OriginePa__PaysI__60A75C0F">
+            <End Role="Pays" EntitySet="Pays" />
+            <End Role="OriginePays" EntitySet="OriginePays" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -92,18 +182,131 @@
           <Property Name="Titre_Original" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Date_de_sortie" Type="DateTime" Precision="0" />
           <Property Name="Duree" Type="Int32" />
-          <NavigationProperty Name="ContenuPays" Relationship="Self.FK__ContenuPa__Conte__5165187F" FromRole="Contenu" ToRole="ContenuPays" />
+          <NavigationProperty Name="ContenuLangue" Relationship="DBModel.FK__ContenuLa__Conte__5812160E" FromRole="Contenu" ToRole="ContenuLangue" />
+          <NavigationProperty Name="OffrePays" Relationship="DBModel.FK__OffrePays__Conte__5AEE82B9" FromRole="Contenu" ToRole="OffrePays" />
+          <NavigationProperty Name="OriginePays" Relationship="DBModel.FK__OriginePa__Conte__5FB337D6" FromRole="Contenu" ToRole="OriginePays" />
         </EntityType>
-        <EntityType Name="ContenuPays">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Contenu" EntityType="Self.Contenu" />
+          <EntitySet Name="Langue" EntityType="DBModel.Langue" />
+          <EntitySet Name="OffrePays" EntityType="DBModel.OffrePays" />
+          <EntitySet Name="OriginePays" EntityType="DBModel.OriginePays" />
+          <EntitySet Name="ContenuLangue" EntityType="DBModel.ContenuLangue" />
+          <AssociationSet Name="FK__ContenuLa__Conte__5812160E" Association="DBModel.FK__ContenuLa__Conte__5812160E">
+            <End Role="Contenu" EntitySet="Contenu" />
+            <End Role="ContenuLangue" EntitySet="ContenuLangue" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OffrePays__Conte__5AEE82B9" Association="DBModel.FK__OffrePays__Conte__5AEE82B9">
+            <End Role="Contenu" EntitySet="Contenu" />
+            <End Role="OffrePays" EntitySet="OffrePays" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OriginePa__Conte__5FB337D6" Association="DBModel.FK__OriginePa__Conte__5FB337D6">
+            <End Role="Contenu" EntitySet="Contenu" />
+            <End Role="OriginePays" EntitySet="OriginePays" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ContenuLa__Langu__571DF1D5" Association="DBModel.FK__ContenuLa__Langu__571DF1D5">
+            <End Role="Langue" EntitySet="Langue" />
+            <End Role="ContenuLangue" EntitySet="ContenuLangue" />
+          </AssociationSet>
+          <EntitySet Name="Pays" EntityType="DBModel.Pays" />
+          <AssociationSet Name="FK__OffrePays__PaysI__5BE2A6F2" Association="DBModel.FK__OffrePays__PaysI__5BE2A6F2">
+            <End Role="Pays" EntitySet="Pays" />
+            <End Role="OffrePays" EntitySet="OffrePays" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OriginePa__PaysI__60A75C0F" Association="DBModel.FK__OriginePa__PaysI__60A75C0F">
+            <End Role="Pays" EntitySet="Pays" />
+            <End Role="OriginePays" EntitySet="OriginePays" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Langue">
           <Key>
-            <PropertyRef Name="ContenuPaysId" />
+            <PropertyRef Name="LangueId" />
           </Key>
-          <Property Name="ContenuPaysId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LangueId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code_ISO639" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="Nom" Type="String" MaxLength="17" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ContenuLangue" Relationship="DBModel.FK__ContenuLa__Langu__571DF1D5" FromRole="Langue" ToRole="ContenuLangue" />
+        </EntityType>
+        <EntityType Name="OffrePays">
+          <Key>
+            <PropertyRef Name="OffrePaysId" />
+          </Key>
+          <Property Name="OffrePaysId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ContenuId" Type="Int32" Nullable="false" />
           <Property Name="PaysId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Contenu" Relationship="Self.FK__ContenuPa__Conte__5165187F" FromRole="ContenuPays" ToRole="Contenu" />
-          <NavigationProperty Name="Pays" Relationship="Self.FK__ContenuPa__PaysI__52593CB8" FromRole="ContenuPays" ToRole="Pays" />
+          <NavigationProperty Name="Contenu" Relationship="DBModel.FK__OffrePays__Conte__5AEE82B9" FromRole="OffrePays" ToRole="Contenu" />
+          <NavigationProperty Name="Pays" Relationship="DBModel.FK__OffrePays__PaysI__5BE2A6F2" FromRole="OffrePays" ToRole="Pays" />
         </EntityType>
+        <EntityType Name="OriginePays">
+          <Key>
+            <PropertyRef Name="OriginePaysId" />
+          </Key>
+          <Property Name="OriginePaysId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContenuId" Type="Int32" Nullable="false" />
+          <Property Name="PaysId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Contenu" Relationship="DBModel.FK__OriginePa__Conte__5FB337D6" FromRole="OriginePays" ToRole="Contenu" />
+          <NavigationProperty Name="Pays" Relationship="DBModel.FK__OriginePa__PaysI__60A75C0F" FromRole="OriginePays" ToRole="Pays" />
+        </EntityType>
+        <EntityType Name="ContenuLangue">
+          <Key>
+            <PropertyRef Name="ContenuLangueId" />
+            <PropertyRef Name="ContenuId" />
+            <PropertyRef Name="LangueId" />
+          </Key>
+          <Property Name="ContenuLangueId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContenuId" Type="Int32" Nullable="false" />
+          <Property Name="LangueId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Contenu" Relationship="DBModel.FK__ContenuLa__Conte__5812160E" FromRole="ContenuLangue" ToRole="Contenu" />
+          <NavigationProperty Name="Langue" Relationship="DBModel.FK__ContenuLa__Langu__571DF1D5" FromRole="ContenuLangue" ToRole="Langue" />
+        </EntityType>
+        <Association Name="FK__ContenuLa__Conte__5812160E">
+          <End Type="DBModel.Contenu" Role="Contenu" Multiplicity="1" />
+          <End Type="DBModel.ContenuLangue" Role="ContenuLangue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contenu">
+              <PropertyRef Name="ContenuId" />
+            </Principal>
+            <Dependent Role="ContenuLangue">
+              <PropertyRef Name="ContenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OffrePays__Conte__5AEE82B9">
+          <End Type="DBModel.Contenu" Role="Contenu" Multiplicity="1" />
+          <End Type="DBModel.OffrePays" Role="OffrePays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contenu">
+              <PropertyRef Name="ContenuId" />
+            </Principal>
+            <Dependent Role="OffrePays">
+              <PropertyRef Name="ContenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OriginePa__Conte__5FB337D6">
+          <End Type="DBModel.Contenu" Role="Contenu" Multiplicity="1" />
+          <End Type="DBModel.OriginePays" Role="OriginePays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contenu">
+              <PropertyRef Name="ContenuId" />
+            </Principal>
+            <Dependent Role="OriginePays">
+              <PropertyRef Name="ContenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ContenuLa__Langu__571DF1D5">
+          <End Type="DBModel.Langue" Role="Langue" Multiplicity="1" />
+          <End Type="DBModel.ContenuLangue" Role="ContenuLangue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Langue">
+              <PropertyRef Name="LangueId" />
+            </Principal>
+            <Dependent Role="ContenuLangue">
+              <PropertyRef Name="LangueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityType Name="Pays">
           <Key>
             <PropertyRef Name="PaysId" />
@@ -111,46 +314,34 @@
           <Property Name="PaysId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Code_ISO3166" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
           <Property Name="Nom" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ContenuPays" Relationship="Self.FK__ContenuPa__PaysI__52593CB8" FromRole="Pays" ToRole="ContenuPays" />
+          <NavigationProperty Name="OffrePays" Relationship="DBModel.FK__OffrePays__PaysI__5BE2A6F2" FromRole="Pays" ToRole="OffrePays" />
+          <NavigationProperty Name="OriginePays" Relationship="DBModel.FK__OriginePa__PaysI__60A75C0F" FromRole="Pays" ToRole="OriginePays" />
         </EntityType>
-        <Association Name="FK__ContenuPa__Conte__5165187F">
-          <End Role="Contenu" Type="Self.Contenu" Multiplicity="1" />
-          <End Role="ContenuPays" Type="Self.ContenuPays" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Contenu">
-              <PropertyRef Name="ContenuId" />
-            </Principal>
-            <Dependent Role="ContenuPays">
-              <PropertyRef Name="ContenuId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__ContenuPa__PaysI__52593CB8">
-          <End Role="Pays" Type="Self.Pays" Multiplicity="1" />
-          <End Role="ContenuPays" Type="Self.ContenuPays" Multiplicity="*" />
+        <Association Name="FK__OffrePays__PaysI__5BE2A6F2">
+          <End Type="DBModel.Pays" Role="Pays" Multiplicity="1" />
+          <End Type="DBModel.OffrePays" Role="OffrePays" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Pays">
               <PropertyRef Name="PaysId" />
             </Principal>
-            <Dependent Role="ContenuPays">
+            <Dependent Role="OffrePays">
               <PropertyRef Name="PaysId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Contenu" EntityType="Self.Contenu" />
-          <EntitySet Name="ContenuPays" EntityType="Self.ContenuPays" />
-          <EntitySet Name="Pays" EntityType="Self.Pays" />
-          <AssociationSet Name="FK__ContenuPa__Conte__5165187F" Association="Self.FK__ContenuPa__Conte__5165187F">
-            <End Role="Contenu" EntitySet="Contenu" />
-            <End Role="ContenuPays" EntitySet="ContenuPays" />
-          </AssociationSet>
-          <AssociationSet Name="FK__ContenuPa__PaysI__52593CB8" Association="Self.FK__ContenuPa__PaysI__52593CB8">
-            <End Role="Pays" EntitySet="Pays" />
-            <End Role="ContenuPays" EntitySet="ContenuPays" />
-          </AssociationSet>
-        </EntityContainer>
-      </Schema>
+        <Association Name="FK__OriginePa__PaysI__60A75C0F">
+          <End Type="DBModel.Pays" Role="Pays" Multiplicity="1" />
+          <End Type="DBModel.OriginePays" Role="OriginePays" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pays">
+              <PropertyRef Name="PaysId" />
+            </Principal>
+            <Dependent Role="OriginePays">
+              <PropertyRef Name="PaysId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -172,21 +363,48 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ContenuPays">
-            <EntityTypeMapping TypeName="DBModel.ContenuPays">
-              <MappingFragment StoreEntitySet="ContenuPays">
-                <ScalarProperty Name="ContenuPaysId" ColumnName="ContenuPaysId" />
-                <ScalarProperty Name="ContenuId" ColumnName="ContenuId" />
+          <EntitySetMapping Name="Langue">
+            <EntityTypeMapping TypeName="DBModel.Langue">
+              <MappingFragment StoreEntitySet="Langue">
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="Code_ISO639" ColumnName="Code_ISO639" />
+                <ScalarProperty Name="LangueId" ColumnName="LangueId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OffrePays">
+            <EntityTypeMapping TypeName="DBModel.OffrePays">
+              <MappingFragment StoreEntitySet="OffrePays">
                 <ScalarProperty Name="PaysId" ColumnName="PaysId" />
+                <ScalarProperty Name="ContenuId" ColumnName="ContenuId" />
+                <ScalarProperty Name="OffrePaysId" ColumnName="OffrePaysId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OriginePays">
+            <EntityTypeMapping TypeName="DBModel.OriginePays">
+              <MappingFragment StoreEntitySet="OriginePays">
+                <ScalarProperty Name="PaysId" ColumnName="PaysId" />
+                <ScalarProperty Name="ContenuId" ColumnName="ContenuId" />
+                <ScalarProperty Name="OriginePaysId" ColumnName="OriginePaysId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ContenuLangue">
+            <EntityTypeMapping TypeName="DBModel.ContenuLangue">
+              <MappingFragment StoreEntitySet="ContenuLangue">
+                <ScalarProperty Name="LangueId" ColumnName="LangueId" />
+                <ScalarProperty Name="ContenuId" ColumnName="ContenuId" />
+                <ScalarProperty Name="ContenuLangueId" ColumnName="ContenuLangueId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Pays">
             <EntityTypeMapping TypeName="DBModel.Pays">
               <MappingFragment StoreEntitySet="Pays">
-                <ScalarProperty Name="PaysId" ColumnName="PaysId" />
-                <ScalarProperty Name="Code_ISO3166" ColumnName="Code_ISO3166" />
                 <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="Code_ISO3166" ColumnName="Code_ISO3166" />
+                <ScalarProperty Name="PaysId" ColumnName="PaysId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
