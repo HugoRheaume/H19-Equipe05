@@ -5,6 +5,21 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="H19_Projet_eq05Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Contenu">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Affiche" Type="nvarchar" MaxLength="255" />
+          <Property Name="Cote_moyenne" Type="numeric" Precision="2" Scale="1" />
+          <Property Name="Nombre_de_Cote" Type="int" />
+          <Property Name="Status" Type="nvarchar" MaxLength="255" />
+          <Property Name="Budget" Type="int" />
+          <Property Name="Titre_Original" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Date_de_sortie" Type="date" />
+          <Property Name="Duree" Type="int" />
+        </EntityType>
         <EntityType Name="Serie">
           <Key>
             <PropertyRef Name="id" />
@@ -13,6 +28,7 @@
           <Property Name="nom" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityContainer Name="H19_Projet_eq05ModelStoreContainer">
+          <EntitySet Name="Contenu" EntityType="Self.Contenu" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Serie" EntityType="Self.Serie" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -21,6 +37,7 @@
       <Schema Namespace="H19_Projet_eq05Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="H19_Projet_eq05Entities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="Serie" EntityType="H19_Projet_eq05Model.Serie" />
+          <EntitySet Name="Contenu" EntityType="H19_Projet_eq05Model.Contenu" />
         </EntityContainer>
         <EntityType Name="Serie">
           <Key>
@@ -28,6 +45,21 @@
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="nom" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Contenu">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Affiche" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Cote_moyenne" Type="Decimal" Precision="2" Scale="1" />
+          <Property Name="Nombre_de_Cote" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Budget" Type="Int32" />
+          <Property Name="Titre_Original" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Date_de_sortie" Type="DateTime" Precision="0" />
+          <Property Name="Duree" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -39,6 +71,22 @@
             <EntityTypeMapping TypeName="H19_Projet_eq05Model.Serie">
               <MappingFragment StoreEntitySet="Serie">
                 <ScalarProperty Name="nom" ColumnName="nom" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Contenu">
+            <EntityTypeMapping TypeName="H19_Projet_eq05Model.Contenu">
+              <MappingFragment StoreEntitySet="Contenu">
+                <ScalarProperty Name="Duree" ColumnName="Duree" />
+                <ScalarProperty Name="Date_de_sortie" ColumnName="Date_de_sortie" />
+                <ScalarProperty Name="Titre_Original" ColumnName="Titre_Original" />
+                <ScalarProperty Name="Budget" ColumnName="Budget" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Nombre_de_Cote" ColumnName="Nombre_de_Cote" />
+                <ScalarProperty Name="Cote_moyenne" ColumnName="Cote_moyenne" />
+                <ScalarProperty Name="Affiche" ColumnName="Affiche" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

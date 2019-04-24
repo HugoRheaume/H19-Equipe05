@@ -156,10 +156,14 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ContenusController.cs" />
     <Compile Include="Controllers\DeleteThisSeriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Contenu.cs">
+      <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DB.Context.cs">
       <AutoGen>True</AutoGen>
@@ -243,6 +247,11 @@
     <Content Include="Views\DeleteThisSeries\Details.cshtml" />
     <Content Include="Views\DeleteThisSeries\Edit.cshtml" />
     <Content Include="Views\DeleteThisSeries\Index.cshtml" />
+    <Content Include="Views\Contenus\Create.cshtml" />
+    <Content Include="Views\Contenus\Delete.cshtml" />
+    <Content Include="Views\Contenus\Details.cshtml" />
+    <Content Include="Views\Contenus\Edit.cshtml" />
+    <Content Include="Views\Contenus\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

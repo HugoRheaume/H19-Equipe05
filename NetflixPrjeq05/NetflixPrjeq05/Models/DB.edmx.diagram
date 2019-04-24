@@ -6,6 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="d3054645f98f4c2a83a256d51e48f66b" Name="Diagram1" >
         <EntityTypeShape EntityType="H19_Projet_eq05Model.Serie" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="H19_Projet_eq05Model.Contenu" Width="1.5" PointX="3.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

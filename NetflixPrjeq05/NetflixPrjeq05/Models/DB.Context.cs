@@ -26,5 +26,6 @@ namespace NetflixPrjeq05.Models
         }
     
         public virtual DbSet<Serie> Serie { get; set; }
+        public virtual DbSet<Contenu> Contenu { get; set; }
     }
 }
