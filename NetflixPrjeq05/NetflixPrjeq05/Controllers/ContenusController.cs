@@ -30,17 +30,17 @@ namespace NetflixPrjeq05.Controllers
         }
 
         public ActionResult Contenu()
-        {
-            //int paysId = 2;           
+        {      
+            
             ViewBag.Pays = new SelectList(db.Pays.ToList(), "PaysId", "Nom");
-            //ViewBag.Pays = new List<string>() { "Ca", "Fr", "Eu" };
-            //var queryContenu = from C in db.Contenu
-            //                   join CR in db.ContenuPays on C.ContenuId equals CR.ContenuId
-            //                   where CR.PaysId == paysId
-            //                   orderby C.Date_de_sortie descending
-            //                   select C;
 
-            List<Contenu> colContenu = db.Contenu.ToList();//queryContenu.ToList();
+            var queryContenu = from C in db.Contenu
+                               join CR in db.OffrePays on C.ContenuId equals CR.ContenuId
+                               where CR.PaysId == 1
+                               orderby C.Date_de_sortie descending
+                               select C;
+
+            List<Contenu> colContenu = queryContenu.ToList();
             List<ContenuVM> colContenuVM = new List<ContenuVM>();
             foreach (var item in colContenu)
             {
@@ -62,12 +62,8 @@ namespace NetflixPrjeq05.Controllers
                 string origines = string.Join(", ", queryOrigines.ToList());
                 contenuVM.Origines = origines;
                 colContenuVM.Add(contenuVM);
-            }
-           
-            //List<Contenu> colContenu = db.Contenu.ToList().OrderByDescending(c => c.Date_de_sortie);
-
-
-            return View(colContenuVM); //colContenu
+            }        
+            return View(colContenuVM);
 
         }
         [HttpPost]
