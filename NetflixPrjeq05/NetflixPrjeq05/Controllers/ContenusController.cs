@@ -7,14 +7,14 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using NetflixPrjeq05.Models;
-
 namespace NetflixPrjeq05.Controllers
 {
     public class ContenusController : Controller
     {
         private Entities db = new Entities();
+        private static int currentPaysId;
 
-        // GET: Contenus
+        //========================================================================================================================================================
         public ActionResult Index(int paysId)
         {
             ViewBag.Region = new List<string>() { "Ca", "Fr", "Eu" };
@@ -28,11 +28,11 @@ namespace NetflixPrjeq05.Controllers
             return View(colContenu);
 
         }
-
+        //============================================================================CONTENU============================================================================
         public ActionResult Contenu()
         {      
             
-            ViewBag.Pays = new SelectList(db.Pays.ToList(), "PaysId", "Nom");
+            ViewBag.Pays = new SelectList(db.Pays.ToList(), "PaysId", "Nom", currentPaysId);
 
             var queryContenu = from C in db.Contenu
                                join CR in db.OffrePays on C.ContenuId equals CR.ContenuId
@@ -81,6 +81,7 @@ namespace NetflixPrjeq05.Controllers
                                orderby C.Date_de_sortie descending
                                select C;
 
+            currentPaysId = id.Value;
             List<Contenu> colContenu = queryContenu.ToList();
             List<ContenuVM> colContenuVM = new List<ContenuVM>();
             foreach (var item in colContenu)
@@ -111,31 +112,33 @@ namespace NetflixPrjeq05.Controllers
             }*/
             return View(colContenuVM);
         }
+        //============================================================================INFORMATION============================================================================
+        public ActionResult Details()
+        {
+            ViewBag.Pays = new SelectList(db.Pays.ToList(), "PaysId", "Nom", currentPaysId);
+            
 
-        // GET: Contenus/Details/5
+            return View();
+        }
+        [HttpPost]
         public ActionResult Details(int? id)
         {
+            /*
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Contenu contenu = db.Contenu.Find(id);
-            if (contenu == null)
-            {
-                return HttpNotFound();
-            }
-            return View(contenu);
+            }*/
+            currentPaysId = id.Value;
+            ViewBag.Pays = new SelectList(db.Pays.ToList(), "PaysId", "Nom", currentPaysId);
+            return View();
         }
 
-        // GET: Contenus/Create
+        //============================================================================AJOUTER============================================================================
         public ActionResult Create()
         {
             return View();
         }
-
-        // POST: Contenus/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ContenuId,Description,Affiche,Cote_moyenne,Nombre_de_Cote,Status,Budget,Titre_Original,Date_de_sortie,Duree")] Contenu contenu)
@@ -150,7 +153,7 @@ namespace NetflixPrjeq05.Controllers
             return View(contenu);
         }
 
-        // GET: Contenus/Edit/5
+        //========================================================================================================================================================
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -164,10 +167,7 @@ namespace NetflixPrjeq05.Controllers
             }
             return View(contenu);
         }
-
-        // POST: Contenus/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ContenuId,Description,Affiche,Cote_moyenne,Nombre_de_Cote,Status,Budget,Titre_Original,Date_de_sortie,Duree")] Contenu contenu)
@@ -181,7 +181,7 @@ namespace NetflixPrjeq05.Controllers
             return View(contenu);
         }
 
-        // GET: Contenus/Delete/5
+        //========================================================================================================================================================
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -196,7 +196,7 @@ namespace NetflixPrjeq05.Controllers
             return View(contenu);
         }
 
-        // POST: Contenus/Delete/5
+        //========================================================================================================================================================
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
