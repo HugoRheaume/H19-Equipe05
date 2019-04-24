@@ -10,7 +10,7 @@ namespace NetflixPrjeq05.Controllers
     {
        
 
-        public ActionResult Index(int regionId)
+        public ActionResult Index()
         {
 
             return View();
