@@ -1,4 +1,4 @@
-﻿@model IEnumerable<NetflixPrjeq05.Models.Contenu>
+﻿@model IEnumerable<NetflixPrjeq05.Models.ContenuVM>
 
 @{
     ViewBag.Title = "Contenu";
@@ -12,68 +12,52 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Titre)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Affiche)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Cote_moyenne)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Nombre_de_Cote)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Budget)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Titre_Original)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Date_de_sortie)
+            @Html.DisplayNameFor(model => model.DateSortie)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Duree)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Doublages)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Origines)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Affiche)
+        </th>
+
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Description)
+            @Html.DisplayFor(modelItem => item.Titre)
         </td>
         <td>
-            <img src="@Html.DisplayFor(modelItem => item.Affiche)">
+            @Html.DisplayFor(modelItem => item.DateSortie)
         </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Cote_moyenne)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nombre_de_Cote)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Budget)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Titre_Original)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date_de_sortie)
-        </td>
+
         <td>
             @Html.DisplayFor(modelItem => item.Duree)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ContenuId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ContenuId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ContenuId })
+            @Html.DisplayFor(modelItem => item.Doublages)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Origines)
+        </td>
+        <td>
+            <img src="@Html.DisplayFor(modelItem => item.Affiche)" width="150" height="200">
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.ContenuId }) |
+            @Html.ActionLink("Details", "Details", new { id = item.ContenuId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.ContenuId })
         </td>
     </tr>
 }
