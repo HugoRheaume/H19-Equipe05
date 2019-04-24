@@ -66,13 +66,14 @@ namespace NetflixPrjeq05.Controllers
             return View(colContenuVM);
 
         }
+        //----------------------------------------------------------------------------------------------------------------------------------------------------------
         [HttpPost]
-        public ActionResult Contenu(int? id)
+        public ActionResult Contenu(int? id, string sortOrder)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            }           
 
             ViewBag.Pays = new SelectList(db.Pays.ToList(), "PaysId", "Nom",id.Value);
             var queryContenu = from C in db.Contenu
@@ -105,6 +106,30 @@ namespace NetflixPrjeq05.Controllers
                 contenuVM.Origines = origines;
                 colContenuVM.Add(contenuVM);
             }
+
+            //Sorting matters nom/date sortie/duree/region/langue supportee          
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "titre_desc" : "";
+            //ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+
+            //Ne pas se faire call avec ActionLink regulier, besoin de modifier view.
+            switch (sortOrder)
+            {
+                case "titre_desc":
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.Titre).ToList();
+                    break;
+                //case "Date":
+                //    students = students.OrderBy(s => s.EnrollmentDate);
+                //    break;
+                //case "date_desc":
+                //    students = students.OrderByDescending(s => s.EnrollmentDate);
+                //    break;
+                default:
+                    colContenuVM = colContenuVM.OrderBy(c => c.Titre).ToList();
+                    break;
+            }
+            //Sorting ends here
+
+
             /*
             if (contenu == null)
             {

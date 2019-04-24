@@ -21,7 +21,8 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Titre)
+            @*@Html.DisplayNameFor(model => model.Titre)*@
+            @Html.ActionLink("Titre", "Contenu", new { sortOrder = ViewBag.NameSortParm })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.DateSortie)
