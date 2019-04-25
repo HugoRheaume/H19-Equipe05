@@ -65,21 +65,30 @@ namespace NetflixPrjeq05.Controllers
                 colContenuVM.Add(contenuVM);
             }
 
-            //Sorting matters nom / date sortie / duree / region / langue supportee
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "titre_desc" : "";
-            //ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
-            
+            //Sorting matters titre / date sortie / duree
+            ViewBag.NameSortParm = sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";
+            //fix
+            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "" : "date_asc";
+            ViewBag.DureeSortParm = sortOrder == "duree_asc" ? "duree_desc" : "duree_asc";
+
             switch (sortOrder)
             {
                 case "titre_desc":
                     colContenuVM = colContenuVM.OrderByDescending(c => c.Titre).ToList();
                     break;
-                //case "Date":
-                //    students = students.OrderBy(s => s.EnrollmentDate);
-                //    break;
-                //case "date_desc":
-                //    students = students.OrderByDescending(s => s.EnrollmentDate);
-                //    break;
+                case "titre_asc":
+                    colContenuVM = colContenuVM.OrderBy(c => c.Titre).ToList();
+                    break;
+                case "date_asc":
+                    colContenuVM = colContenuVM.OrderBy(c => c.DateSortie).ToList();
+                    break;
+                case "duree_desc":
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.Duree).ToList();
+                    break;
+                case "duree_asc":
+                    colContenuVM = colContenuVM.OrderBy(c => c.Duree).ToList();
+                    break;
+
                 default:
                     colContenuVM = colContenuVM.OrderByDescending(c => c.DateSortie).ToList();
                     break;

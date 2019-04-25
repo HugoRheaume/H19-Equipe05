@@ -25,10 +25,12 @@
             @Html.ActionLink("Titre", "Contenu", new { sortOrder = ViewBag.NameSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateSortie)
+            @*@Html.DisplayNameFor(model => model.DateSortie)*@
+            @Html.ActionLink("DateSortie", "Contenu", new { sortOrder = ViewBag.DateSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Duree)
+            @*@Html.DisplayNameFor(model => model.Duree)*@
+            @Html.ActionLink("Duree", "Contenu", new { sortOrder = ViewBag.DureeSortParm })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Doublages)
