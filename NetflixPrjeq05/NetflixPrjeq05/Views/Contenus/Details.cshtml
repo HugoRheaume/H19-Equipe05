@@ -6,7 +6,7 @@
 
 <h2>Details</h2>
 <p>
-    @using (Html.BeginForm("Detail", "Contenus", FormMethod.Post))
+    @using (Html.BeginForm("Details", "Contenus", FormMethod.Get))
     {
         @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();" })
 

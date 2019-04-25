@@ -12,7 +12,7 @@ namespace NetflixPrjeq05.Controllers
     public class ContenusController : Controller
     {
         private Entities db = new Entities();
-        private static int currentPaysId;
+        private static int currentPaysId = 1;
 
         //========================================================================================================================================================
         public ActionResult Index(int paysId)
@@ -29,15 +29,16 @@ namespace NetflixPrjeq05.Controllers
 
         }
         //============================================================================CONTENU============================================================================
-        public ActionResult Contenu()
+        public ActionResult Contenu(int? id, string sortOrder)
         {      
             
             ViewBag.Pays = new SelectList(db.Pays.ToList(), "PaysId", "Nom", currentPaysId);
+            if (id != null)
+                currentPaysId = (int)id;
 
             var queryContenu = from C in db.Contenu
                                join CR in db.OffrePays on C.ContenuId equals CR.ContenuId
-                               where CR.PaysId == 1
-                               orderby C.Date_de_sortie descending
+                               where CR.PaysId == currentPaysId                              
                                select C;
 
             List<Contenu> colContenu = queryContenu.ToList();
@@ -62,56 +63,12 @@ namespace NetflixPrjeq05.Controllers
                 string origines = string.Join(", ", queryOrigines.ToList());
                 contenuVM.Origines = origines;
                 colContenuVM.Add(contenuVM);
-            }        
-            return View(colContenuVM);
-
-        }
-        //----------------------------------------------------------------------------------------------------------------------------------------------------------
-        [HttpPost]
-        public ActionResult Contenu(int? id, string sortOrder)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }           
-
-            ViewBag.Pays = new SelectList(db.Pays.ToList(), "PaysId", "Nom",id.Value);
-            var queryContenu = from C in db.Contenu
-                               join CR in db.OffrePays on C.ContenuId equals CR.ContenuId
-                               where CR.PaysId == id.Value
-                               orderby C.Date_de_sortie descending
-                               select C;
-
-            currentPaysId = id.Value;
-            List<Contenu> colContenu = queryContenu.ToList();
-            List<ContenuVM> colContenuVM = new List<ContenuVM>();
-            foreach (var item in colContenu)
-            {
-                ContenuVM contenuVM = new ContenuVM(item);
-                //Doublages              
-                var queryLangue = from C in db.Contenu
-                                  join CL in db.ContenuLangue on C.ContenuId equals CL.ContenuId
-                                  join L in db.Langue on CL.LangueId equals L.LangueId
-                                  where C.ContenuId == contenuVM.ContenuId
-                                  select L.Nom;
-                string langues = string.Join(", ", queryLangue.ToList());
-                contenuVM.Doublages = langues;
-                //Origines             
-                var queryOrigines = from C in db.Contenu
-                                    join OP in db.OriginePays on C.ContenuId equals OP.ContenuId
-                                    join L in db.Pays on OP.PaysId equals L.PaysId
-                                    where C.ContenuId == contenuVM.ContenuId
-                                    select L.Nom;
-                string origines = string.Join(", ", queryOrigines.ToList());
-                contenuVM.Origines = origines;
-                colContenuVM.Add(contenuVM);
             }
 
-            //Sorting matters nom/date sortie/duree/region/langue supportee          
+            //Sorting matters nom / date sortie / duree / region / langue supportee
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "titre_desc" : "";
             //ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
-
-            //Ne pas se faire call avec ActionLink regulier, besoin de modifier view.
+            
             switch (sortOrder)
             {
                 case "titre_desc":
@@ -124,40 +81,26 @@ namespace NetflixPrjeq05.Controllers
                 //    students = students.OrderByDescending(s => s.EnrollmentDate);
                 //    break;
                 default:
-                    colContenuVM = colContenuVM.OrderBy(c => c.Titre).ToList();
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.DateSortie).ToList();
                     break;
             }
             //Sorting ends here
 
-
-            /*
-            if (contenu == null)
-            {
-                return HttpNotFound();
-            }*/
             return View(colContenuVM);
-        }
-        //============================================================================INFORMATION============================================================================
-        public ActionResult Details()
-        {
-            ViewBag.Pays = new SelectList(db.Pays.ToList(), "PaysId", "Nom", currentPaysId);
-            
 
-            return View();
-        }
-        [HttpPost]
+        }           
+        //============================================================================INFORMATION============================================================================
         public ActionResult Details(int? id)
         {
-            /*
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }*/
-            currentPaysId = id.Value;
             ViewBag.Pays = new SelectList(db.Pays.ToList(), "PaysId", "Nom", currentPaysId);
+            if (id != null)
+                currentPaysId = (int)id;
+
+
+
             return View();
         }
-
+       
         //============================================================================AJOUTER============================================================================
         public ActionResult Create()
         {
