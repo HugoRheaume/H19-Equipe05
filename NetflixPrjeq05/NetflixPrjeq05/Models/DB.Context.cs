@@ -31,5 +31,6 @@ namespace NetflixPrjeq05.Models
         public virtual DbSet<OriginePays> OriginePays { get; set; }
         public virtual DbSet<ContenuLangue> ContenuLangue { get; set; }
         public virtual DbSet<Pays> Pays { get; set; }
+        public virtual DbSet<Regle> Regle { get; set; }
     }
 }

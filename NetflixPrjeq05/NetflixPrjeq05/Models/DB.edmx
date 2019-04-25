@@ -60,6 +60,17 @@
           <Property Name="Code_ISO3166" Type="nvarchar" MaxLength="3" />
           <Property Name="Nom" Type="nvarchar" MaxLength="16" />
         </EntityType>
+        <EntityType Name="Regle">
+          <Key>
+            <PropertyRef Name="RegleId" />
+          </Key>
+          <Property Name="RegleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PaysId" Type="int" Nullable="false" />
+          <Property Name="OriginePaysId" Type="int" />
+          <Property Name="DoublageLangueId" Type="int" />
+          <Property Name="Pourcentage" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="EstPlusGrand" Type="bit" />
+        </EntityType>
         <Association Name="FK__ContenuLa__Conte__5812160E">
           <End Role="Contenu" Type="Self.Contenu" Multiplicity="1" />
           <End Role="ContenuLangue" Type="Self.ContenuLangue" Multiplicity="*" />
@@ -132,6 +143,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Regle__DoublageL__6B24EA82">
+          <End Role="Langue" Type="Self.Langue" Multiplicity="0..1" />
+          <End Role="Regle" Type="Self.Regle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Langue">
+              <PropertyRef Name="LangueId" />
+            </Principal>
+            <Dependent Role="Regle">
+              <PropertyRef Name="DoublageLangueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Regle__OriginePa__6A30C649">
+          <End Role="Pays" Type="Self.Pays" Multiplicity="0..1" />
+          <End Role="Regle" Type="Self.Regle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pays">
+              <PropertyRef Name="PaysId" />
+            </Principal>
+            <Dependent Role="Regle">
+              <PropertyRef Name="OriginePaysId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Regle__PaysId__693CA210">
+          <End Role="Pays" Type="Self.Pays" Multiplicity="1" />
+          <End Role="Regle" Type="Self.Regle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pays">
+              <PropertyRef Name="PaysId" />
+            </Principal>
+            <Dependent Role="Regle">
+              <PropertyRef Name="PaysId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DBModelStoreContainer">
           <EntitySet Name="Contenu" EntityType="Self.Contenu" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="ContenuLangue" EntityType="Self.ContenuLangue" Schema="Contenus" store:Type="Tables" />
@@ -139,6 +186,7 @@
           <EntitySet Name="OffrePays" EntityType="Self.OffrePays" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="OriginePays" EntityType="Self.OriginePays" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="Pays" EntityType="Self.Pays" Schema="Contenus" store:Type="Tables" />
+          <EntitySet Name="Regle" EntityType="Self.Regle" Schema="Reglementations" store:Type="Tables" />
           <AssociationSet Name="FK__ContenuLa__Conte__5812160E" Association="Self.FK__ContenuLa__Conte__5812160E">
             <End Role="Contenu" EntitySet="Contenu" />
             <End Role="ContenuLangue" EntitySet="ContenuLangue" />
@@ -162,6 +210,18 @@
           <AssociationSet Name="FK__OriginePa__PaysI__60A75C0F" Association="Self.FK__OriginePa__PaysI__60A75C0F">
             <End Role="Pays" EntitySet="Pays" />
             <End Role="OriginePays" EntitySet="OriginePays" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Regle__DoublageL__6B24EA82" Association="Self.FK__Regle__DoublageL__6B24EA82">
+            <End Role="Langue" EntitySet="Langue" />
+            <End Role="Regle" EntitySet="Regle" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Regle__OriginePa__6A30C649" Association="Self.FK__Regle__OriginePa__6A30C649">
+            <End Role="Pays" EntitySet="Pays" />
+            <End Role="Regle" EntitySet="Regle" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Regle__PaysId__693CA210" Association="Self.FK__Regle__PaysId__693CA210">
+            <End Role="Pays" EntitySet="Pays" />
+            <End Role="Regle" EntitySet="Regle" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -217,6 +277,19 @@
             <End Role="Pays" EntitySet="Pays" />
             <End Role="OriginePays" EntitySet="OriginePays" />
           </AssociationSet>
+          <EntitySet Name="Regle" EntityType="DBModel.Regle" />
+          <AssociationSet Name="FK__Regle__DoublageL__6B24EA82" Association="DBModel.FK__Regle__DoublageL__6B24EA82">
+            <End Role="Langue" EntitySet="Langue" />
+            <End Role="Regle" EntitySet="Regle" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Regle__OriginePa__6A30C649" Association="DBModel.FK__Regle__OriginePa__6A30C649">
+            <End Role="Pays" EntitySet="Pays" />
+            <End Role="Regle" EntitySet="Regle" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Regle__PaysId__693CA210" Association="DBModel.FK__Regle__PaysId__693CA210">
+            <End Role="Pays" EntitySet="Pays" />
+            <End Role="Regle" EntitySet="Regle" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="Langue">
           <Key>
@@ -226,6 +299,7 @@
           <Property Name="Code_ISO639" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
           <Property Name="Nom" Type="String" MaxLength="17" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ContenuLangue" Relationship="DBModel.FK__ContenuLa__Langu__571DF1D5" FromRole="Langue" ToRole="ContenuLangue" />
+          <NavigationProperty Name="Regle" Relationship="DBModel.FK__Regle__DoublageL__6B24EA82" FromRole="Langue" ToRole="Regle" />
         </EntityType>
         <EntityType Name="OffrePays">
           <Key>
@@ -314,6 +388,8 @@
           <Property Name="Nom" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="OffrePays" Relationship="DBModel.FK__OffrePays__PaysI__5BE2A6F2" FromRole="Pays" ToRole="OffrePays" />
           <NavigationProperty Name="OriginePays" Relationship="DBModel.FK__OriginePa__PaysI__60A75C0F" FromRole="Pays" ToRole="OriginePays" />
+          <NavigationProperty Name="Regle" Relationship="DBModel.FK__Regle__OriginePa__6A30C649" FromRole="Pays" ToRole="Regle" />
+          <NavigationProperty Name="Regle1" Relationship="DBModel.FK__Regle__PaysId__693CA210" FromRole="Pays" ToRole="Regle" />
         </EntityType>
         <Association Name="FK__OffrePays__PaysI__5BE2A6F2">
           <End Type="DBModel.Pays" Role="Pays" Multiplicity="1" />
@@ -335,6 +411,56 @@
               <PropertyRef Name="PaysId" />
             </Principal>
             <Dependent Role="OriginePays">
+              <PropertyRef Name="PaysId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Regle">
+          <Key>
+            <PropertyRef Name="RegleId" />
+          </Key>
+          <Property Name="RegleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PaysId" Type="Int32" Nullable="false" />
+          <Property Name="OriginePaysId" Type="Int32" />
+          <Property Name="DoublageLangueId" Type="Int32" />
+          <Property Name="Pourcentage" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="EstPlusGrand" Type="Boolean" />
+          <NavigationProperty Name="Langue" Relationship="DBModel.FK__Regle__DoublageL__6B24EA82" FromRole="Regle" ToRole="Langue" />
+          <NavigationProperty Name="Pays" Relationship="DBModel.FK__Regle__OriginePa__6A30C649" FromRole="Regle" ToRole="Pays" />
+          <NavigationProperty Name="Pays1" Relationship="DBModel.FK__Regle__PaysId__693CA210" FromRole="Regle" ToRole="Pays" />
+        </EntityType>
+        <Association Name="FK__Regle__DoublageL__6B24EA82">
+          <End Type="DBModel.Langue" Role="Langue" Multiplicity="0..1" />
+          <End Type="DBModel.Regle" Role="Regle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Langue">
+              <PropertyRef Name="LangueId" />
+            </Principal>
+            <Dependent Role="Regle">
+              <PropertyRef Name="DoublageLangueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Regle__OriginePa__6A30C649">
+          <End Type="DBModel.Pays" Role="Pays" Multiplicity="0..1" />
+          <End Type="DBModel.Regle" Role="Regle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pays">
+              <PropertyRef Name="PaysId" />
+            </Principal>
+            <Dependent Role="Regle">
+              <PropertyRef Name="OriginePaysId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Regle__PaysId__693CA210">
+          <End Type="DBModel.Pays" Role="Pays" Multiplicity="1" />
+          <End Type="DBModel.Regle" Role="Regle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pays">
+              <PropertyRef Name="PaysId" />
+            </Principal>
+            <Dependent Role="Regle">
               <PropertyRef Name="PaysId" />
             </Dependent>
           </ReferentialConstraint>
@@ -403,6 +529,18 @@
                 <ScalarProperty Name="Nom" ColumnName="Nom" />
                 <ScalarProperty Name="Code_ISO3166" ColumnName="Code_ISO3166" />
                 <ScalarProperty Name="PaysId" ColumnName="PaysId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Regle">
+            <EntityTypeMapping TypeName="DBModel.Regle">
+              <MappingFragment StoreEntitySet="Regle">
+                <ScalarProperty Name="EstPlusGrand" ColumnName="EstPlusGrand" />
+                <ScalarProperty Name="Pourcentage" ColumnName="Pourcentage" />
+                <ScalarProperty Name="DoublageLangueId" ColumnName="DoublageLangueId" />
+                <ScalarProperty Name="OriginePaysId" ColumnName="OriginePaysId" />
+                <ScalarProperty Name="PaysId" ColumnName="PaysId" />
+                <ScalarProperty Name="RegleId" ColumnName="RegleId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

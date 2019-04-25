@@ -19,6 +19,8 @@ namespace NetflixPrjeq05.Models
         {
             this.OffrePays = new HashSet<OffrePays>();
             this.OriginePays = new HashSet<OriginePays>();
+            this.Regle = new HashSet<Regle>();
+            this.Regle1 = new HashSet<Regle>();
         }
     
         public int PaysId { get; set; }
@@ -29,5 +31,9 @@ namespace NetflixPrjeq05.Models
         public virtual ICollection<OffrePays> OffrePays { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OriginePays> OriginePays { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Regle> Regle { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Regle> Regle1 { get; set; }
     }
 }

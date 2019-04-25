@@ -18,6 +18,7 @@ namespace NetflixPrjeq05.Models
         public Langue()
         {
             this.ContenuLangue = new HashSet<ContenuLangue>();
+            this.Regle = new HashSet<Regle>();
         }
     
         public int LangueId { get; set; }
@@ -26,5 +27,7 @@ namespace NetflixPrjeq05.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ContenuLangue> ContenuLangue { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Regle> Regle { get; set; }
     }
 }
