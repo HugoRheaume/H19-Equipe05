@@ -66,9 +66,8 @@ namespace NetflixPrjeq05.Controllers
             }
 
             //Sorting matters titre / date sortie / duree
-            ViewBag.NameSortParm = sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";
-            //fix
-            ViewBag.DateSortParm = String.IsNullOrEmpty(sortOrder) ? "" : "date_asc";
+            ViewBag.NameSortParm = sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";           
+            ViewBag.DateSortParm = sortOrder == "date_asc" ? "date_desc" : "date_asc";
             ViewBag.DureeSortParm = sortOrder == "duree_asc" ? "duree_desc" : "duree_asc";
 
             switch (sortOrder)
@@ -78,6 +77,9 @@ namespace NetflixPrjeq05.Controllers
                     break;
                 case "titre_asc":
                     colContenuVM = colContenuVM.OrderBy(c => c.Titre).ToList();
+                    break;
+                case "date_desc":
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.DateSortie).ToList();
                     break;
                 case "date_asc":
                     colContenuVM = colContenuVM.OrderBy(c => c.DateSortie).ToList();
@@ -90,7 +92,7 @@ namespace NetflixPrjeq05.Controllers
                     break;
 
                 default:
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.DateSortie).ToList();
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.ContenuId).ToList();
                     break;
             }
             //Sorting ends here
