@@ -1,0 +1,58 @@
+﻿@model NetflixPrjeq05.Models.Regle
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Regle</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Pourcentage)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pourcentage)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EstPlusGrand)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EstPlusGrand)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Langue.Code_ISO639)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Langue.Code_ISO639)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pays.Code_ISO3166)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pays.Code_ISO3166)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pays1.Code_ISO3166)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pays1.Code_ISO3166)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.RegleId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

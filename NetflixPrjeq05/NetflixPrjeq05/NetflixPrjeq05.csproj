@@ -154,6 +154,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ContenusController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ReglesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -258,6 +259,11 @@
     <Content Include="Views\Contenus\Edit.cshtml" />
     <Content Include="Views\Contenus\Index.cshtml" />
     <Content Include="Views\Contenus\Contenu.cshtml" />
+    <Content Include="Views\Regles\Create.cshtml" />
+    <Content Include="Views\Regles\Delete.cshtml" />
+    <Content Include="Views\Regles\Details.cshtml" />
+    <Content Include="Views\Regles\Edit.cshtml" />
+    <Content Include="Views\Regles\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
