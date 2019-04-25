@@ -15,16 +15,13 @@
             @Html.DisplayNameFor(model => model.Pourcentage)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EstPlusGrand)
+            @Html.DisplayNameFor(model => model.Langue)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Langue.Code_ISO639)
+            @Html.DisplayNameFor(model => model.Pays)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Pays.Code_ISO3166)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Pays1.Code_ISO3166)
+            @Html.DisplayNameFor(model => model.Pays1)
         </th>
         <th></th>
     </tr>
@@ -35,21 +32,13 @@
             @Html.DisplayFor(modelItem => item.Pourcentage)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.EstPlusGrand)
+            @Html.DisplayFor(modelItem => item.Langue.Nom)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Langue.Code_ISO639)
+            @Html.DisplayFor(modelItem => item.Pays.Nom)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Pays.Code_ISO3166)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Pays1.Code_ISO3166)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.RegleId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.RegleId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.RegleId })
+            @Html.DisplayFor(modelItem => item.Pays1.Nom)
         </td>
     </tr>
 }
