@@ -195,6 +195,7 @@
     <Compile Include="Models\Regle.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\RegleVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -259,10 +260,6 @@
     <Content Include="Views\Contenus\Edit.cshtml" />
     <Content Include="Views\Contenus\Index.cshtml" />
     <Content Include="Views\Contenus\Contenu.cshtml" />
-    <Content Include="Views\Regles\Create.cshtml" />
-    <Content Include="Views\Regles\Delete.cshtml" />
-    <Content Include="Views\Regles\Details.cshtml" />
-    <Content Include="Views\Regles\Edit.cshtml" />
     <Content Include="Views\Regles\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
