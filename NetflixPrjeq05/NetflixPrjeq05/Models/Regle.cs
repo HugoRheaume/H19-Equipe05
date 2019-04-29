@@ -18,8 +18,10 @@ namespace NetflixPrjeq05.Models
         public int PaysId { get; set; }
         public Nullable<int> OriginePaysId { get; set; }
         public Nullable<int> DoublageLangueId { get; set; }
-        public Nullable<decimal> Pourcentage { get; set; }
+        public Nullable<double> Pourcentage { get; set; }
         public Nullable<bool> EstPlusGrand { get; set; }
+        public Nullable<System.DateTime> DateCreation { get; set; }
+        public Nullable<double> PourcentageReel { get; set; }
     
         public virtual Langue Langue { get; set; }
         public virtual Pays Pays { get; set; }

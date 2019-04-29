@@ -15,10 +15,31 @@ namespace NetflixPrjeq05.Controllers
         private Entities db = new Entities();
 
         // GET: Regles
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
-            var regle = db.Regle.Include(r => r.Langue).Include(r => r.Pays).Include(r => r.Pays1);
-            return View(regle.ToList());
+            ViewBag.Pays = new SelectList(db.Pays.ToList(), "PaysId", "Nom", ContenusController.currentPaysId);
+            if (id != null)
+                ContenusController.currentPaysId = (int)id;
+            List<RegleVM> regleVMs = new List<RegleVM>();
+            List<Regle> regles = db.Regle.Where(r => r.RegleId == id).ToList();
+            foreach (Regle rv in regles )
+            {
+                RegleVM regleVm = new RegleVM(rv);
+                var queryDoublageLangue = from r in db.Regle
+                                  join l in db.Langue on r.DoublageLangueId equals l.LangueId
+                                  where r.RegleId ==  regleVm.RegleId
+                                  select l.Nom;
+                string langues = string.Join(", ", queryDoublageLangue.ToList());
+                regleVm.DoublageLangue = langues;
+                var queryOriginePays = from r in db.Regle
+                                       join p in db.Pays on r.OriginePaysId equals p.PaysId
+                                       where r.RegleId == regleVm.RegleId
+                                       select p.Nom;
+                string origines = string.Join(", ", queryOriginePays.ToList());
+                regleVm.OriginePays = origines;
+                regleVMs.Add(regleVm);
+            }
+            return View(regleVMs);
         }
 
         // GET: Regles/Details/5

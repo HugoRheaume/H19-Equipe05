@@ -1,9 +1,15 @@
-﻿@model IEnumerable<NetflixPrjeq05.Models.Regle>
+﻿@model IEnumerable<NetflixPrjeq05.Models.RegleVM>
 
 @{
     ViewBag.Title = "Index";
 }
+<p>
+    @using (Html.BeginForm("Index", "Regles", FormMethod.Get))
+    {
+        @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();" })
 
+    }
+</p>
 <h2>Information</h2>
 
 <table class="table">
@@ -12,13 +18,13 @@
             @Html.DisplayNameFor(model => model.Pourcentage)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Langue)
+            @Html.DisplayNameFor(model => model.PourcentageReel)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Pays)
+            @Html.DisplayNameFor(model => model.DoublageLangue)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Pays1)
+            @Html.DisplayNameFor(model => model.OriginePaysId)
         </th>
         <th></th>
     </tr>
@@ -29,13 +35,13 @@
             @Html.DisplayFor(modelItem => item.Pourcentage)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Langue.Nom)
+            @Html.DisplayFor(modelItem => item.PourcentageReel)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Pays.Nom)
+            @Html.DisplayFor(modelItem => item.DoublageLangue)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Pays1.Nom)
+            @Html.DisplayFor(modelItem => item.OriginePays)
         </td>
     </tr>
 }

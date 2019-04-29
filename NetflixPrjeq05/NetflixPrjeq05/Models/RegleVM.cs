@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -13,8 +15,29 @@ namespace NetflixPrjeq05.Models
         }
         public RegleVM(Regle regle)
         {
-
+            RegleId = regle.RegleId;
+            DateCreation = regle.DateCreation;
+            PaysId = regle.PaysId;
+            OriginePaysId = regle.OriginePaysId;
+            DoublageLangueId = regle.DoublageLangueId;
+            Pourcentage = regle.Pourcentage;
+            PourcentageReel = regle.PourcentageReel;
         }
-        public int RegleID; 
+        public int RegleId { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+        [DisplayName("Date de sortie")]
+        public DateTime? DateCreation { get; set; }
+        public int PaysId { get; set; }
+        public int? OriginePaysId { get; set; }
+        public int? DoublageLangueId { get; set; }
+        [DisplayFormat(DataFormatString = @"{0:#\%}")]
+        public double?  Pourcentage { get; set; }
+        [DisplayFormat(DataFormatString = @"{0:#\%}")]
+        public double? PourcentageReel { get; set; }
+        [DisplayName("Langue de doublage")]
+        public string DoublageLangue { get; set; }
+        [DisplayName("Pays d'origine")]
+        public string OriginePays { get; set; }
+
     }
 }

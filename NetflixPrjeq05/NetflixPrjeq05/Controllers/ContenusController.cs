@@ -12,7 +12,7 @@ namespace NetflixPrjeq05.Controllers
     public class ContenusController : Controller
     {
         private Entities db = new Entities();
-        private static int currentPaysId = 1;
+        public static int currentPaysId = 1;
 
         //========================================================================================================================================================
         public ActionResult Index(int paysId)

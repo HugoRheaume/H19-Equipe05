@@ -65,11 +65,13 @@
             <PropertyRef Name="RegleId" />
           </Key>
           <Property Name="RegleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DateCreation" Type="date" />
           <Property Name="PaysId" Type="int" Nullable="false" />
           <Property Name="OriginePaysId" Type="int" />
           <Property Name="DoublageLangueId" Type="int" />
-          <Property Name="Pourcentage" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Pourcentage" Type="float" />
           <Property Name="EstPlusGrand" Type="bit" />
+          <Property Name="PourcentageReel" Type="float" />
         </EntityType>
         <Association Name="FK__ContenuLa__Conte__5812160E">
           <End Role="Contenu" Type="Self.Contenu" Multiplicity="1" />
@@ -143,7 +145,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Regle__DoublageL__6B24EA82">
+        <Association Name="FK__Regle__DoublageL__6E01572D">
           <End Role="Langue" Type="Self.Langue" Multiplicity="0..1" />
           <End Role="Regle" Type="Self.Regle" Multiplicity="*" />
           <ReferentialConstraint>
@@ -155,7 +157,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Regle__OriginePa__6A30C649">
+        <Association Name="FK__Regle__OriginePa__6EF57B66">
           <End Role="Pays" Type="Self.Pays" Multiplicity="0..1" />
           <End Role="Regle" Type="Self.Regle" Multiplicity="*" />
           <ReferentialConstraint>
@@ -167,7 +169,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Regle__PaysId__693CA210">
+        <Association Name="FK__Regle__PaysId__6FE99F9F">
           <End Role="Pays" Type="Self.Pays" Multiplicity="1" />
           <End Role="Regle" Type="Self.Regle" Multiplicity="*" />
           <ReferentialConstraint>
@@ -211,15 +213,15 @@
             <End Role="Pays" EntitySet="Pays" />
             <End Role="OriginePays" EntitySet="OriginePays" />
           </AssociationSet>
-          <AssociationSet Name="FK__Regle__DoublageL__6B24EA82" Association="Self.FK__Regle__DoublageL__6B24EA82">
+          <AssociationSet Name="FK__Regle__DoublageL__6E01572D" Association="Self.FK__Regle__DoublageL__6E01572D">
             <End Role="Langue" EntitySet="Langue" />
             <End Role="Regle" EntitySet="Regle" />
           </AssociationSet>
-          <AssociationSet Name="FK__Regle__OriginePa__6A30C649" Association="Self.FK__Regle__OriginePa__6A30C649">
+          <AssociationSet Name="FK__Regle__OriginePa__6EF57B66" Association="Self.FK__Regle__OriginePa__6EF57B66">
             <End Role="Pays" EntitySet="Pays" />
             <End Role="Regle" EntitySet="Regle" />
           </AssociationSet>
-          <AssociationSet Name="FK__Regle__PaysId__693CA210" Association="Self.FK__Regle__PaysId__693CA210">
+          <AssociationSet Name="FK__Regle__PaysId__6FE99F9F" Association="Self.FK__Regle__PaysId__6FE99F9F">
             <End Role="Pays" EntitySet="Pays" />
             <End Role="Regle" EntitySet="Regle" />
           </AssociationSet>
@@ -423,11 +425,13 @@
           <Property Name="PaysId" Type="Int32" Nullable="false" />
           <Property Name="OriginePaysId" Type="Int32" />
           <Property Name="DoublageLangueId" Type="Int32" />
-          <Property Name="Pourcentage" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Pourcentage" Type="Double" Nullable="true" />
           <Property Name="EstPlusGrand" Type="Boolean" />
           <NavigationProperty Name="Langue" Relationship="DBModel.FK__Regle__DoublageL__6B24EA82" FromRole="Regle" ToRole="Langue" />
           <NavigationProperty Name="Pays" Relationship="DBModel.FK__Regle__OriginePa__6A30C649" FromRole="Regle" ToRole="Pays" />
           <NavigationProperty Name="Pays1" Relationship="DBModel.FK__Regle__PaysId__693CA210" FromRole="Regle" ToRole="Pays" />
+          <Property Name="DateCreation" Type="DateTime" Precision="0" />
+          <Property Name="PourcentageReel" Type="Double" Nullable="true" />
         </EntityType>
         <Association Name="FK__Regle__DoublageL__6B24EA82">
           <End Type="DBModel.Langue" Role="Langue" Multiplicity="0..1" />
@@ -535,6 +539,8 @@
           <EntitySetMapping Name="Regle">
             <EntityTypeMapping TypeName="DBModel.Regle">
               <MappingFragment StoreEntitySet="Regle">
+                <ScalarProperty Name="PourcentageReel" ColumnName="PourcentageReel" />
+                <ScalarProperty Name="DateCreation" ColumnName="DateCreation" />
                 <ScalarProperty Name="EstPlusGrand" ColumnName="EstPlusGrand" />
                 <ScalarProperty Name="Pourcentage" ColumnName="Pourcentage" />
                 <ScalarProperty Name="DoublageLangueId" ColumnName="DoublageLangueId" />
