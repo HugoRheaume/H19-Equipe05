@@ -133,7 +133,7 @@ namespace NetflixPrjeq05.Controllers
             }
             return View(contenu);
         }
-        
+
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public ActionResult Edit([Bind(Include = "ContenuId,Description,Affiche,Cote_moyenne,Nombre_de_Cote,Status,Budget,Titre_Original,Date_de_sortie,Duree")] Contenu contenu)
@@ -147,31 +147,30 @@ namespace NetflixPrjeq05.Controllers
         //    return View(contenu);
         //}
 
-        ////========================================================================================================================================================
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Contenu contenu = db.Contenu.Find(id);
-        //    if (contenu == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(contenu);
-        //}
+        //========================================================================================================================================================
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }          
+            Contenu contenu = service.GetAllContenu().ElementAt((int)id);            
+            if (contenu == null)
+            {
+                return HttpNotFound();
+            }                      
+            return View(contenu);
+        }
 
-        ////========================================================================================================================================================
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    Contenu contenu = db.Contenu.Find(id);
-        //    db.Contenu.Remove(contenu);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+        //========================================================================================================================================================
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {           
+            int offreId = service.GetAllOffreContenu().Where(o => o.ContenuId == id && o.PaysId == currentPaysId).Single().OffrePaysId;
+            service.RemoveOffre(offreId);
+            return RedirectToAction("Contenu");
+        }
 
         protected override void Dispose(bool disposing)
         {

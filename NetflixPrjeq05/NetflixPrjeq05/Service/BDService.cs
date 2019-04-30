@@ -104,5 +104,11 @@ namespace NetflixPrjeq05.Service
             return queryDoublageLangue.ToList();
         }
 
+        public void RemoveOffre(int id)
+        {
+            db.OffrePays.Remove(db.OffrePays.Find(id));
+            db.SaveChanges();
+        }
+
     }
 }
