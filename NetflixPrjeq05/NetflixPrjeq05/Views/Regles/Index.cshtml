@@ -7,7 +7,7 @@
 <p>
     @using (Html.BeginForm("Index", "Regles", FormMethod.Get))
     {
-        @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();" })
+        @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
 
     }
 </p>
