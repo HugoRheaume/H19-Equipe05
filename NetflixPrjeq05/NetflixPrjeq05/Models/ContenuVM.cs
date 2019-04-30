@@ -23,7 +23,7 @@ namespace NetflixPrjeq05.Models
         }
 
 
-        public int ContenuId { get; set; }
+        public int ContenuId { get; set; }      
         
         public string Titre { get; set; }
 
