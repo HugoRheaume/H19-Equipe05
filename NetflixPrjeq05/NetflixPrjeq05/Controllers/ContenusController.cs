@@ -18,6 +18,8 @@ namespace NetflixPrjeq05.Controllers
         private BDService service = new BDService(new Entities());
         public static int currentPaysId = 1;
         public static string m_sortOrder;
+        public static List<ContenuVM> m_colContenuCourant;
+        public static List<Contenu> m_tousLeContenu;
 
         //========================================================================================================================================================
         public ActionResult Index(int paysId)
@@ -33,67 +35,166 @@ namespace NetflixPrjeq05.Controllers
         public ActionResult Contenu(int? id, string sortOrder, int? page)
         {              
             ViewBag.Pays = new SelectList(service.GetAllPays(), "PaysId", "Nom", currentPaysId);
-            if (id != null)
-                currentPaysId = (int)id;
+            m_colContenuCourant = null;
+            //Seulement effectué quand le controleur est appellé pour la première fois.
+            if (m_tousLeContenu == null)
+                m_tousLeContenu = service.GetAllContenu();
 
-            if(sortOrder != null)
-                m_sortOrder = sortOrder;
-
-            var queryContenu = service.getAllContenuByPays(currentPaysId);
-
-            List<Contenu> colContenu = queryContenu.ToList();
-            List<ContenuVM> colContenuVM = new List<ContenuVM>();
-            foreach (var item in colContenu)
-            {
-                ContenuVM contenuVM = new ContenuVM(item);
-                //Doublages              
-                var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
-                string langues = string.Join(", ",queryLangue.ToList());
-                contenuVM.Doublages = langues;
-                //Origines             
-                var queryOrigines = service.getOriginePaysByContenuId(contenuVM.ContenuId);
-                string origines = string.Join(", ", queryOrigines.ToList());
-                contenuVM.Origines = origines;
-                colContenuVM.Add(contenuVM);
-            }
-
-            //Sorting matters titre / date sortie / duree
-            ViewBag.NameSortParm = m_sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";           
-            ViewBag.DateSortParm = m_sortOrder == "date_asc" ? "date_desc" : "date_asc";
-            ViewBag.DureeSortParm = m_sortOrder == "duree_asc" ? "duree_desc" : "duree_asc";
-
-            switch (m_sortOrder)
-            {
-                case "titre_desc":
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.Titre).ToList();
-                    break;
-                case "titre_asc":
-                    colContenuVM = colContenuVM.OrderBy(c => c.Titre).ToList();
-                    break;
-                case "date_desc":
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.DateSortie).ToList();
-                    break;
-                case "date_asc":
-                    colContenuVM = colContenuVM.OrderBy(c => c.DateSortie).ToList();
-                    break;
-                case "duree_desc":
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.Duree).ToList();
-                    break;
-                case "duree_asc":
-                    colContenuVM = colContenuVM.OrderBy(c => c.Duree).ToList();
-                    break;
-
-                default:
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.ContenuId).ToList();
-                    break;
-            }
-            //Sorting ends here
             //Pagination
             int pageSize = 2;
             int pageNumber = (page ?? 1);
+
+            //if (sortOrder == null && m_sortOrder != null)
+            //{
+                if (id != null)
+                    currentPaysId = (int)id;
+
+                if (sortOrder != null)
+                    m_sortOrder = sortOrder;
+
+                var queryContenu = service.getAllContenuByPays(currentPaysId);
+
+                List<Contenu> colContenu = queryContenu.ToList();
+                List<ContenuVM> colContenuVM = new List<ContenuVM>();
+                foreach (var item in colContenu)
+                {
+                    ContenuVM contenuVM = new ContenuVM(item);
+                    //Doublages              
+                    var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
+                    string langues = string.Join(", ", queryLangue.ToList());
+                    contenuVM.Doublages = langues;
+                    //Origines             
+                    var queryOrigines = service.getOriginePaysByContenuId(contenuVM.ContenuId);
+                    string origines = string.Join(", ", queryOrigines.ToList());
+                    contenuVM.Origines = origines;
+                    colContenuVM.Add(contenuVM);
+                }
+
+                //Sorting matters titre / date sortie / duree
+                ViewBag.NameSortParm = m_sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";
+                ViewBag.DateSortParm = m_sortOrder == "date_asc" ? "date_desc" : "date_asc";
+                ViewBag.DureeSortParm = m_sortOrder == "duree_asc" ? "duree_desc" : "duree_asc";
+
+                switch (m_sortOrder)
+                {
+                    case "titre_desc":
+                        colContenuVM = colContenuVM.OrderByDescending(c => c.Titre).ToList();
+                        break;
+                    case "titre_asc":
+                        colContenuVM = colContenuVM.OrderBy(c => c.Titre).ToList();
+                        break;
+                    case "date_desc":
+                        colContenuVM = colContenuVM.OrderByDescending(c => c.DateSortie).ToList();
+                        break;
+                    case "date_asc":
+                        colContenuVM = colContenuVM.OrderBy(c => c.DateSortie).ToList();
+                        break;
+                    case "duree_desc":
+                        colContenuVM = colContenuVM.OrderByDescending(c => c.Duree).ToList();
+                        break;
+                    case "duree_asc":
+                        colContenuVM = colContenuVM.OrderBy(c => c.Duree).ToList();
+                        break;
+
+                    default:
+                        colContenuVM = colContenuVM.OrderByDescending(c => c.ContenuId).ToList();
+                        break;
+                }
+            //}
+            //Sorting ends here            
             return View(colContenuVM.ToPagedList(pageNumber, pageSize));
 
-        }           
+        }
+        //============================================================================AJOUTER============================================================================
+        public ActionResult Ajouter(int? id, string sortOrder, int? page)
+        {          
+            ViewBag.Pays = new SelectList(service.GetAllPays(), "PaysId", "Nom", currentPaysId);
+            //Seulement effectué quand le controleur est appellé pour la première fois.
+            if (m_tousLeContenu == null)
+                m_tousLeContenu = service.GetAllContenu();
+            
+            //Pagination
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+
+            //Empêche de trier une seconde fois la liste quand on veut juste changer de page.
+            if (page == null)
+            {                
+                //Pays a été modifié à partir de menu déroulant ou initialisation
+                if (id != null || m_colContenuCourant == null)
+                {
+                    List<Contenu> queryContenuPays;
+                    List<Contenu> colContenu;
+                    List<ContenuVM> colContenuVM = new List<ContenuVM>();
+
+                    if (id != null)
+                        currentPaysId = (int)id;
+
+                    //queryContenuPays = service.getAllContenuByPays(currentPaysId);
+                    queryContenuPays = service.getAllContenuByPays(currentPaysId);
+                    List<int> contenuPaysIds = queryContenuPays.Select(c => c.ContenuId).ToList();
+                    colContenu = m_tousLeContenu.Where(c => !contenuPaysIds.Contains(c.ContenuId)).ToList();
+                    
+                    foreach (var item in colContenu)
+                    {
+                        ContenuVM contenuVM = new ContenuVM(item);
+                        //Doublages              
+                        var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
+                        string langues = string.Join(", ", queryLangue.ToList());
+                        contenuVM.Doublages = langues;
+                        //Origines             
+                        var queryOrigines = service.getOriginePaysByContenuId(contenuVM.ContenuId);
+                        string origines = string.Join(", ", queryOrigines.ToList());
+                        contenuVM.Origines = origines;
+                        colContenuVM.Add(contenuVM);
+                    }
+                    m_colContenuCourant = colContenuVM;
+                }       
+                //BUG: SORT_ORDER N'EST PAS PRIS EN PARAMETRE QUAND NOUS TRIONS DEPUIS AUTREPART QUE LA PAGE 1.  
+                // ^ empeche aussi de 
+                if (sortOrder != null)
+                    m_sortOrder = sortOrder;
+
+                //List<Contenu> queryContenuPays = service.getAllContenuByPays(currentPaysId);
+                //List<Contenu> colContenu =  service.GetAllContenu().Except(queryContenuPays).ToList();
+                              
+                
+
+                //Sorting matters titre / date sortie / duree
+                ViewBag.NameSortParm = m_sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";
+                ViewBag.DateSortParm = m_sortOrder == "date_asc" ? "date_desc" : "date_asc";
+                ViewBag.DureeSortParm = m_sortOrder == "duree_asc" ? "duree_desc" : "duree_asc";
+
+                switch (m_sortOrder)
+                {
+                    case "titre_desc":
+                        m_colContenuCourant = m_colContenuCourant.OrderByDescending(c => c.Titre).ToList();
+                        break;
+                    case "titre_asc":
+                        m_colContenuCourant = m_colContenuCourant.OrderBy(c => c.Titre).ToList();
+                        break;
+                    case "date_desc":
+                        m_colContenuCourant = m_colContenuCourant.OrderByDescending(c => c.DateSortie).ToList();
+                        break;
+                    case "date_asc":
+                        m_colContenuCourant = m_colContenuCourant.OrderBy(c => c.DateSortie).ToList();
+                        break;
+                    case "duree_desc":
+                        m_colContenuCourant = m_colContenuCourant.OrderByDescending(c => c.Duree).ToList();
+                        break;
+                    case "duree_asc":
+                        m_colContenuCourant = m_colContenuCourant.OrderBy(c => c.Duree).ToList();
+                        break;
+
+                    default:
+                        m_colContenuCourant = m_colContenuCourant.OrderByDescending(c => c.ContenuId).ToList();
+                        break;
+                }
+                
+            }
+            //Sorting ends here          
+            return View(m_colContenuCourant.ToPagedList(pageNumber, pageSize));            
+        }
         //============================================================================INFORMATION============================================================================
         public ActionResult Details(int? id)
         {
@@ -153,31 +254,7 @@ namespace NetflixPrjeq05.Controllers
         //    }
         //    return View(contenu);
         //}
-        public ActionResult Ajouter(int? id)
-        {
-            ViewBag.Pays = new SelectList(service.GetAllPays(), "PaysId", "Nom", currentPaysId);
-            if (id != null)
-                currentPaysId = (int)id;
-
-            List<Contenu> queryContenuPays = service.getAllContenuByPays(currentPaysId);
-            List<Contenu> colContenu = service.GetAllContenu().Except(queryContenuPays).ToList();
-           
-            List<ContenuVM> colContenuVM = new List<ContenuVM>();
-            foreach (var item in colContenu)
-            {
-                ContenuVM contenuVM = new ContenuVM(item);
-                //Doublages              
-                var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
-                string langues = string.Join(", ", queryLangue.ToList());
-                contenuVM.Doublages = langues;
-                //Origines             
-                var queryOrigines = service.getOriginePaysByContenuId(contenuVM.ContenuId);
-                string origines = string.Join(", ", queryOrigines.ToList());
-                contenuVM.Origines = origines;
-                colContenuVM.Add(contenuVM);
-            }
-            return View(colContenuVM);
-        }
+        
         //========================================================================================================================================================
         public ActionResult Delete(int? id)
         {
@@ -198,7 +275,7 @@ namespace NetflixPrjeq05.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {           
-            int offreId = service.GetAllOffreContenu().Where(o => o.ContenuId == id && o.PaysId == currentPaysId).Single().OffrePaysId;
+            int offreId = service.GetAllOffreContenu().Where(o => o.ContenuId == id && o.PaysId == currentPaysId).First().OffrePaysId;
             service.RemoveOffre(offreId);
             return RedirectToAction("Contenu");
         }

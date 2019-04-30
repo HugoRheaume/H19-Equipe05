@@ -54,6 +54,11 @@ namespace NetflixPrjeq05.Service
             return db.ContenuLangue.ToList();
         }
 
+        public List<Contenu> GetContenuBetween(int debut, int fin)
+        {
+            return db.Contenu.Where(c => c.ContenuId >= debut && c.ContenuId <= fin).ToList();
+        }
+
         public List<string> getLangueDoublageByRegleId(int id)
         {
             var queryDoublageLangue = from r in GetAllReglement()
