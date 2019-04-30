@@ -31,6 +31,8 @@
 
         @foreach (var item in Model)
         {
+            if (item.DoublageLangue != string.Empty)
+            {
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Pourcentage)
@@ -42,6 +44,8 @@
                     @Html.DisplayFor(modelItem => item.DoublageLangue)
                 </td>
             </tr>
+                
+            }
         }
 
     </table>
@@ -54,23 +58,27 @@
                 @Html.DisplayNameFor(model => model.PourcentageReel)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OriginePaysId)
+                @Html.DisplayNameFor(model => model.OriginePays)
             </th>
         </tr>
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Pourcentage)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PourcentageReel)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DoublageLangue)
-                </td>
-            </tr>
+            if (item.OriginePays != string.Empty)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pourcentage)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PourcentageReel)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OriginePays)
+                    </td>
+                </tr>
+            }
+
         }
 
     </table>
