@@ -5,10 +5,14 @@
 }
 
 <h2>Ajouter</h2>
-
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @using (Html.BeginForm("Contenu", "Contenus", FormMethod.Get))
+    {
+        @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();" })
+
+    }
 </p>
+
 <table class="table">
     <tr>
         <th>
