@@ -1,4 +1,6 @@
-﻿@model IEnumerable<NetflixPrjeq05.Models.ContenuVM>
+﻿@model PagedList.IPagedList<NetflixPrjeq05.Models.ContenuVM>
+@using PagedList.Mvc;
+
 
 @{
     ViewBag.Title = "Ajouter";
@@ -6,65 +8,68 @@
 
 <h2>Ajouter</h2>
 <p>
-    @using (Html.BeginForm("Contenu", "Contenus", FormMethod.Get))
+    @using (Html.BeginForm("Ajouter", "Contenus", FormMethod.Get))
     {
         @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();" })
 
     }
 </p>
 
+
+<p>
+    @*Html.ActionLink("Create New", "Create")*@
+</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Titre)
+            @Html.ActionLink("Titre", "Ajouter", new { sortOrder = ViewBag.NameSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateSortie)
+            @Html.ActionLink("DateSortie", "Ajouter", new { sortOrder = ViewBag.DateSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Duree)
+            @Html.ActionLink("Duree", "Ajouter", new { sortOrder = ViewBag.DureeSortParm })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Doublages)
+            Doublages
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Origines)
+            Origines
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Affiche)
+            Affiche
         </th>
-        <th>
-            
-        </th>
-        
-        
+        <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Titre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateSortie)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Duree)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Doublages)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Origines)
-        </td>
-        <td>
-            <img src="@Html.DisplayFor(modelItem => item.Affiche)" width="150" height="200">
-        </td>        
-        <td>
-            <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Ajouter", "Contenus", new { id = item.ContenuId })';return false;">Ajouter</button>
-        </td>
-        
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateSortie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duree)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Doublages)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Origines)
+            </td>
+            <td>
+                <img src="@Html.DisplayFor(modelItem => item.Affiche)" width="150" height="200">
+            </td>
+            <td>
+                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Ajouter", "Contenus", new { id = item.ContenuId })';return false;">Ajouter</button>
+            </td>
+
+        </tr>
+    }
 
 </table>
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+@Html.PagedListPager(Model, page => Url.Action("Ajouter", new { page = page }))
