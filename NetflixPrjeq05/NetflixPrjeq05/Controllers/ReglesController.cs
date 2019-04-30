@@ -17,11 +17,13 @@ namespace NetflixPrjeq05.Controllers
         // GET: Regles
         public ActionResult Index(int? id)
         {
-            ViewBag.Pays = new SelectList(db.Pays.ToList(), "PaysId", "Nom", ContenusController.currentPaysId);
             if (id != null)
-                ContenusController.currentPaysId = (int)id;
+                ContenusController.currentPaysId = id.Value;
+
+            int paysId = ContenusController.currentPaysId;
+            ViewBag.Pays = new SelectList(db.Pays.ToList(), "PaysId", "Nom", paysId);
             List<RegleVM> regleVMs = new List<RegleVM>();
-            List<Regle> regles = db.Regle.Where(r => r.RegleId == id).ToList();
+            List<Regle> regles = db.Regle.Where(r => r.PaysId == paysId).ToList();
             foreach (Regle rv in regles )
             {
                 RegleVM regleVm = new RegleVM(rv);
