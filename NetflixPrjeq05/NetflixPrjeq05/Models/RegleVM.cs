@@ -30,9 +30,9 @@ namespace NetflixPrjeq05.Models
         public int PaysId { get; set; }
         public int? OriginePaysId { get; set; }
         public int? DoublageLangueId { get; set; }
-        [DisplayFormat(DataFormatString = @"{0:#\%}")]
+        [DisplayFormat(DataFormatString = @"{0:0.00\%}")]
         public double?  Pourcentage { get; set; }
-        [DisplayFormat(DataFormatString = @"{0:#\%}")]
+        [DisplayFormat(DataFormatString = @"{0:0.00\%}")]
         public double? PourcentageReel { get; set; }
         [DisplayName("Langue de doublage")]
         public string DoublageLangue { get; set; }
