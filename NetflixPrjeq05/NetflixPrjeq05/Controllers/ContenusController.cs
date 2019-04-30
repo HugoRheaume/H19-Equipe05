@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using NetflixPrjeq05.Models;
 using NetflixPrjeq05.Service;
+using PagedList;
+
 
 namespace NetflixPrjeq05.Controllers
 {
@@ -15,6 +17,7 @@ namespace NetflixPrjeq05.Controllers
     {
         private BDService service = new BDService(new Entities());
         public static int currentPaysId = 1;
+        public static string m_sortOrder;
 
         //========================================================================================================================================================
         public ActionResult Index(int paysId)
@@ -27,12 +30,14 @@ namespace NetflixPrjeq05.Controllers
 
         }
         //============================================================================CONTENU============================================================================
-        public ActionResult Contenu(int? id, string sortOrder)
-        {      
-            
+        public ActionResult Contenu(int? id, string sortOrder, int? page)
+        {              
             ViewBag.Pays = new SelectList(service.GetAllPays(), "PaysId", "Nom", currentPaysId);
             if (id != null)
                 currentPaysId = (int)id;
+
+            if(sortOrder != null)
+                m_sortOrder = sortOrder;
 
             var queryContenu = service.getAllContenuByPays(currentPaysId);
 
@@ -53,11 +58,11 @@ namespace NetflixPrjeq05.Controllers
             }
 
             //Sorting matters titre / date sortie / duree
-            ViewBag.NameSortParm = sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";           
-            ViewBag.DateSortParm = sortOrder == "date_asc" ? "date_desc" : "date_asc";
-            ViewBag.DureeSortParm = sortOrder == "duree_asc" ? "duree_desc" : "duree_asc";
+            ViewBag.NameSortParm = m_sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";           
+            ViewBag.DateSortParm = m_sortOrder == "date_asc" ? "date_desc" : "date_asc";
+            ViewBag.DureeSortParm = m_sortOrder == "duree_asc" ? "duree_desc" : "duree_asc";
 
-            switch (sortOrder)
+            switch (m_sortOrder)
             {
                 case "titre_desc":
                     colContenuVM = colContenuVM.OrderByDescending(c => c.Titre).ToList();
@@ -83,8 +88,10 @@ namespace NetflixPrjeq05.Controllers
                     break;
             }
             //Sorting ends here
-
-            return View(colContenuVM);
+            //Pagination
+            int pageSize = 2;
+            int pageNumber = (page ?? 1);
+            return View(colContenuVM.ToPagedList(pageNumber, pageSize));
 
         }           
         //============================================================================INFORMATION============================================================================
