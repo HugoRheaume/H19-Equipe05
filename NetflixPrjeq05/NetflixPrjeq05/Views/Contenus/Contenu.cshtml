@@ -16,7 +16,7 @@
 
 
 <p>
-    <!--@Html.ActionLink("Create New", "Create")-->
+    @*Html.ActionLink("Create New", "Create")*@
 </p>
 <table class="table">
     <tr>       
@@ -67,9 +67,7 @@
             <img src="@Html.DisplayFor(modelItem => item.Affiche)" width="150" height="200">
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.ContenuId }) |
-            @Html.ActionLink("Details", "Details", new { id = item.ContenuId }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.ContenuId })
+            <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Contenus", new { id = item.ContenuId })';return false;">Retirer</button>
         </td>
     </tr>
 }
