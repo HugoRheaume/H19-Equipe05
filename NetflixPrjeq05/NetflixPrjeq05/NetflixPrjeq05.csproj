@@ -263,6 +263,7 @@
     <Content Include="Views\Contenus\Index.cshtml" />
     <Content Include="Views\Contenus\Contenu.cshtml" />
     <Content Include="Views\Regles\Index.cshtml" />
+    <Content Include="Views\Contenus\Ajouter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
