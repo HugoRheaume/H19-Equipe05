@@ -146,7 +146,31 @@ namespace NetflixPrjeq05.Controllers
         //    }
         //    return View(contenu);
         //}
+        public ActionResult Ajouter(int? id)
+        {
+            ViewBag.Pays = new SelectList(service.GetAllPays(), "PaysId", "Nom", currentPaysId);
+            if (id != null)
+                currentPaysId = (int)id;
 
+            List<Contenu> queryContenuPays = service.getAllContenuByPays(currentPaysId);
+            List<Contenu> colContenu = service.GetAllContenu().Except(queryContenuPays).ToList();
+           
+            List<ContenuVM> colContenuVM = new List<ContenuVM>();
+            foreach (var item in colContenu)
+            {
+                ContenuVM contenuVM = new ContenuVM(item);
+                //Doublages              
+                var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
+                string langues = string.Join(", ", queryLangue.ToList());
+                contenuVM.Doublages = langues;
+                //Origines             
+                var queryOrigines = service.getOriginePaysByContenuId(contenuVM.ContenuId);
+                string origines = string.Join(", ", queryOrigines.ToList());
+                contenuVM.Origines = origines;
+                colContenuVM.Add(contenuVM);
+            }
+            return View(colContenuVM);
+        }
         //========================================================================================================================================================
         public ActionResult Delete(int? id)
         {

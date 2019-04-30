@@ -15,9 +15,9 @@ namespace NetflixPrjeq05.Models
 
         public ContenuVM(Contenu contenu)
         {                
-            ContenuId = contenu.ContenuId;                        
-            DateSortie = (DateTime)contenu.Date_de_sortie;           
-            Duree = contenu.Duree;           
+            ContenuId = contenu.ContenuId;
+            DateSortie = contenu.Date_de_sortie == null ? new DateTime(): contenu.Date_de_sortie.Value;           
+            Duree = contenu.Duree;          
             Titre = contenu.Titre_Original;
             Affiche = contenu.Affiche;
         }
