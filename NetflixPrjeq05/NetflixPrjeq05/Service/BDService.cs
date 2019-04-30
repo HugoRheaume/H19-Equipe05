@@ -54,7 +54,55 @@ namespace NetflixPrjeq05.Service
             return db.ContenuLangue.ToList();
         }
 
+        public List<string> getLangueDoublageByRegleId(int id)
+        {
+            var queryDoublageLangue = from r in GetAllReglement()
+            join l in GetAllLangue() on r.DoublageLangueId equals l.LangueId
+            where r.RegleId == id
+            select l.Nom;
 
+            return queryDoublageLangue.ToList();
+        }
+
+        public List<string> getLangueDoublageByContenuId(int id)
+        {
+            var queryDoublageLangue = from C in GetAllContenu()
+                                      join CL in GetAllContenuLangue() on C.ContenuId equals CL.ContenuId
+                                      join L in GetAllLangue() on CL.LangueId equals L.LangueId
+                                      where C.ContenuId == id
+                                      select L.Nom;
+
+            return queryDoublageLangue.ToList();
+        }
+        public List<string> getOriginePaysByRegleId(int id)
+        {
+            var queryDoublageLangue = from r in GetAllReglement()
+                                      join p in GetAllPays() on r.OriginePaysId equals p.PaysId
+                                      where r.RegleId == id
+                                      select p.Nom;
+
+            return queryDoublageLangue.ToList();
+        }
+
+        public List<string> getOriginePaysByContenuId(int id)
+        {
+            var queryDoublageLangue = from C in GetAllContenu()
+                                      join OP in GetAllOrigineContenu() on C.ContenuId equals OP.ContenuId
+                                      join L in GetAllPays() on OP.PaysId equals L.PaysId
+                                      where C.ContenuId == id
+                                      select L.Nom;
+
+            return queryDoublageLangue.ToList();
+        }
+        public List<Contenu> getAllContenuByPays(int id)
+        {
+            var queryDoublageLangue = from C in GetAllContenu()
+                                      join CR in GetAllOffreContenu() on C.ContenuId equals CR.ContenuId
+                                      where CR.PaysId == id
+                                      select C;
+
+            return queryDoublageLangue.ToList();
+        }
 
     }
 }

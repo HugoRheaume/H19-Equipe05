@@ -28,17 +28,11 @@ namespace NetflixPrjeq05.Controllers
             foreach (Regle rv in regles )
             {
                 RegleVM regleVm = new RegleVM(rv);
-                var queryDoublageLangue = from r in service.GetAllReglement()
-                                          join l in service.GetAllLangue() on r.DoublageLangueId equals l.LangueId
-                                  where r.RegleId ==  regleVm.RegleId
-                                  select l.Nom;
-                string langues = string.Join(", ", queryDoublageLangue.ToList());
+                var queryDoublageLangue = service.getLangueDoublageByRegleId(regleVm.RegleId);
+                string langues = string.Join(", ", queryDoublageLangue);
                 regleVm.DoublageLangue = langues;
-                var queryOriginePays = from r in service.GetAllReglement()
-                                       join p in service.GetAllPays() on r.OriginePaysId equals p.PaysId
-                                       where r.RegleId == regleVm.RegleId
-                                       select p.Nom;
-                string origines = string.Join(", ", queryOriginePays.ToList());
+                var queryOriginePays = service.getOriginePaysByRegleId(regleVm.RegleId);
+                string origines = string.Join(", ", queryOriginePays);
                 regleVm.OriginePays = origines;
                 regleVMs.Add(regleVm);
             }
