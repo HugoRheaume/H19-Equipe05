@@ -118,13 +118,18 @@ namespace NetflixPrjeq05.Service
 
         public string GetSaisonNumero(int id)
         {
-            return db.Saison.Where(s => s.SaisonId == id).Select(o => o.NoSaison).ToString();
+            return db.Saison.Where(s => s.SaisonId == id).Select(o => o.NoSaison).First().ToString();
         }
 
         public string GetSerieNom(int id)
         {
             int serieId = db.Saison.Where(s => s.SaisonId == id).Select(o => o.SerieId).First();
             return db.Serie.Where(s => s.SerieId == serieId).Select(s => s.Nom).First();
+        }
+
+        public List<Contenu> GetSaisonEpisodes(int saisonId)
+        {
+            return db.Contenu.Where(c => c.SaisonId == saisonId).ToList();
         }
 
 

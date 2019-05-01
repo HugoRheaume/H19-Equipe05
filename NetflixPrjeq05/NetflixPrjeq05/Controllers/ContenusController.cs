@@ -252,12 +252,12 @@ namespace NetflixPrjeq05.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Contenu contenu = service.GetContenuByID(id.Value);
-            //List<C>
+            //List<Contenu> colEpisodes = 
             //OffrePays offrePays = new OffrePays();
             //offrePays.ContenuId = id.Value;
             //offrePays.PaysId = currentPaysId;
             //service.AjouterOffre(offrePays);
-            //m_tousLeContenu.Remove(contenu);
+            m_tousLeContenu.Remove(contenu);
             if (contenu == null)
             {
                 return HttpNotFound();
