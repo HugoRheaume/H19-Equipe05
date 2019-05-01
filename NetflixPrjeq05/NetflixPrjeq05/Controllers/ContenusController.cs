@@ -40,7 +40,7 @@ namespace NetflixPrjeq05.Controllers
                 m_tousLesPays = service.GetAllPays();
 
             ViewBag.Pays = new SelectList(m_tousLesPays, "PaysId", "Nom", currentPaysId);
-            m_colContenuCourant = null;
+            //m_colContenuCourant = null;
             //Seulement effectué quand le controleur est appellé pour la première fois.
             if (m_tousLeContenu == null)
                 m_tousLeContenu = service.GetAllContenu();
@@ -252,10 +252,11 @@ namespace NetflixPrjeq05.Controllers
             List<Contenu> colEpisodes = service.GetSaisonEpisodes(id.Value);
             foreach (var episode in colEpisodes)
             {
-                ContenuVM contenu = m_colContenuCourant.Where(c => c.ContenuId == episode.ContenuId).First();
+                var contenuTest = m_colContenuCourant.Where(c => c.ContenuId == episode.ContenuId).ToList();
                 //Vérification si episode est déja disponible
-                if (m_colContenuCourant.Where(c => c.ContenuId == contenu.ContenuId) != null)
-                {                  
+                if (contenuTest.Count != 0)
+                {
+                    ContenuVM contenu = m_colContenuCourant.Where(c => c.ContenuId == episode.ContenuId).First();
                     OffrePays offrePays = new OffrePays();
                     offrePays.ContenuId = episode.ContenuId;
                     offrePays.PaysId = currentPaysId;
@@ -272,8 +273,7 @@ namespace NetflixPrjeq05.Controllers
             return RedirectToAction("Ajouter");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+      
         public ActionResult AjouterSerie(int? id)
         {
             if (id == null)
@@ -283,10 +283,13 @@ namespace NetflixPrjeq05.Controllers
             List<Contenu> colEpisodes = service.GetSerieEpisodes(id.Value);
             foreach (var episode in colEpisodes)
             {
-                ContenuVM contenu = m_colContenuCourant.Where(c => c.ContenuId == episode.ContenuId).First();
+                var contenuTest = m_colContenuCourant.Where(c => c.ContenuId == episode.ContenuId).ToList();
+
                 //Vérification si episode est déja disponible
-                if (m_colContenuCourant.Where(c => c.ContenuId == contenu.ContenuId) != null)
+                if (contenuTest.Count != 0)
                 {
+                    ContenuVM contenu = m_colContenuCourant.Where(c => c.ContenuId == episode.ContenuId).First();
+
                     OffrePays offrePays = new OffrePays();
                     offrePays.ContenuId = episode.ContenuId;
                     offrePays.PaysId = currentPaysId;
@@ -357,7 +360,7 @@ namespace NetflixPrjeq05.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }          
-            Contenu contenu = service.GetAllContenu().ElementAt((int)id);            
+            Contenu contenu = service.GetContenuByID(id.Value);            
             if (contenu == null)
             {
                 return HttpNotFound();
