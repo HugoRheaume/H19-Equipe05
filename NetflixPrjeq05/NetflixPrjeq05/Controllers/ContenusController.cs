@@ -51,59 +51,62 @@ namespace NetflixPrjeq05.Controllers
 
             //if (sortOrder == null && m_sortOrder != null)
             //{
-                if (id != null)
-                    currentPaysId = (int)id;
+            if (id != null)
+            {
+                currentPaysId = (int)id;
+                m_tousLeContenu = null;
+            }
 
-                if (sortOrder != null)
-                    m_sortOrder = sortOrder;
+            if (sortOrder != null)
+                m_sortOrder = sortOrder;
 
-                var queryContenu = service.getAllContenuByPays(currentPaysId);
+            var queryContenu = service.getAllContenuByPays(currentPaysId);
 
-                List<Contenu> colContenu = queryContenu.ToList();
-                List<ContenuVM> colContenuVM = new List<ContenuVM>();
-                foreach (var item in colContenu)
-                {
-                    ContenuVM contenuVM = new ContenuVM(item);
-                    //Doublages              
-                    var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
-                    string langues = string.Join(", ", queryLangue.ToList());
-                    contenuVM.Doublages = langues;
-                    //Origines             
-                    var queryOrigines = service.getOriginePaysByContenuId(contenuVM.ContenuId);
-                    string origines = string.Join(", ", queryOrigines.ToList());
-                    contenuVM.Origines = origines;
-                    colContenuVM.Add(contenuVM);
-                }
+            List<Contenu> colContenu = queryContenu.ToList();
+            List<ContenuVM> colContenuVM = new List<ContenuVM>();
+            foreach (var item in colContenu)
+            {
+                ContenuVM contenuVM = new ContenuVM(item);
+                //Doublages              
+                var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
+                string langues = string.Join(", ", queryLangue.ToList());
+                contenuVM.Doublages = langues;
+                //Origines             
+                var queryOrigines = service.getOriginePaysByContenuId(contenuVM.ContenuId);
+                string origines = string.Join(", ", queryOrigines.ToList());
+                contenuVM.Origines = origines;
+                colContenuVM.Add(contenuVM);
+            }
 
-                //Sorting matters titre / date sortie / duree
-                ViewBag.NameSortParm = m_sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";
-                ViewBag.DateSortParm = m_sortOrder == "date_asc" ? "date_desc" : "date_asc";
-                ViewBag.DureeSortParm = m_sortOrder == "duree_asc" ? "duree_desc" : "duree_asc";
+            //Sorting matters titre / date sortie / duree
+            ViewBag.NameSortParm = m_sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";
+            ViewBag.DateSortParm = m_sortOrder == "date_asc" ? "date_desc" : "date_asc";
+            ViewBag.DureeSortParm = m_sortOrder == "duree_asc" ? "duree_desc" : "duree_asc";
 
-                switch (m_sortOrder)
-                {
-                    case "titre_desc":
-                        colContenuVM = colContenuVM.OrderByDescending(c => c.Titre).ToList();
-                        break;
-                    case "titre_asc":
-                        colContenuVM = colContenuVM.OrderBy(c => c.Titre).ToList();
-                        break;
-                    case "date_desc":
-                        colContenuVM = colContenuVM.OrderByDescending(c => c.DateSortie).ToList();
-                        break;
-                    case "date_asc":
-                        colContenuVM = colContenuVM.OrderBy(c => c.DateSortie).ToList();
-                        break;
-                    case "duree_desc":
-                        colContenuVM = colContenuVM.OrderByDescending(c => c.Duree).ToList();
-                        break;
-                    case "duree_asc":
-                        colContenuVM = colContenuVM.OrderBy(c => c.Duree).ToList();
-                        break;
-                    default:
-                        colContenuVM = colContenuVM.OrderByDescending(c => c.ContenuId).ToList();
-                        break;
-                }
+            switch (m_sortOrder)
+            {
+                case "titre_desc":
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.Titre).ToList();
+                    break;
+                case "titre_asc":
+                    colContenuVM = colContenuVM.OrderBy(c => c.Titre).ToList();
+                    break;
+                case "date_desc":
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.DateSortie).ToList();
+                    break;
+                case "date_asc":
+                    colContenuVM = colContenuVM.OrderBy(c => c.DateSortie).ToList();
+                    break;
+                case "duree_desc":
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.Duree).ToList();
+                    break;
+                case "duree_asc":
+                    colContenuVM = colContenuVM.OrderBy(c => c.Duree).ToList();
+                    break;
+                default:
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.ContenuId).ToList();
+                    break;
+            }
             //}
             //Sorting ends here            
             return View(colContenuVM.ToPagedList(pageNumber, pageSize));
@@ -375,6 +378,21 @@ namespace NetflixPrjeq05.Controllers
         {           
             int offreId = service.GetAllOffreContenu().Where(o => o.ContenuId == id && o.PaysId == currentPaysId).First().OffrePaysId;
             service.RemoveOffre(offreId);
+
+            if (m_colContenuCourant != null)
+            {
+                Contenu contenu = m_tousLeContenu.Where(c => c.ContenuId == id).First();
+                ContenuVM contenuVM = new ContenuVM(contenu);
+                //Doublages                                    
+                List<string> queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
+                string langues = string.Join(", ", queryLangue.ToList());
+                contenuVM.Doublages = langues;
+                //Origines                                   
+                List<string> queryOrignine = service.getOriginePaysByContenuId(contenuVM.ContenuId);
+                string origines = string.Join(", ", queryOrignine.ToList());
+                contenuVM.Origines = origines;
+                m_colContenuCourant.Add(contenuVM);
+            }
             return RedirectToAction("Contenu");
         }
 
