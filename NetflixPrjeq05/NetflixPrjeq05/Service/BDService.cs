@@ -116,10 +116,10 @@ namespace NetflixPrjeq05.Service
             db.SaveChanges();
         }
 
-        //public Saison GetSaison(int id)
-        //{
-        //    return db.Saison.Where(s => s.SaisonId == id).Select(o => o.NoSaison).Single();
-        //}
+        public string GetSaisonNumero(int id)
+        {
+            return db.Saison.Where(s => s.SaisonId == id).Select(o => o.NoSaison).ToString();
+        }
 
 
     }
