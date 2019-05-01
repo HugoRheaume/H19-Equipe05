@@ -69,9 +69,9 @@ namespace NetflixPrjeq05.Service
             return queryDoublageLangue.ToList();
         }
 
-        public List<string> getLangueDoublageByContenuId(int id)
+        public List<string> getLangueDoublageByContenuId(int id, List<Contenu> contenus)
         {
-            var queryDoublageLangue = from C in GetAllContenu()
+            var queryDoublageLangue = from C in contenus
                                       join CL in GetAllContenuLangue() on C.ContenuId equals CL.ContenuId
                                       join L in GetAllLangue() on CL.LangueId equals L.LangueId
                                       where C.ContenuId == id

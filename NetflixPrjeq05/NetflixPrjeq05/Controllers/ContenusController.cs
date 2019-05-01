@@ -60,7 +60,7 @@ namespace NetflixPrjeq05.Controllers
                 {
                     ContenuVM contenuVM = new ContenuVM(item);
                     //Doublages              
-                    var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
+                    var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId, m_tousLeContenu);
                     string langues = string.Join(", ", queryLangue.ToList());
                     contenuVM.Doublages = langues;
                     //Origines             
@@ -117,17 +117,17 @@ namespace NetflixPrjeq05.Controllers
             int pageNumber = (page ?? 1);
 
             //Empêche de trier une seconde fois la liste quand on veut juste changer de page.
-            if (page == null)
-            {                
-                //Pays a été modifié à partir de menu déroulant ou initialisation
+            if (!page.HasValue)
+            {
+                //Pays a été modifié à partir de menu déroulant ou 
+
                 if (id != null || m_colContenuCourant == null)
                 {
                     List<Contenu> queryContenuPays;
                     List<Contenu> colContenu;
                     List<ContenuVM> colContenuVM = new List<ContenuVM>();
-
                     if (id != null)
-                        currentPaysId = (int)id;
+                        currentPaysId = id.Value;
 
                     //queryContenuPays = service.getAllContenuByPays(currentPaysId);
                     queryContenuPays = service.getAllContenuByPays(currentPaysId);
@@ -138,7 +138,7 @@ namespace NetflixPrjeq05.Controllers
                     {
                         ContenuVM contenuVM = new ContenuVM(item);
                         //Doublages              
-                        var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
+                        var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId, m_tousLeContenu);
                         string langues = string.Join(", ", queryLangue.ToList());
                         contenuVM.Doublages = langues;
                         //Origines             

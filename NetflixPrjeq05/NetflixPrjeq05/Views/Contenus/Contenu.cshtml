@@ -20,7 +20,7 @@
     @*Html.ActionLink("Create New", "Create")*@
 </p>
 <table class="table">
-    <tr>
+    <tr>                  
         <th>
             @*@Html.DisplayNameFor(model => model.Titre)*@
             @Html.ActionLink("Titre", "Contenu", new { sortOrder = ViewBag.NameSortParm })
@@ -48,30 +48,30 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateSortie)
-            </td>
+    <tr>        
+        <td>
+            @Html.DisplayFor(modelItem => item.Titre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateSortie)
+        </td>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.Duree)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Doublages)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Origines)
-            </td>
-            <td>
-                <img src="@Html.DisplayFor(modelItem => item.Affiche)" width="150" height="200">
-            </td>
-            <td>
-                <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Contenus", new { id = item.ContenuId })';return false;">Retirer</button>
-            </td>
-        </tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Duree)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Doublages)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Origines)
+        </td>
+        <td>
+            <img src="@Html.DisplayFor(modelItem => item.Affiche)" width="150" height="200">
+        </td>
+        <td>
+            <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Contenus", new { id = item.ContenuId })';return false;">Retirer</button>
+        </td>
+    </tr>
     }
 
 </table>
