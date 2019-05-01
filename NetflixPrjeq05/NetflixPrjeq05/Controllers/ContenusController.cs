@@ -20,7 +20,8 @@ namespace NetflixPrjeq05.Controllers
         public static string m_sortOrder;
         public static List<ContenuVM> m_colContenuCourant;
         public static List<Contenu> m_tousLeContenu;
-        public static List<Pays> m_tousLesPays;        
+        public static List<Pays> m_tousLesPays;
+        
 
         //========================================================================================================================================================
         public ActionResult Index(int paysId)
