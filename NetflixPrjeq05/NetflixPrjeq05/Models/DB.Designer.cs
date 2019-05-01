@@ -1,4 +1,4 @@
-﻿// La génération de code T4 est activée pour le modèle 'C:\Users\1634721\Source\Repos\h19prjeq05\NetflixPrjeq05\NetflixPrjeq05\Models\DB.edmx'. 
+﻿// La génération de code T4 est activée pour le modèle 'C:\Users\1749836\Source\Repos\h19prjeq052\NetflixPrjeq05\NetflixPrjeq05\Models\DB.edmx'. 
 // Pour activer la génération de code héritée, définissez la valeur de la propriété
 // du concepteur 'Stratégie de génération de code' sur 'ObjectContext hérité'. Cette propriété est disponible dans la fenêtre Propriétés lorsque le modèle
 //  est ouvert dans le concepteur.

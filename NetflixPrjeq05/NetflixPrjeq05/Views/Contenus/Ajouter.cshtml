@@ -3,7 +3,7 @@
 
 
 @{
-    ViewBag.Title = "Ajouter";
+    ViewBag.Title = "Ajouter du contenu";
 }
 
 <h2>Ajouter</h2>
@@ -15,10 +15,6 @@
     }
 </p>
 
-
-<p>
-    @*Html.ActionLink("Create New", "Create")*@
-</p>
 <table class="table">
     <tr>
         <th>
@@ -64,9 +60,84 @@
                 <img src="@Html.DisplayFor(modelItem => item.Affiche)" width="150" height="200">
             </td>
             <td>
-                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Ajouter", "Contenus", new { id = item.ContenuId })';return false;">Ajouter</button>
-            </td>
+                <table class="table">
 
+                    <tr>
+                        <td>
+                            @if (item.SaisonId != null)
+                            {
+                                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("AjouterContenu", "Contenus", new { id = item.ContenuId })';return false;">Ajouter l'épisode</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("AjouterContenu", "Contenus", new { id = item.ContenuId })';return false;">Ajouter le film</button>
+                            }
+                        </td>
+                    </tr>
+
+                    @if (item.SaisonId != null)
+                    {
+                        <tr>
+                            <td>
+                                <span>
+                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalSeason">Ajouter la saison 1</button>
+
+                                    <div class="modal fade" id="modalSeason" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="ModalLabel">Ajouter une saison</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Êtes-vous sûr vouloir ajouter la saison NBSAISON de la série NAME ?
+                                                    
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                    <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("AjouterSaison", "Contenus", new { id = item.ContenuId })';return false;">Ajouter</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </td>
+                        </tr>
+                    }
+
+
+                    @if (item.SaisonId != null)
+                    {
+                        <tr>
+                            <td>
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modelaSerie">Ajouter une série</button>
+        
+                                <div class="modal fade" id="modelaSerie" tabindex="-1" role="dialog" aria-labelledby="ModalLabel2" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="ModalLabel2">Ajouter Game of Thrones</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Êtes-vous sûr de vouloir ajouter la série NAME?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("AjouterSerie", "Contenus", new { id = item.ContenuId })';return false;">Ajouter</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </td>
         </tr>
     }
 
