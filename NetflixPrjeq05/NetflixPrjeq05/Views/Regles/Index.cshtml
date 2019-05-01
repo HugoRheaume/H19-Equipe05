@@ -16,14 +16,17 @@
 <div id="reglesDiv" style="
     display: flex;
 ">
+    @*<h3>Langue</h3>*@
+    <br />
     <table class="table">
         <tr>
+
             <th>
-               <!--@Html.DisplayNameFor(model => model.Pourcentage)-->
-                Pourcentage
+                <!--@Html.DisplayNameFor(model => model.Pourcentage)-->
+                Pourcentage visé
             </th>
             <th>
-               <!--@Html.DisplayNameFor(model => model.PourcentageReel)-->
+                <!--@Html.DisplayNameFor(model => model.PourcentageReel)-->
                 Pourcentage actuel
             </th>
             <th>
@@ -35,29 +38,44 @@
         {
             if (item.DoublageLangue != string.Empty)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Pourcentage)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PourcentageReel)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DoublageLangue)
-                </td>
-            </tr>
-                
+                <tr>
+                    <td>
+                        @if ((bool)item.EstPlusGrand)
+                        {
+                            <span>>=@Html.DisplayFor(modelItem => item.Pourcentage)</span>
+                        }
+                        else
+                        {
+                            <span>@Html.DisplayFor(modelItem => item.Pourcentage)<=</span>
+                        }
+                    </td>
+                    <td>
+                        @if (((bool)item.EstPlusGrand && item.PourcentageReel >= item.Pourcentage) || !((bool)item.EstPlusGrand && item.PourcentageReel <= item.Pourcentage))
+                        {
+                            <span style="color:green;">@Html.DisplayFor(modelItem => item.PourcentageReel)</span>
+                        }
+                        else
+                        {
+                            <span style="color:red;">@Html.DisplayFor(modelItem => item.PourcentageReel)</span>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DoublageLangue)
+                    </td>
+                </tr>
+
             }
         }
 
     </table>
     <div style="width:3px; margin: 0 20px; background-color:lightgray;"></div>
 
+    @*<h3>Origine</h3>*@
     <table class="table">
         <tr>
             <th>
                 <!--@Html.DisplayNameFor(model => model.Pourcentage)-->
-                Pourcentage
+                Pourcentage visé
             </th>
             <th>
                 <!--@Html.DisplayNameFor(model => model.PourcentageReel)-->
@@ -74,10 +92,24 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Pourcentage)
+                        @if ((bool)item.EstPlusGrand)
+                        {
+                            <span>>=@Html.DisplayFor(modelItem => item.Pourcentage)</span>
+                        }
+                        else
+                        {
+                            <span>@Html.DisplayFor(modelItem => item.Pourcentage)<=</span>
+                        }
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PourcentageReel)
+                        @if (((bool)item.EstPlusGrand && item.PourcentageReel >= item.Pourcentage) || !((bool)item.EstPlusGrand && item.PourcentageReel <= item.Pourcentage))
+                        {
+                            <span style="color:green;">@Html.DisplayFor(modelItem => item.PourcentageReel)</span>
+                        }
+                        else
+                        {
+                            <span style="color:red;">@Html.DisplayFor(modelItem => item.PourcentageReel)</span>
+                        }
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.OriginePays)

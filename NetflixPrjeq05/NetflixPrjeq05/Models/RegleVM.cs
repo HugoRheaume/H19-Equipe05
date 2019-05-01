@@ -22,6 +22,8 @@ namespace NetflixPrjeq05.Models
             DoublageLangueId = regle.DoublageLangueId;
             Pourcentage = regle.Pourcentage;
             PourcentageReel = regle.PourcentageReel;
+            EstPlusGrand = regle.EstPlusGrand;
+            
         }
         public int RegleId { get; set; }
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
@@ -39,6 +41,7 @@ namespace NetflixPrjeq05.Models
         public string DoublageLangue { get; set; }
         [DisplayName("Pays d'origine")]
         public string OriginePays { get; set; }
+        public bool? EstPlusGrand { get; set; }
 
     }
 }

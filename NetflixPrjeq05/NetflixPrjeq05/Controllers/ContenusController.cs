@@ -41,7 +41,7 @@ namespace NetflixPrjeq05.Controllers
                 m_tousLeContenu = service.GetAllContenu();
 
             //Pagination
-            int pageSize = 2;
+            int pageSize = 3;
             int pageNumber = (page ?? 1);
 
             //if (sortOrder == null && m_sortOrder != null)
@@ -95,7 +95,6 @@ namespace NetflixPrjeq05.Controllers
                     case "duree_asc":
                         colContenuVM = colContenuVM.OrderBy(c => c.Duree).ToList();
                         break;
-
                     default:
                         colContenuVM = colContenuVM.OrderByDescending(c => c.ContenuId).ToList();
                         break;
