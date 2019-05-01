@@ -68,21 +68,14 @@ namespace NetflixPrjeq05.Service
 
             return queryDoublageLangue.ToList();
         }
-
-        public List<string> getLangueDoublageByContenuId(int id, List<Contenu> contenus)
-        {
-            var queryDoublageLangue = from C in contenus
-                                      join CL in GetAllContenuLangue() on C.ContenuId equals CL.ContenuId
-                                      join L in GetAllLangue() on CL.LangueId equals L.LangueId
-                                      where C.ContenuId == id
-                                      select L.Nom;
-
-            return queryDoublageLangue.ToList();
-        }
-
-        public List<string> getLangueDoublageByContenuId2(int id)
+        
+        public List<string> getLangueDoublageByContenuId(int id)
         {
             return db.ContenuLangue.Where(x => x.ContenuId == id).Select(y => y.Langue.Nom).ToList();
+        }
+        public List<string> getOriginePaysByContenuId(int id)
+        {
+            return db.OriginePays.Where(x => x.ContenuId == id).Select(y => y.Pays.Nom).ToList();
         }
 
         public List<string> getOriginePaysByRegleId(int id)
@@ -94,21 +87,8 @@ namespace NetflixPrjeq05.Service
 
             return queryDoublageLangue.ToList();
         }
-
-        public List<string> getOriginePaysByContenuId(int id)
-        {
-            var queryDoublageLangue = from C in GetAllContenu()
-                                      join OP in GetAllOrigineContenu() on C.ContenuId equals OP.ContenuId
-                                      join L in GetAllPays() on OP.PaysId equals L.PaysId
-                                      where C.ContenuId == id
-                                      select L.Nom;
-
-            return queryDoublageLangue.ToList();
-        }
-        public List<string> getOriginePaysByContenuId2(int id)
-        {
-            return db.OriginePays.Where(x => x.ContenuId == id).Select(y => y.Pays.Nom).ToList();
-        }
+        
+        
         public List<Contenu> getAllContenuByPays(int id)
         {
             var queryDoublageLangue = from C in GetAllContenu()

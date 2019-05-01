@@ -60,7 +60,7 @@ namespace NetflixPrjeq05.Controllers
                 {
                     ContenuVM contenuVM = new ContenuVM(item);
                     //Doublages              
-                    var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId, m_tousLeContenu);
+                    var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
                     string langues = string.Join(", ", queryLangue.ToList());
                     contenuVM.Doublages = langues;
                     //Origines             
@@ -137,13 +137,13 @@ namespace NetflixPrjeq05.Controllers
                     foreach (var item in colContenu)
                     {
                         ContenuVM contenuVM = new ContenuVM(item);
-                        //Doublages              
-                        var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId, m_tousLeContenu);
+                        //Doublages                                    
+                        List<string> queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
                         string langues = string.Join(", ", queryLangue.ToList());
                         contenuVM.Doublages = langues;
-                        //Origines             
-                        var queryOrigines = service.getOriginePaysByContenuId(contenuVM.ContenuId);
-                        string origines = string.Join(", ", queryOrigines.ToList());
+                        //Origines                                   
+                        List<string> queryOrignine = service.getOriginePaysByContenuId(contenuVM.ContenuId);
+                        string origines = string.Join(", ", queryOrignine.ToList());
                         contenuVM.Origines = origines;
                         colContenuVM.Add(contenuVM);
                     }
