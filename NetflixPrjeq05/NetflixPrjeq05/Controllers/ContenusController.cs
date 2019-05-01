@@ -36,15 +36,16 @@ namespace NetflixPrjeq05.Controllers
         //============================================================================CONTENU============================================================================
         public ActionResult Contenu(int? id, string sortOrder, int? page)
         {
+            //Seulement effectué quand le controleur est appellé pour la première fois.
+            if (m_tousLeContenu == null)
+                m_tousLeContenu = service.GetAllContenu();
+
             if (m_tousLesPays == null)
                 m_tousLesPays = service.GetAllPays();
 
             ViewBag.Pays = new SelectList(m_tousLesPays, "PaysId", "Nom", currentPaysId);
             //m_colContenuCourant = null;
-            //Seulement effectué quand le controleur est appellé pour la première fois.
-            if (m_tousLeContenu == null)
-                m_tousLeContenu = service.GetAllContenu();
-
+                   
             //Pagination
             int pageSize = 3;
             int pageNumber = (page ?? 1);
