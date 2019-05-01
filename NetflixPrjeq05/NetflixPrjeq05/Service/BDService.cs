@@ -109,5 +109,18 @@ namespace NetflixPrjeq05.Service
             db.SaveChanges();
         }
 
+        //============================================================================AJOUTER============================================================================
+        public void AjouterOffre(OffrePays offre)
+        {
+            db.OffrePays.Add(offre);
+            db.SaveChanges();
+        }
+
+        //public Saison GetSaison(int id)
+        //{
+        //    return db.Saison.Where(s => s.SaisonId == id).Select(o => o.NoSaison).Single();
+        //}
+
+
     }
 }

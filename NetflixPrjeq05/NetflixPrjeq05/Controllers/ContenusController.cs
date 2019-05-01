@@ -123,6 +123,7 @@ namespace NetflixPrjeq05.Controllers
             //Pagination
             int pageSize = 3;
             int pageNumber = (page ?? 1);
+
             //BUG: SORT_ORDER N'EST PAS PRIS EN PARAMETRE QUAND NOUS TRIONS DEPUIS AUTREPART QUE LA PAGE 1.  
             // ^ empeche aussi de 
             if (sortOrder != null)
@@ -219,8 +220,67 @@ namespace NetflixPrjeq05.Controllers
 
             return View();
         }
-       
+
         //============================================================================AJOUTER============================================================================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AjouterContenu(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Contenu contenu = service.GetContenuByID(id.Value);
+            OffrePays offrePays = new OffrePays();
+            offrePays.ContenuId = id.Value;
+            offrePays.PaysId = currentPaysId;
+            service.AjouterOffre(offrePays);
+            m_tousLeContenu.Remove(contenu);
+            if (contenu == null)
+            {
+                return HttpNotFound();
+            }
+            return View(contenu);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AjouterSaison(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Contenu contenu = service.GetContenuByID(id.Value);
+            List<C>
+            OffrePays offrePays = new OffrePays();
+            offrePays.ContenuId = id.Value;
+            offrePays.PaysId = currentPaysId;
+            service.AjouterOffre(offrePays);
+            m_tousLeContenu.Remove(contenu);
+            if (contenu == null)
+            {
+                return HttpNotFound();
+            }
+            return View(contenu);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AjouterSerie(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Contenu contenu = service.GetContenuByID(id.Value);
+            if (contenu == null)
+            {
+                return HttpNotFound();
+            }
+            return View(contenu);
+        }
+
         public ActionResult Create()
         {
             return View();
