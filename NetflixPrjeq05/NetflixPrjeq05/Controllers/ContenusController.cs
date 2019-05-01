@@ -216,8 +216,6 @@ namespace NetflixPrjeq05.Controllers
             if (id != null)
                 currentPaysId = (int)id;
 
-
-
             return View();
         }
 
