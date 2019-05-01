@@ -222,8 +222,7 @@ namespace NetflixPrjeq05.Controllers
         }
 
         //============================================================================AJOUTER============================================================================
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        
         public ActionResult AjouterContenu(int? id)
         {
             if (id == null)
@@ -244,8 +243,7 @@ namespace NetflixPrjeq05.Controllers
             return RedirectToAction("Ajouter");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+       
         public ActionResult AjouterSaison(int? id)
         {
             if (id == null)
