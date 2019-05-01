@@ -240,7 +240,8 @@ namespace NetflixPrjeq05.Controllers
             {
                 return HttpNotFound();
             }
-            return View(contenu);
+            //return View();
+            return View();
         }
 
         [HttpPost]
@@ -250,19 +251,28 @@ namespace NetflixPrjeq05.Controllers
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Contenu contenu = service.GetContenuByID(id.Value);
-            //List<Contenu> colEpisodes = 
-            //OffrePays offrePays = new OffrePays();
-            //offrePays.ContenuId = id.Value;
-            //offrePays.PaysId = currentPaysId;
-            //service.AjouterOffre(offrePays);
-            m_tousLeContenu.Remove(contenu);
-            if (contenu == null)
+            }           
+            List<Contenu> colEpisodes = service.GetSaisonEpisodes(id.Value);
+            foreach (var episode in colEpisodes)
             {
-                return HttpNotFound();
+                ContenuVM contenu = m_colContenuCourant.Where(c => c.ContenuId == episode.ContenuId).First();
+                //Vérification si episode est déja disponible
+                if (m_colContenuCourant.Where(c => c.ContenuId == contenu.ContenuId) != null)
+                {                  
+                    OffrePays offrePays = new OffrePays();
+                    offrePays.ContenuId = episode.ContenuId;
+                    offrePays.PaysId = currentPaysId;
+                    service.AjouterOffre(offrePays);
+                    //Met a jour liste courante
+                    m_colContenuCourant.Remove(contenu);
+                }
             }
-            return View(contenu);
+            //if (contenu == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //return View(contenu);
+            return View();
         }
 
         [HttpPost]
