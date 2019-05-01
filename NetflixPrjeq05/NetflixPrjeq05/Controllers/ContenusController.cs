@@ -241,7 +241,7 @@ namespace NetflixPrjeq05.Controllers
                 return HttpNotFound();
             }
             //return View();
-            return View();
+            return RedirectToAction("Ajouter");
         }
 
         [HttpPost]
@@ -271,8 +271,8 @@ namespace NetflixPrjeq05.Controllers
             //{
             //    return HttpNotFound();
             //}
-            //return View(contenu);
-            return View();
+            //return View(contenu);            
+            return RedirectToAction("Ajouter");
         }
 
         [HttpPost]
