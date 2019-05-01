@@ -132,10 +132,17 @@ namespace NetflixPrjeq05.Service
             return db.Contenu.Where(c => c.SaisonId == saisonId).ToList();
         }
 
-        //public List<Contenu> GetSerieEpisodes(int saisonId)
-        //{
-        //    int serieId = db.Saison.Where(s => s.SaisonId == saisonId).Select(o => o.SerieId).First();
-
-        //}
+        public List<Contenu> GetSerieEpisodes(int saisonId)
+        {
+            List<Contenu> colEpisodes = new List<Contenu>();
+            int serieId = db.Saison.Where(s => s.SaisonId == saisonId).Select(o => o.SerieId).First();
+            List<int> saisonIds = db.Saison.Where(s => s.SerieId == serieId).Select(s => s.SaisonId).ToList();
+            foreach (int sauceId in saisonIds)
+            {
+                List<Contenu> colSaisonEpi = GetSaisonEpisodes(sauceId);
+                colEpisodes.AddRange(colSaisonEpi);
+            }
+            return colEpisodes;
+        }
     }
 }

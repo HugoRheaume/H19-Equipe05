@@ -281,12 +281,27 @@ namespace NetflixPrjeq05.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Contenu contenu = service.GetContenuByID(id.Value);
-            if (contenu == null)
+            List<Contenu> colEpisodes = service.GetSerieEpisodes(id.Value);
+            foreach (var episode in colEpisodes)
             {
-                return HttpNotFound();
+                ContenuVM contenu = m_colContenuCourant.Where(c => c.ContenuId == episode.ContenuId).First();
+                //Vérification si episode est déja disponible
+                if (m_colContenuCourant.Where(c => c.ContenuId == contenu.ContenuId) != null)
+                {
+                    OffrePays offrePays = new OffrePays();
+                    offrePays.ContenuId = episode.ContenuId;
+                    offrePays.PaysId = currentPaysId;
+                    service.AjouterOffre(offrePays);
+                    //Met a jour liste courante
+                    m_colContenuCourant.Remove(contenu);
+                }
             }
-            return View(contenu);
+            //if (contenu == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //return View(contenu);
+            return RedirectToAction("Ajouter");
         }
 
         public ActionResult Create()
