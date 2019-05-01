@@ -79,6 +79,12 @@ namespace NetflixPrjeq05.Service
 
             return queryDoublageLangue.ToList();
         }
+
+        public List<string> getLangueDoublageByContenuId2(int id)
+        {
+            return db.ContenuLangue.Where(x => x.ContenuId == id).Select(y => y.Langue.Nom).ToList();
+        }
+
         public List<string> getOriginePaysByRegleId(int id)
         {
             var queryDoublageLangue = from r in GetAllReglement()
@@ -98,6 +104,10 @@ namespace NetflixPrjeq05.Service
                                       select L.Nom;
 
             return queryDoublageLangue.ToList();
+        }
+        public List<string> getOriginePaysByContenuId2(int id)
+        {
+            return db.OriginePays.Where(x => x.ContenuId == id).Select(y => y.Pays.Nom).ToList();
         }
         public List<Contenu> getAllContenuByPays(int id)
         {
