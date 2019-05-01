@@ -353,6 +353,16 @@ namespace NetflixPrjeq05.Controllers
             return RedirectToAction("Contenu");
         }
 
+        public string GetSerieNom(int id)
+        {
+            return service.GetSerieNom(id);
+        }
+
+        public string GetSaisonNumero(int id)
+        {
+            return service.GetSaisonNumero(id);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
