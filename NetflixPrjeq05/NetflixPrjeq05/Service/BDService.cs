@@ -58,17 +58,22 @@ namespace NetflixPrjeq05.Service
         {
             return db.Contenu.Where(c => c.ContenuId >= debut && c.ContenuId <= fin).ToList();
         }
-
-        public List<string> getLangueDoublageByRegleId(int id)
+    
+        public List<Contenu> getAllContenuByPays(int id)
         {
-            var queryDoublageLangue = from r in GetAllReglement()
-            join l in GetAllLangue() on r.DoublageLangueId equals l.LangueId
-            where r.RegleId == id
-            select l.Nom;
+            var queryDoublageLangue = from C in GetAllContenu()
+                                      join CR in GetAllOffreContenu() on C.ContenuId equals CR.ContenuId
+                                      where CR.PaysId == id
+                                      select C;
 
             return queryDoublageLangue.ToList();
         }
-        
+
+        public List<int> GetAllContenuIdsByPays(int id)
+        {
+            return db.OffrePays.Where(o => o.PaysId == id).Select(o => o.ContenuId).ToList();
+        }
+
         public List<string> getLangueDoublageByContenuId(int id)
         {
             return db.ContenuLangue.Where(x => x.ContenuId == id).Select(y => y.Langue.Nom).ToList();
@@ -76,6 +81,16 @@ namespace NetflixPrjeq05.Service
         public List<string> getOriginePaysByContenuId(int id)
         {
             return db.OriginePays.Where(x => x.ContenuId == id).Select(y => y.Pays.Nom).ToList();
+        }
+
+        public List<string> getLangueDoublageByRegleId(int id)
+        {
+            var queryDoublageLangue = from r in GetAllReglement()
+                                      join l in GetAllLangue() on r.DoublageLangueId equals l.LangueId
+                                      where r.RegleId == id
+                                      select l.Nom;
+
+            return queryDoublageLangue.ToList();
         }
 
         public List<string> getOriginePaysByRegleId(int id)
@@ -87,18 +102,7 @@ namespace NetflixPrjeq05.Service
 
             return queryDoublageLangue.ToList();
         }
-        
-        
-        public List<Contenu> getAllContenuByPays(int id)
-        {
-            var queryDoublageLangue = from C in GetAllContenu()
-                                      join CR in GetAllOffreContenu() on C.ContenuId equals CR.ContenuId
-                                      where CR.PaysId == id
-                                      select C;
-
-            return queryDoublageLangue.ToList();
-        }
-
+             
         public void RemoveOffre(int id)
         {
             db.OffrePays.Remove(db.OffrePays.Find(id));

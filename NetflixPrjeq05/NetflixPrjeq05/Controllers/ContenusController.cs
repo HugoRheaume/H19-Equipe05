@@ -20,6 +20,7 @@ namespace NetflixPrjeq05.Controllers
         public static string m_sortOrder;
         public static List<ContenuVM> m_colContenuCourant;
         public static List<Contenu> m_tousLeContenu;
+        public static List<Pays> m_tousLesPays;        
 
         //========================================================================================================================================================
         public ActionResult Index(int paysId)
@@ -33,8 +34,11 @@ namespace NetflixPrjeq05.Controllers
         }
         //============================================================================CONTENU============================================================================
         public ActionResult Contenu(int? id, string sortOrder, int? page)
-        {              
-            ViewBag.Pays = new SelectList(service.GetAllPays(), "PaysId", "Nom", currentPaysId);
+        {
+            if (m_tousLesPays == null)
+                m_tousLesPays = service.GetAllPays();
+
+            ViewBag.Pays = new SelectList(m_tousLesPays, "PaysId", "Nom", currentPaysId);
             m_colContenuCourant = null;
             //Seulement effectué quand le controleur est appellé pour la première fois.
             if (m_tousLeContenu == null)
@@ -106,12 +110,15 @@ namespace NetflixPrjeq05.Controllers
         }
         //============================================================================AJOUTER============================================================================
         public ActionResult Ajouter(int? id, string sortOrder, int? page)
-        {          
-            ViewBag.Pays = new SelectList(service.GetAllPays(), "PaysId", "Nom", currentPaysId);
-            //Seulement effectué quand le controleur est appellé pour la première fois.
+        {
+            //Seulement effectués quand le controleur est appellé pour la première fois.
+            if (m_tousLesPays == null)
+                m_tousLesPays = service.GetAllPays();
+
             if (m_tousLeContenu == null)
                 m_tousLeContenu = service.GetAllContenu();
-            
+
+            ViewBag.Pays = new SelectList(m_tousLesPays, "PaysId", "Nom", currentPaysId);                      
             //Pagination
             int pageSize = 3;
             int pageNumber = (page ?? 1);
@@ -132,6 +139,10 @@ namespace NetflixPrjeq05.Controllers
                     //queryContenuPays = service.getAllContenuByPays(currentPaysId);
                     queryContenuPays = service.getAllContenuByPays(currentPaysId);
                     List<int> contenuPaysIds = queryContenuPays.Select(c => c.ContenuId).ToList();
+                    //List<int> contenuPaysIds2 = service.GetAllContenuIdsByPays(currentPaysId);
+
+
+
                     colContenu = m_tousLeContenu.Where(c => !contenuPaysIds.Contains(c.ContenuId)).ToList();
                     
                     foreach (var item in colContenu)
