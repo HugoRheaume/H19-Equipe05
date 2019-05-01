@@ -122,6 +122,13 @@ namespace NetflixPrjeq05.Controllers
             //Pagination
             int pageSize = 3;
             int pageNumber = (page ?? 1);
+            //BUG: SORT_ORDER N'EST PAS PRIS EN PARAMETRE QUAND NOUS TRIONS DEPUIS AUTREPART QUE LA PAGE 1.  
+            // ^ empeche aussi de 
+            if (sortOrder != null)
+                m_sortOrder = sortOrder;
+            ViewBag.NameSortParm = m_sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";
+            ViewBag.DateSortParm = m_sortOrder == "date_asc" ? "date_desc" : "date_asc";
+            ViewBag.DureeSortParm = m_sortOrder == "duree_asc" ? "duree_desc" : "duree_asc";
 
             //Empêche de trier une seconde fois la liste quand on veut juste changer de page.
             if (!page.HasValue)
@@ -159,21 +166,16 @@ namespace NetflixPrjeq05.Controllers
                         colContenuVM.Add(contenuVM);
                     }
                     m_colContenuCourant = colContenuVM;
-                }       
-                //BUG: SORT_ORDER N'EST PAS PRIS EN PARAMETRE QUAND NOUS TRIONS DEPUIS AUTREPART QUE LA PAGE 1.  
-                // ^ empeche aussi de 
-                if (sortOrder != null)
-                    m_sortOrder = sortOrder;
+                }
+               
+                
 
                 //List<Contenu> queryContenuPays = service.getAllContenuByPays(currentPaysId);
                 //List<Contenu> colContenu =  service.GetAllContenu().Except(queryContenuPays).ToList();
-                              
                 
 
                 //Sorting matters titre / date sortie / duree
-                ViewBag.NameSortParm = m_sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";
-                ViewBag.DateSortParm = m_sortOrder == "date_asc" ? "date_desc" : "date_asc";
-                ViewBag.DureeSortParm = m_sortOrder == "duree_asc" ? "duree_desc" : "duree_asc";
+
 
                 switch (m_sortOrder)
                 {
