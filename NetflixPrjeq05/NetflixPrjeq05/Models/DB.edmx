@@ -61,6 +61,21 @@
           <Property Name="Code_ISO3166" Type="nvarchar" MaxLength="3" />
           <Property Name="Nom" Type="nvarchar" MaxLength="16" />
         </EntityType>
+        <EntityType Name="Saison">
+          <Key>
+            <PropertyRef Name="SaisonId" />
+          </Key>
+          <Property Name="SaisonId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SerieId" Type="int" Nullable="false" />
+          <Property Name="NoSaison" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Serie">
+          <Key>
+            <PropertyRef Name="SerieId" />
+          </Key>
+          <Property Name="SerieId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nom" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
         <EntityType Name="Regle">
           <Key>
             <PropertyRef Name="RegleId" />
@@ -182,6 +197,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Saison_Serie_SerieId">
+          <End Role="Serie" Type="Self.Serie" Multiplicity="1" />
+          <End Role="Saison" Type="Self.Saison" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Serie">
+              <PropertyRef Name="SerieId" />
+            </Principal>
+            <Dependent Role="Saison">
+              <PropertyRef Name="SerieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SaisonContenu">
+          <End Role="Saison" Type="Self.Saison" Multiplicity="0..1" />
+          <End Role="Contenu" Type="Self.Contenu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Saison">
+              <PropertyRef Name="SaisonId" />
+            </Principal>
+            <Dependent Role="Contenu">
+              <PropertyRef Name="SaisonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DBModelStoreContainer">
           <EntitySet Name="Contenu" EntityType="Self.Contenu" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="ContenuLangue" EntityType="Self.ContenuLangue" Schema="Contenus" store:Type="Tables" />
@@ -189,6 +228,8 @@
           <EntitySet Name="OffrePays" EntityType="Self.OffrePays" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="OriginePays" EntityType="Self.OriginePays" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="Pays" EntityType="Self.Pays" Schema="Contenus" store:Type="Tables" />
+          <EntitySet Name="Saison" EntityType="Self.Saison" Schema="Contenus" store:Type="Tables" />
+          <EntitySet Name="Serie" EntityType="Self.Serie" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="Regle" EntityType="Self.Regle" Schema="Reglementations" store:Type="Tables" />
           <AssociationSet Name="FK_ContenuLangue_Contenu_ContenuId" Association="Self.FK_ContenuLangue_Contenu_ContenuId">
             <End Role="Contenu" EntitySet="Contenu" />
@@ -226,6 +267,14 @@
             <End Role="Pays" EntitySet="Pays" />
             <End Role="Regle" EntitySet="Regle" />
           </AssociationSet>
+          <AssociationSet Name="FK_Saison_Serie_SerieId" Association="Self.FK_Saison_Serie_SerieId">
+            <End Role="Serie" EntitySet="Serie" />
+            <End Role="Saison" EntitySet="Saison" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SaisonContenu" Association="Self.FK_SaisonContenu">
+            <End Role="Saison" EntitySet="Saison" />
+            <End Role="Contenu" EntitySet="Contenu" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -249,6 +298,7 @@
           <NavigationProperty Name="OffrePays" Relationship="DBModel.FK__OffrePays__Conte__5AEE82B9" FromRole="Contenu" ToRole="OffrePays" />
           <NavigationProperty Name="OriginePays" Relationship="DBModel.FK__OriginePa__Conte__5FB337D6" FromRole="Contenu" ToRole="OriginePays" />
           <Property Name="SaisonId" Type="Int32" />
+          <NavigationProperty Name="Saison" Relationship="DBModel.FK_SaisonContenu" FromRole="Contenu" ToRole="Saison" />
         </EntityType>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Contenu" EntityType="Self.Contenu" />
@@ -293,6 +343,16 @@
           <AssociationSet Name="FK__Regle__PaysId__693CA210" Association="DBModel.FK__Regle__PaysId__693CA210">
             <End Role="Pays" EntitySet="Pays" />
             <End Role="Regle" EntitySet="Regle" />
+          </AssociationSet>
+          <EntitySet Name="Saison" EntityType="DBModel.Saison" />
+          <EntitySet Name="Serie" EntityType="DBModel.Serie" />
+          <AssociationSet Name="FK_SaisonContenu" Association="DBModel.FK_SaisonContenu">
+            <End Role="Saison" EntitySet="Saison" />
+            <End Role="Contenu" EntitySet="Contenu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Saison_Serie_SerieId" Association="DBModel.FK_Saison_Serie_SerieId">
+            <End Role="Serie" EntitySet="Serie" />
+            <End Role="Saison" EntitySet="Saison" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Langue">
@@ -471,6 +531,48 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Saison">
+          <Key>
+            <PropertyRef Name="SaisonId" />
+          </Key>
+          <Property Name="SaisonId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SerieId" Type="Int32" Nullable="false" />
+          <Property Name="NoSaison" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Contenu" Relationship="DBModel.FK_SaisonContenu" FromRole="Saison" ToRole="Contenu" />
+          <NavigationProperty Name="Serie" Relationship="DBModel.FK_Saison_Serie_SerieId" FromRole="Saison" ToRole="Serie" />
+        </EntityType>
+        <EntityType Name="Serie">
+          <Key>
+            <PropertyRef Name="SerieId" />
+          </Key>
+          <Property Name="SerieId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nom" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Saison" Relationship="DBModel.FK_Saison_Serie_SerieId" FromRole="Serie" ToRole="Saison" />
+        </EntityType>
+        <Association Name="FK_SaisonContenu">
+          <End Type="DBModel.Saison" Role="Saison" Multiplicity="0..1" />
+          <End Type="DBModel.Contenu" Role="Contenu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Saison">
+              <PropertyRef Name="SaisonId" />
+            </Principal>
+            <Dependent Role="Contenu">
+              <PropertyRef Name="SaisonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Saison_Serie_SerieId">
+          <End Type="DBModel.Serie" Role="Serie" Multiplicity="1" />
+          <End Type="DBModel.Saison" Role="Saison" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Serie">
+              <PropertyRef Name="SerieId" />
+            </Principal>
+            <Dependent Role="Saison">
+              <PropertyRef Name="SerieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -550,6 +652,23 @@
                 <ScalarProperty Name="OriginePaysId" ColumnName="OriginePaysId" />
                 <ScalarProperty Name="PaysId" ColumnName="PaysId" />
                 <ScalarProperty Name="RegleId" ColumnName="RegleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Saison">
+            <EntityTypeMapping TypeName="DBModel.Saison">
+              <MappingFragment StoreEntitySet="Saison">
+                <ScalarProperty Name="NoSaison" ColumnName="NoSaison" />
+                <ScalarProperty Name="SerieId" ColumnName="SerieId" />
+                <ScalarProperty Name="SaisonId" ColumnName="SaisonId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Serie">
+            <EntityTypeMapping TypeName="DBModel.Serie">
+              <MappingFragment StoreEntitySet="Serie">
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="SerieId" ColumnName="SerieId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

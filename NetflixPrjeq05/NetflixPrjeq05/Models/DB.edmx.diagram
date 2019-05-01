@@ -21,6 +21,10 @@
         <AssociationConnector Association="DBModel.FK__Regle__DoublageL__6B24EA82" />
         <AssociationConnector Association="DBModel.FK__Regle__OriginePa__6A30C649" />
         <AssociationConnector Association="DBModel.FK__Regle__PaysId__693CA210" />
+        <EntityTypeShape EntityType="DBModel.Saison" Width="1.5" PointX="0.75" PointY="6" />
+        <EntityTypeShape EntityType="DBModel.Serie" Width="1.5" PointX="0.75" PointY="12.125" />
+        <AssociationConnector Association="DBModel.FK_SaisonContenu" />
+        <AssociationConnector Association="DBModel.FK_Saison_Serie_SerieId" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

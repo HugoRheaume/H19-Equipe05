@@ -40,5 +40,6 @@ namespace NetflixPrjeq05.Models
         public virtual ICollection<OffrePays> OffrePays { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OriginePays> OriginePays { get; set; }
+        public virtual Saison Saison { get; set; }
     }
 }
