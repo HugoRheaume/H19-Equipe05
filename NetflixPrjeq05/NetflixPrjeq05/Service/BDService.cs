@@ -39,7 +39,7 @@ namespace NetflixPrjeq05.Service
         }
         public Contenu GetContenuByID(int id)
         {
-            return (Contenu)db.Contenu.Where(x => x.ContenuId==id);
+            return db.Contenu.Where(x => x.ContenuId==id).First();
         }
         public List<OffrePays> GetAllOffreContenu()
         {
