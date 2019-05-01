@@ -8,14 +8,18 @@ namespace NetflixPrjeq05.Controllers
 {
     public class HomeController : Controller
     {
-       
 
+        //==================================================================================================================================
+        public ActionResult ConfirmationAjout()
+        {
+            return PartialView();
+        }
+        //==================================================================================================================================
         public ActionResult Index()
         {
 
             return View();
         }
-
         public ActionResult About()
         {
            
