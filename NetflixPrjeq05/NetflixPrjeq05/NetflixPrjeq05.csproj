@@ -282,6 +282,8 @@
     <Content Include="Views\Regles\Edit.cshtml" />
     <Content Include="Views\Regles\CreateOrigine.cshtml" />
     <Content Include="Views\Regles\CreateLangue.cshtml" />
+    <Content Include="Views\Regles\EditLangue.cshtml" />
+    <Content Include="Views\Regles\EditOrigine.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
