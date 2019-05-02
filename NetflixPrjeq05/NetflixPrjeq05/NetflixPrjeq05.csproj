@@ -280,6 +280,8 @@
     <Content Include="Views\Home\ConfirmationAjout.cshtml" />
     <Content Include="Views\Regles\Create.cshtml" />
     <Content Include="Views\Regles\Edit.cshtml" />
+    <Content Include="Views\Regles\CreateOrigine.cshtml" />
+    <Content Include="Views\Regles\CreateLangue.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

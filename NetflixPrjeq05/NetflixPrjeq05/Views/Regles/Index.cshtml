@@ -42,43 +42,45 @@
         {
             if (item.DoublageLangue != string.Empty)
             {
-                <tr>
-                    <td>
-                        @if ((bool)item.EstPlusGrand)
-                        {
-                            <span>Plus de @Html.DisplayFor(modelItem => item.Pourcentage)</span>
-                        }
-                        else
-                        {
-                            <span>Moins de @Html.DisplayFor(modelItem => item.Pourcentage)</span>
-                        }
-                    </td>
-                    <td>
-                        @if (((bool)item.EstPlusGrand && item.PourcentageReel >= item.Pourcentage) || !((bool)item.EstPlusGrand && item.PourcentageReel <= item.Pourcentage))
-                        {
-                            <span style="color:green;">@Html.DisplayFor(modelItem => item.PourcentageReel)</span>
-                        }
-                        else
-                        {
-                            <span style="color:red;">@Html.DisplayFor(modelItem => item.PourcentageReel)</span>
-                        }
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DoublageLangue)
-                    </td>
-                    <td>
-                        <a href="@Url.Action("Edit", "Regles")"> <i class="far fa-edit"></i></a>
-                    </td>
-                    <th>
-                        <a href="@Url.Action("Edit", "Regles")"> <i class="far fa-trash-alt"></i></a>
-                    </th>
-                </tr>
+        <tr>
+            <td>
+                @if ((bool)item.EstPlusGrand)
+                {
+                    <span>Plus de @Html.DisplayFor(modelItem => item.Pourcentage)</span>
+                }
+                else
+                {
+                    <span>Moins de @Html.DisplayFor(modelItem => item.Pourcentage)</span>
+                }
+            </td>
+            <td>
+                @if (((bool)item.EstPlusGrand && item.PourcentageReel >= item.Pourcentage) || !((bool)item.EstPlusGrand && item.PourcentageReel <= item.Pourcentage))
+                {
+                    <span style="color:green;">@Html.DisplayFor(modelItem => item.PourcentageReel)</span>
+                }
+                else
+                {
+                    <span style="color:red;">@Html.DisplayFor(modelItem => item.PourcentageReel)</span>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DoublageLangue)
+            </td>
+            <th>
+
+                <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("Edit", "Regles", new { id = item.RegleId })';return false;"><i class="far fa-edit"></i></button>
+            </th>
+            <th>
+                <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Regles", new { id = item.RegleId })';return false;"><i class="fas fa-trash-alt"></i></button>
+
+            </th>
+        </tr>
 
             }
         }
         <tr>
             <td>
-                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("Delete", "Regles")';return false;"><i class="fas fa-plus-circle"></i></button>
+                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("CreateLangue", "Regles")';return false;"><i class="fas fa-plus-circle"></i></button>
 
             </td>
             <td></td>
@@ -155,7 +157,7 @@
         }
         <tr>
             <td>
-                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("AjouterOrigine", "Regles")';return false;"><i class="fas fa-plus-circle"></i></button>
+                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("CreateOrigine", "Regles")';return false;"><i class="fas fa-plus-circle"></i></button>
 
             </td>
             <td></td>
