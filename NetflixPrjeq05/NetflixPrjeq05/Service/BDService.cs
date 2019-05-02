@@ -144,5 +144,10 @@ namespace NetflixPrjeq05.Service
             }
             return colEpisodes;
         }
+        public void AddRegle(Regle regle)
+        {            
+            db.Regle.Add(regle);
+            db.SaveChanges();
+        }
     }
 }
