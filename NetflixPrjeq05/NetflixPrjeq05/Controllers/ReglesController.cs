@@ -19,8 +19,12 @@ namespace NetflixPrjeq05.Controllers
         public ActionResult Index(int? id)
         {
             if (id != null)
+            {
                 ContenusController.currentPaysId = id.Value;
-
+                ContenusController.m_colContenuDisponibleCourant = null;
+                ContenusController.m_colContenuIndisponibleCourant = null;
+            }
+            
             int paysId = ContenusController.currentPaysId;
             ViewBag.Pays = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
             List<RegleVM> regleVMs = new List<RegleVM>();

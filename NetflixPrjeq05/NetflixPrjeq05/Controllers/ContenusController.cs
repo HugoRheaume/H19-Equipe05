@@ -238,7 +238,7 @@ namespace NetflixPrjeq05.Controllers
             service.AjouterOffre(offrePays);
             //Met a jour listes courantes
             if (m_colContenuIndisponibleCourant != null)
-                m_colContenuIndisponibleCourant.Remove(contenu);
+                m_colContenuIndisponibleCourant.Remove(m_colContenuIndisponibleCourant.Where(c => c.ContenuId == id).First());
             if (m_colContenuDisponibleCourant != null)
                 m_colContenuDisponibleCourant.Add(contenu);
             if (contenu == null)
@@ -270,7 +270,7 @@ namespace NetflixPrjeq05.Controllers
                     service.AjouterOffre(offrePays);
                     //Met a jour listes courantes
                     if (m_colContenuIndisponibleCourant != null)
-                        m_colContenuIndisponibleCourant.Remove(contenu);
+                        m_colContenuIndisponibleCourant.Remove(m_colContenuIndisponibleCourant.Where(c => c.ContenuId == episode.ContenuId).First());
                     if (m_colContenuDisponibleCourant != null)
                         m_colContenuDisponibleCourant.Add(contenu);
                 }
@@ -306,8 +306,8 @@ namespace NetflixPrjeq05.Controllers
                     service.AjouterOffre(offrePays);
                     //Met a jour listes courantes
                     if (m_colContenuIndisponibleCourant != null)
-                        m_colContenuIndisponibleCourant.Remove(contenu);
-                    if(m_colContenuDisponibleCourant != null)
+                        m_colContenuIndisponibleCourant.Remove(m_colContenuIndisponibleCourant.Where(c => c.ContenuId == episode.ContenuId).First());
+                    if (m_colContenuDisponibleCourant != null)
                         m_colContenuDisponibleCourant.Add(contenu);
                 }
             }
@@ -403,7 +403,7 @@ namespace NetflixPrjeq05.Controllers
             if (m_colContenuIndisponibleCourant != null)
                 m_colContenuIndisponibleCourant.Add(contenuVM);
             if (m_colContenuDisponibleCourant != null)
-                m_colContenuDisponibleCourant.Remove(contenuVM);
+                m_colContenuDisponibleCourant.Remove(m_colContenuDisponibleCourant.Where(c => c.ContenuId == id).First());
             
             return RedirectToAction("Contenu");
         }
