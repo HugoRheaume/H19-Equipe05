@@ -53,6 +53,8 @@ namespace NetflixPrjeq05.Controllers
 
             if (sortOrder != null)
                 m_sortOrder = sortOrder;
+            else if (m_colContenuDisponibleCourant != null)
+                m_sortOrder = null;
 
             //Sorting matters titre / date sortie / duree
             ViewBag.NameSortParm = m_sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";
@@ -137,6 +139,9 @@ namespace NetflixPrjeq05.Controllers
             // ^ empeche aussi de 
             if (sortOrder != null)
                 m_sortOrder = sortOrder;
+            else if (m_colContenuIndisponibleCourant != null)
+                m_sortOrder = null;
+
             ViewBag.NameSortParm = m_sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";
             ViewBag.DateSortParm = m_sortOrder == "date_asc" ? "date_desc" : "date_asc";
             ViewBag.DureeSortParm = m_sortOrder == "duree_asc" ? "duree_desc" : "duree_asc";
