@@ -37,14 +37,14 @@
 
             </th>
         </tr>
-
+        @*Comment*@
         @foreach (var item in Model)
         {
             if (item.DoublageLangue != string.Empty)
             {
         <tr>
             <td>
-                @if ((bool)item.EstPlusGrand)
+                @if (item.EstPlusGrand.Value)
                 {
                     <span>Plus de @Html.DisplayFor(modelItem => item.Pourcentage)</span>
                 }
@@ -54,7 +54,7 @@
                 }
             </td>
             <td>
-                @if (((bool)item.EstPlusGrand && item.PourcentageReel >= item.Pourcentage) || !((bool)item.EstPlusGrand && item.PourcentageReel <= item.Pourcentage))
+                @if (((bool)item.EstPlusGrand && item.PourcentageReel >= item.Pourcentage) || (!item.EstPlusGrand.Value && item.PourcentageReel <= item.Pourcentage))
                 {
                     <span style="color:green;">@Html.DisplayFor(modelItem => item.PourcentageReel)</span>
                 }
@@ -121,7 +121,7 @@
             {
         <tr>
             <td>
-                @if ((bool)item.EstPlusGrand)
+                @if (item.EstPlusGrand.Value)
                 {
                     <span>Plus de @Html.DisplayFor(modelItem => item.Pourcentage)</span>
                 }
@@ -131,7 +131,7 @@
                 }
             </td>
             <td>
-                @if (((bool)item.EstPlusGrand && item.PourcentageReel >= item.Pourcentage) || !((bool)item.EstPlusGrand && item.PourcentageReel <= item.Pourcentage))
+                @if ((item.EstPlusGrand.Value && item.PourcentageReel >= item.Pourcentage) || (!item.EstPlusGrand.Value && item.PourcentageReel <= item.Pourcentage))
                 {
                     <span style="color:green;">@Html.DisplayFor(modelItem => item.PourcentageReel)</span>
                 }

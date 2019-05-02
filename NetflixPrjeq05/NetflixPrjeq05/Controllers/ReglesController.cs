@@ -44,7 +44,7 @@ namespace NetflixPrjeq05.Controllers
         }
       
         // GET: Regles/Create
-
+        // DOUBLE FONCTIONNE PAS <--------------------------------------------------------------////////////////////////////////////////////////////////////
         public ActionResult CreateOrigine()
         {
             int paysId = ContenusController.currentPaysId;
@@ -61,7 +61,7 @@ namespace NetflixPrjeq05.Controllers
             ViewBag.PaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
             return View();
         }
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateOrigine([Bind(Include = "RegleId,PaysId,OriginePaysId,DoublageLangueId,Pourcentage,EstPlusGrand")] Regle regle)
@@ -104,7 +104,7 @@ namespace NetflixPrjeq05.Controllers
 
         
         // GET: Regles/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult EditOrigine(int? id)
         {
             if (id == null)
             {
@@ -112,6 +112,25 @@ namespace NetflixPrjeq05.Controllers
             }
             Regle regle = service.GetRegle(id.Value);
                       
+            if (regle == null)
+            {
+                return HttpNotFound();
+            }
+            int paysId = ContenusController.currentPaysId;
+            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom");
+            ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
+            ViewBag.PaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
+            return View(regle);
+        }
+
+        public ActionResult EditLangue(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Regle regle = service.GetRegle(id.Value);
+
             if (regle == null)
             {
                 return HttpNotFound();
