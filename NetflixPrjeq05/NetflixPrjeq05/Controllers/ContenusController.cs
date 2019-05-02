@@ -18,9 +18,11 @@ namespace NetflixPrjeq05.Controllers
         private BDService service = new BDService(new Entities());
         public static int currentPaysId = 1;
         public static string m_sortOrder;
-        public static List<ContenuVM> m_colContenuCourant;
+        public static List<ContenuVM> m_colContenuIndisponibleCourant;
+        public static List<ContenuVM> m_colContenuDisponibleCourant;
         public static List<Contenu> m_tousLeContenu;
         public static List<Pays> m_tousLesPays;
+
         
 
         //========================================================================================================================================================
@@ -44,73 +46,76 @@ namespace NetflixPrjeq05.Controllers
                 m_tousLesPays = service.GetAllPays();
 
             ViewBag.Pays = new SelectList(m_tousLesPays, "PaysId", "Nom", currentPaysId);
-            //m_colContenuCourant = null;
-                   
+                              
             //Pagination
             int pageSize = 3;
             int pageNumber = (page ?? 1);
 
-            //if (sortOrder == null && m_sortOrder != null)
-            //{
-            if (id != null)
-            {
-                currentPaysId = (int)id;
-                m_tousLeContenu = null;
-            }
-
             if (sortOrder != null)
                 m_sortOrder = sortOrder;
-
-            var queryContenu = service.getAllContenuByPays(currentPaysId);
-
-            List<Contenu> colContenu = queryContenu.ToList();
-            List<ContenuVM> colContenuVM = new List<ContenuVM>();
-            foreach (var item in colContenu)
-            {
-                ContenuVM contenuVM = new ContenuVM(item);
-                //Doublages              
-                var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
-                string langues = string.Join(", ", queryLangue.ToList());
-                contenuVM.Doublages = langues;
-                //Origines             
-                var queryOrigines = service.getOriginePaysByContenuId(contenuVM.ContenuId);
-                string origines = string.Join(", ", queryOrigines.ToList());
-                contenuVM.Origines = origines;
-                colContenuVM.Add(contenuVM);
-            }
 
             //Sorting matters titre / date sortie / duree
             ViewBag.NameSortParm = m_sortOrder == "titre_asc" ? "titre_desc" : "titre_asc";
             ViewBag.DateSortParm = m_sortOrder == "date_asc" ? "date_desc" : "date_asc";
             ViewBag.DureeSortParm = m_sortOrder == "duree_asc" ? "duree_desc" : "duree_asc";
 
-            switch (m_sortOrder)
-            {
-                case "titre_desc":
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.Titre).ToList();
-                    break;
-                case "titre_asc":
-                    colContenuVM = colContenuVM.OrderBy(c => c.Titre).ToList();
-                    break;
-                case "date_desc":
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.DateSortie).ToList();
-                    break;
-                case "date_asc":
-                    colContenuVM = colContenuVM.OrderBy(c => c.DateSortie).ToList();
-                    break;
-                case "duree_desc":
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.Duree).ToList();
-                    break;
-                case "duree_asc":
-                    colContenuVM = colContenuVM.OrderBy(c => c.Duree).ToList();
-                    break;
-                default:
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.ContenuId).ToList();
-                    break;
+            if (!page.HasValue)
+            {   //Peut etre optimisé en recodant le fonctionnement de la liste courante
+                if (id.HasValue || m_colContenuDisponibleCourant == null)
+                {
+                    if (id.HasValue)
+                    {
+                        currentPaysId = id.Value;
+                        m_colContenuIndisponibleCourant = null;
+                    }
+                        
+                    var queryContenu = service.getAllContenuByPays(currentPaysId);
+                    List<Contenu> colContenu = queryContenu.ToList();
+                    List<ContenuVM> colContenuVM = new List<ContenuVM>();
+
+                    foreach (var item in colContenu)
+                    {
+                        ContenuVM contenuVM = new ContenuVM(item);
+                        //Doublages              
+                        var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
+                        string langues = string.Join(", ", queryLangue.ToList());
+                        contenuVM.Doublages = langues;
+                        //Origines             
+                        var queryOrigines = service.getOriginePaysByContenuId(contenuVM.ContenuId);
+                        string origines = string.Join(", ", queryOrigines.ToList());
+                        contenuVM.Origines = origines;
+                        colContenuVM.Add(contenuVM);
+                    }
+                    m_colContenuDisponibleCourant = colContenuVM;
+                }
+                //Sorting matters titre / date sortie / duree
+                switch (m_sortOrder)
+                {
+                    case "titre_desc":
+                        m_colContenuDisponibleCourant = m_colContenuDisponibleCourant.OrderByDescending(c => c.Titre).ToList();
+                        break;
+                    case "titre_asc":
+                        m_colContenuDisponibleCourant = m_colContenuDisponibleCourant.OrderBy(c => c.Titre).ToList();
+                        break;
+                    case "date_desc":
+                        m_colContenuDisponibleCourant = m_colContenuDisponibleCourant.OrderByDescending(c => c.DateSortie).ToList();
+                        break;
+                    case "date_asc":
+                        m_colContenuDisponibleCourant = m_colContenuDisponibleCourant.OrderBy(c => c.DateSortie).ToList();
+                        break;
+                    case "duree_desc":
+                        m_colContenuDisponibleCourant = m_colContenuDisponibleCourant.OrderByDescending(c => c.Duree).ToList();
+                        break;
+                    case "duree_asc":
+                        m_colContenuDisponibleCourant = m_colContenuDisponibleCourant.OrderBy(c => c.Duree).ToList();
+                        break;
+                    default:
+                        m_colContenuDisponibleCourant = m_colContenuDisponibleCourant.OrderByDescending(c => c.ContenuId).ToList();
+                        break;
+                }           
             }
-            //}
             //Sorting ends here            
-            return View(colContenuVM.ToPagedList(pageNumber, pageSize));
+            return View(m_colContenuDisponibleCourant.ToPagedList(pageNumber, pageSize));
 
         }
         //============================================================================AJOUTER============================================================================
@@ -139,23 +144,24 @@ namespace NetflixPrjeq05.Controllers
             //Empêche de trier une seconde fois la liste quand on veut juste changer de page.
             if (!page.HasValue)
             {
-                //Pays a été modifié à partir de menu déroulant ou 
-
-                if (id != null || m_colContenuCourant == null)
+                //Pays a été modifié à partir de menu déroulant ou            
+                if (id.HasValue || m_colContenuIndisponibleCourant == null)
                 {
+                    if (id.HasValue)
+                    {
+                        currentPaysId = id.Value;
+                        m_colContenuDisponibleCourant = null;
+                    }
+                        
                     List<Contenu> queryContenuPays;
                     List<Contenu> colContenu;
                     List<ContenuVM> colContenuVM = new List<ContenuVM>();
-                    if (id != null)
-                        currentPaysId = id.Value;
-
+                                    
                     //queryContenuPays = service.getAllContenuByPays(currentPaysId);
                     queryContenuPays = service.getAllContenuByPays(currentPaysId);
                     List<int> contenuPaysIds = queryContenuPays.Select(c => c.ContenuId).ToList();
                     //List<int> contenuPaysIds2 = service.GetAllContenuIdsByPays(currentPaysId);
-
-
-
+               
                     colContenu = m_tousLeContenu.Where(c => !contenuPaysIds.Contains(c.ContenuId)).ToList();
                     
                     foreach (var item in colContenu)
@@ -171,55 +177,49 @@ namespace NetflixPrjeq05.Controllers
                         contenuVM.Origines = origines;
                         colContenuVM.Add(contenuVM);
                     }
-                    m_colContenuCourant = colContenuVM;
-                }
-               
-                
-
-                //List<Contenu> queryContenuPays = service.getAllContenuByPays(currentPaysId);
-                //List<Contenu> colContenu =  service.GetAllContenu().Except(queryContenuPays).ToList();
-                
-
+                    m_colContenuIndisponibleCourant = colContenuVM;
+                }                                                         
                 //Sorting matters titre / date sortie / duree
-
-
                 switch (m_sortOrder)
                 {
                     case "titre_desc":
-                        m_colContenuCourant = m_colContenuCourant.OrderByDescending(c => c.Titre).ToList();
+                        m_colContenuIndisponibleCourant = m_colContenuIndisponibleCourant.OrderByDescending(c => c.Titre).ToList();
                         break;
                     case "titre_asc":
-                        m_colContenuCourant = m_colContenuCourant.OrderBy(c => c.Titre).ToList();
+                        m_colContenuIndisponibleCourant = m_colContenuIndisponibleCourant.OrderBy(c => c.Titre).ToList();
                         break;
                     case "date_desc":
-                        m_colContenuCourant = m_colContenuCourant.OrderByDescending(c => c.DateSortie).ToList();
+                        m_colContenuIndisponibleCourant = m_colContenuIndisponibleCourant.OrderByDescending(c => c.DateSortie).ToList();
                         break;
                     case "date_asc":
-                        m_colContenuCourant = m_colContenuCourant.OrderBy(c => c.DateSortie).ToList();
+                        m_colContenuIndisponibleCourant = m_colContenuIndisponibleCourant.OrderBy(c => c.DateSortie).ToList();
                         break;
                     case "duree_desc":
-                        m_colContenuCourant = m_colContenuCourant.OrderByDescending(c => c.Duree).ToList();
+                        m_colContenuIndisponibleCourant = m_colContenuIndisponibleCourant.OrderByDescending(c => c.Duree).ToList();
                         break;
                     case "duree_asc":
-                        m_colContenuCourant = m_colContenuCourant.OrderBy(c => c.Duree).ToList();
+                        m_colContenuIndisponibleCourant = m_colContenuIndisponibleCourant.OrderBy(c => c.Duree).ToList();
                         break;
 
                     default:
-                        m_colContenuCourant = m_colContenuCourant.OrderByDescending(c => c.ContenuId).ToList();
+                        m_colContenuIndisponibleCourant = m_colContenuIndisponibleCourant.OrderByDescending(c => c.ContenuId).ToList();
                         break;
                 }
                 
             }
             //Sorting ends here          
-            return View(m_colContenuCourant.ToPagedList(pageNumber, pageSize));            
+            return View(m_colContenuIndisponibleCourant.ToPagedList(pageNumber, pageSize));            
         }
         //============================================================================INFORMATION============================================================================
         public ActionResult Details(int? id)
         {
             ViewBag.Pays = new SelectList(service.GetAllPays(), "PaysId", "Nom", currentPaysId);
-            if (id != null)
-                currentPaysId = (int)id;
-
+            if (id.HasValue)
+            {
+                currentPaysId = id.Value;
+                m_colContenuIndisponibleCourant = null;
+                m_colContenuDisponibleCourant = null;
+            }
             return View();
         }
 
@@ -231,13 +231,16 @@ namespace NetflixPrjeq05.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ContenuVM contenu = m_colContenuCourant.Where(c => c.ContenuId == id.Value).First();
+            ContenuVM contenu = m_colContenuIndisponibleCourant.Where(c => c.ContenuId == id.Value).First();
             OffrePays offrePays = new OffrePays();
             offrePays.ContenuId = id.Value;
             offrePays.PaysId = currentPaysId;
             service.AjouterOffre(offrePays);
-            //Met a jour liste courante
-            m_colContenuCourant.Remove(contenu);
+            //Met a jour listes courantes
+            if (m_colContenuIndisponibleCourant != null)
+                m_colContenuIndisponibleCourant.Remove(contenu);
+            if (m_colContenuDisponibleCourant != null)
+                m_colContenuDisponibleCourant.Add(contenu);
             if (contenu == null)
             {
                 return HttpNotFound();
@@ -256,17 +259,20 @@ namespace NetflixPrjeq05.Controllers
             List<Contenu> colEpisodes = service.GetSaisonEpisodes(id.Value);
             foreach (var episode in colEpisodes)
             {
-                var contenuTest = m_colContenuCourant.Where(c => c.ContenuId == episode.ContenuId).ToList();
+                var contenuTest = m_colContenuIndisponibleCourant.Where(c => c.ContenuId == episode.ContenuId).ToList();
                 //Vérification si episode est déja disponible
                 if (contenuTest.Count != 0)
                 {
-                    ContenuVM contenu = m_colContenuCourant.Where(c => c.ContenuId == episode.ContenuId).First();
+                    ContenuVM contenu = m_colContenuIndisponibleCourant.Where(c => c.ContenuId == episode.ContenuId).First();
                     OffrePays offrePays = new OffrePays();
                     offrePays.ContenuId = episode.ContenuId;
                     offrePays.PaysId = currentPaysId;
                     service.AjouterOffre(offrePays);
-                    //Met a jour liste courante
-                    m_colContenuCourant.Remove(contenu);
+                    //Met a jour listes courantes
+                    if (m_colContenuIndisponibleCourant != null)
+                        m_colContenuIndisponibleCourant.Remove(contenu);
+                    if (m_colContenuDisponibleCourant != null)
+                        m_colContenuDisponibleCourant.Add(contenu);
                 }
             }
             //if (contenu == null)
@@ -287,19 +293,22 @@ namespace NetflixPrjeq05.Controllers
             List<Contenu> colEpisodes = service.GetSerieEpisodes(id.Value);
             foreach (var episode in colEpisodes)
             {
-                var contenuTest = m_colContenuCourant.Where(c => c.ContenuId == episode.ContenuId).ToList();
+                var contenuTest = m_colContenuIndisponibleCourant.Where(c => c.ContenuId == episode.ContenuId).ToList();
 
                 //Vérification si episode est déja disponible
                 if (contenuTest.Count != 0)
                 {
-                    ContenuVM contenu = m_colContenuCourant.Where(c => c.ContenuId == episode.ContenuId).First();
+                    ContenuVM contenu = m_colContenuIndisponibleCourant.Where(c => c.ContenuId == episode.ContenuId).First();
 
                     OffrePays offrePays = new OffrePays();
                     offrePays.ContenuId = episode.ContenuId;
                     offrePays.PaysId = currentPaysId;
                     service.AjouterOffre(offrePays);
-                    //Met a jour liste courante
-                    m_colContenuCourant.Remove(contenu);
+                    //Met a jour listes courantes
+                    if (m_colContenuIndisponibleCourant != null)
+                        m_colContenuIndisponibleCourant.Remove(contenu);
+                    if(m_colContenuDisponibleCourant != null)
+                        m_colContenuDisponibleCourant.Add(contenu);
                 }
             }
             //if (contenu == null)
@@ -379,21 +388,23 @@ namespace NetflixPrjeq05.Controllers
         {           
             int offreId = service.GetAllOffreContenu().Where(o => o.ContenuId == id && o.PaysId == currentPaysId).First().OffrePaysId;
             service.RemoveOffre(offreId);
+            //Mettre à jour les listes courantes
+            Contenu contenu = m_tousLeContenu.Where(c => c.ContenuId == id).First();
+            ContenuVM contenuVM = new ContenuVM(contenu);
+            //Doublages                                    
+            List<string> queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
+            string langues = string.Join(", ", queryLangue.ToList());
+            contenuVM.Doublages = langues;
+            //Origines                                   
+            List<string> queryOrignine = service.getOriginePaysByContenuId(contenuVM.ContenuId);
+            string origines = string.Join(", ", queryOrignine.ToList());
+            contenuVM.Origines = origines;
 
-            if (m_colContenuCourant != null)
-            {
-                Contenu contenu = m_tousLeContenu.Where(c => c.ContenuId == id).First();
-                ContenuVM contenuVM = new ContenuVM(contenu);
-                //Doublages                                    
-                List<string> queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
-                string langues = string.Join(", ", queryLangue.ToList());
-                contenuVM.Doublages = langues;
-                //Origines                                   
-                List<string> queryOrignine = service.getOriginePaysByContenuId(contenuVM.ContenuId);
-                string origines = string.Join(", ", queryOrignine.ToList());
-                contenuVM.Origines = origines;
-                m_colContenuCourant.Add(contenuVM);
-            }
+            if (m_colContenuIndisponibleCourant != null)
+                m_colContenuIndisponibleCourant.Add(contenuVM);
+            if (m_colContenuDisponibleCourant != null)
+                m_colContenuDisponibleCourant.Remove(contenuVM);
+            
             return RedirectToAction("Contenu");
         }
 
