@@ -69,7 +69,8 @@
             <img src="@Html.DisplayFor(modelItem => item.Affiche)" width="150" height="200">
         </td>
         <td>
-            <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Contenus", new { id = item.ContenuId })';return false;">Retirer</button>
+            
+            <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Contenus", new { id = item.ContenuId })';return false;"><i class="fas fa-trash-alt"></i></button>
         </td>
     </tr>
     }

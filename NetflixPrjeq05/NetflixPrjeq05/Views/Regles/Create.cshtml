@@ -12,8 +12,8 @@
     @Html.AntiForgeryToken()
     
 <div class="form-horizontal">
-    
-    
+
+
 
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <table class="table">
@@ -43,13 +43,20 @@
             </td>
             <td>
 
-                Minimum @Html.RadioButtonFor(model => model.EstPlusGrand, "true", new { id = "yesNo" })
-                Maximum @Html.RadioButtonFor(model => model.EstPlusGrand, "false", new { id = "yesNo" })
+                Minimum @Html.RadioButtonFor(model => model.EstPlusGrand, "true", new { id = "yesNoToaster" })
+                Maximum @Html.RadioButtonFor(model => model.EstPlusGrand, "false", new { id = "yesNoToaster" })
 
                 @Html.ValidationMessageFor(model => model.EstPlusGrand, "", new { @class = "text-danger" })
             </td>
         </tr>
-    </table>    
+    </table>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-primary" />
+        </div>
+    </div>
 </div>
 }
 

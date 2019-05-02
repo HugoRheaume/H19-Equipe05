@@ -59,6 +59,23 @@ namespace NetflixPrjeq05.Controllers
         //}
 
         // GET: Regles/Create
+
+        public ActionResult CreateOrigine()
+        {
+            int paysId = ContenusController.currentPaysId;
+            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom");
+            ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
+            ViewBag.PaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
+            return View();
+        }
+        public ActionResult CreateLangue()
+        {
+            int paysId = ContenusController.currentPaysId;
+            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom");
+            ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
+            ViewBag.PaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
+            return View();
+        }
         public ActionResult Create()
         {
             int paysId = ContenusController.currentPaysId;
