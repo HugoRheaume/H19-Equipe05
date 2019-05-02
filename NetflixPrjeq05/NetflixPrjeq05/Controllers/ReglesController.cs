@@ -42,22 +42,7 @@ namespace NetflixPrjeq05.Controllers
             }
             return View(regleVMs);
         }
-
-        //// GET: Regles/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Regle regle = db.Regle.Find(id);
-        //    if (regle == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(regle);
-        //}
-
+      
         // GET: Regles/Create
 
         public ActionResult CreateOrigine()
@@ -125,7 +110,8 @@ namespace NetflixPrjeq05.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Regle regle = new Regle();
+            Regle regle = service.GetRegle(id.Value);
+                      
             if (regle == null)
             {
                 return HttpNotFound();
@@ -134,7 +120,7 @@ namespace NetflixPrjeq05.Controllers
             ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom");
             ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
             ViewBag.PaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
-            return View(/*regle*/);
+            return View(regle);
         }
 
         // POST: Regles/Edit/5
@@ -181,6 +167,21 @@ namespace NetflixPrjeq05.Controllers
         //    db.Regle.Remove(regle);
         //    db.SaveChanges();
         //    return RedirectToAction("Index");
+        //}
+
+        //// GET: Regles/Details/5
+        //public ActionResult Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+        //    Regle regle = db.Regle.Find(id);
+        //    if (regle == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(regle);
         //}
 
         protected override void Dispose(bool disposing)

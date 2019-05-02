@@ -149,5 +149,10 @@ namespace NetflixPrjeq05.Service
             db.Regle.Add(regle);
             db.SaveChanges();
         }
+
+        public Regle GetRegle(int id)
+        {
+            return db.Regle.Find(id);           
+        }
     }
 }
