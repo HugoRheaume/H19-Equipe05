@@ -29,7 +29,7 @@ namespace NetflixPrjeq05.Controllers
         public ActionResult Index(int paysId)
         {
             ViewBag.Region = new List<string>() { "Ca", "Fr", "Eu" };
-            var queryContenu = service.getAllContenuByPays(paysId);
+            var queryContenu = service.GetAllContenuByPays(paysId);
 
             List<Contenu> colContenu = queryContenu.ToList();
             return View(colContenu);
@@ -71,7 +71,7 @@ namespace NetflixPrjeq05.Controllers
                         m_colContenuIndisponibleCourant = null;
                     }
                         
-                    var queryContenu = service.getAllContenuByPays(currentPaysId);
+                    var queryContenu = service.GetAllContenuByPays(currentPaysId);
                     List<Contenu> colContenu = queryContenu.ToList();
                     List<ContenuVM> colContenuVM = new List<ContenuVM>();
 
@@ -79,11 +79,11 @@ namespace NetflixPrjeq05.Controllers
                     {
                         ContenuVM contenuVM = new ContenuVM(item);
                         //Doublages              
-                        var queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
+                        var queryLangue = service.GetLangueDoublageByContenuId(contenuVM.ContenuId);
                         string langues = string.Join(", ", queryLangue.ToList());
                         contenuVM.Doublages = langues;
                         //Origines             
-                        var queryOrigines = service.getOriginePaysByContenuId(contenuVM.ContenuId);
+                        var queryOrigines = service.GetOriginePaysByContenuId(contenuVM.ContenuId);
                         string origines = string.Join(", ", queryOrigines.ToList());
                         contenuVM.Origines = origines;
                         colContenuVM.Add(contenuVM);
@@ -163,7 +163,7 @@ namespace NetflixPrjeq05.Controllers
                     List<ContenuVM> colContenuVM = new List<ContenuVM>();
                                     
                     //queryContenuPays = service.getAllContenuByPays(currentPaysId);
-                    queryContenuPays = service.getAllContenuByPays(currentPaysId);
+                    queryContenuPays = service.GetAllContenuByPays(currentPaysId);
                     List<int> contenuPaysIds = queryContenuPays.Select(c => c.ContenuId).ToList();
                     //List<int> contenuPaysIds2 = service.GetAllContenuIdsByPays(currentPaysId);
                
@@ -173,11 +173,11 @@ namespace NetflixPrjeq05.Controllers
                     {
                         ContenuVM contenuVM = new ContenuVM(item);
                         //Doublages                                    
-                        List<string> queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
+                        List<string> queryLangue = service.GetLangueDoublageByContenuId(contenuVM.ContenuId);
                         string langues = string.Join(", ", queryLangue.ToList());
                         contenuVM.Doublages = langues;
                         //Origines                                   
-                        List<string> queryOrignine = service.getOriginePaysByContenuId(contenuVM.ContenuId);
+                        List<string> queryOrignine = service.GetOriginePaysByContenuId(contenuVM.ContenuId);
                         string origines = string.Join(", ", queryOrignine.ToList());
                         contenuVM.Origines = origines;
                         colContenuVM.Add(contenuVM);
@@ -397,11 +397,11 @@ namespace NetflixPrjeq05.Controllers
             Contenu contenu = m_tousLeContenu.Where(c => c.ContenuId == id).First();
             ContenuVM contenuVM = new ContenuVM(contenu);
             //Doublages                                    
-            List<string> queryLangue = service.getLangueDoublageByContenuId(contenuVM.ContenuId);
+            List<string> queryLangue = service.GetLangueDoublageByContenuId(contenuVM.ContenuId);
             string langues = string.Join(", ", queryLangue.ToList());
             contenuVM.Doublages = langues;
             //Origines                                   
-            List<string> queryOrignine = service.getOriginePaysByContenuId(contenuVM.ContenuId);
+            List<string> queryOrignine = service.GetOriginePaysByContenuId(contenuVM.ContenuId);
             string origines = string.Join(", ", queryOrignine.ToList());
             contenuVM.Origines = origines;
 

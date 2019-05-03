@@ -15,7 +15,7 @@ namespace NetflixPrjeq05.Controllers
     {
         private BDService service = new BDService(new Entities());
 
-        // GET: Regles
+        //============================================================================INDEX============================================================================
         public ActionResult Index(int? id)
         {
             if (id != null)
@@ -32,18 +32,20 @@ namespace NetflixPrjeq05.Controllers
             foreach (Regle rv in regles )
             {
                 RegleVM regleVm = new RegleVM(rv);
-                var queryDoublageLangue = service.getLangueDoublageByRegleId(regleVm.RegleId);
+                var queryDoublageLangue = service.GetLangueDoublageByRegleId(regleVm.RegleId);
                 string langues = string.Join(", ", queryDoublageLangue);
                 regleVm.DoublageLangue = langues;
-                var queryOriginePays = service.getOriginePaysByRegleId(regleVm.RegleId);
+                var queryOriginePays = service.GetOriginePaysByRegleId(regleVm.RegleId);
                 string origines = string.Join(", ", queryOriginePays);
                 regleVm.OriginePays = origines;
                 regleVMs.Add(regleVm);
             }
             return View(regleVMs);
         }
-      
-        // GET: Regles/Create
+
+        //============================================================================CREATE============================================================================
+
+
         // DOUBLE FONCTIONNE PAS <--------------------------------------------------------------////////////////////////////////////////////////////////////
         public ActionResult CreateOrigine()
         {
@@ -81,9 +83,7 @@ namespace NetflixPrjeq05.Controllers
         }
 
 
-        // POST: Regles/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateLangue([Bind(Include = "RegleId,PaysId,OriginePaysId,DoublageLangueId,Pourcentage,EstPlusGrand")] Regle regle)
@@ -102,8 +102,8 @@ namespace NetflixPrjeq05.Controllers
             return View(regle);
         }
 
-        
-        // GET: Regles/Edit/5
+
+        //============================================================================EDIT============================================================================
         public ActionResult EditOrigine(int? id)
         {
             if (id == null)
@@ -142,9 +142,7 @@ namespace NetflixPrjeq05.Controllers
             return View(regle);
         }
 
-        // POST: Regles/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "RegleId,PaysId,OriginePaysId,DoublageLangueId,Pourcentage,EstPlusGrand")] Regle regle)
@@ -161,7 +159,33 @@ namespace NetflixPrjeq05.Controllers
             ViewBag.PaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
             return View(regle);
         }
-
+        //============================================================================DELETE============================================================================
+        public ActionResult DeleteOrigine(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Regle regle = service.GetRegle((int)id);
+            if (regle == null)
+            {
+                return HttpNotFound();
+            }
+            return View(regle);
+        }
+        public ActionResult DeleteLangue(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Regle regle = service.GetRegle((int)id);
+            if (regle == null)
+            {
+                return HttpNotFound();
+            }
+            return View(regle);
+        }
         //// GET: Regles/Delete/5
         //public ActionResult Delete(int? id)
         //{

@@ -284,6 +284,8 @@
     <Content Include="Views\Regles\CreateLangue.cshtml" />
     <Content Include="Views\Regles\EditLangue.cshtml" />
     <Content Include="Views\Regles\EditOrigine.cshtml" />
+    <Content Include="Views\Regles\DeleteLangue.cshtml" />
+    <Content Include="Views\Regles\DeleteOrigine.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

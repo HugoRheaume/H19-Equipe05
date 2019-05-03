@@ -59,7 +59,7 @@ namespace NetflixPrjeq05.Service
             return db.Contenu.Where(c => c.ContenuId >= debut && c.ContenuId <= fin).ToList();
         }
     
-        public List<Contenu> getAllContenuByPays(int id)
+        public List<Contenu> GetAllContenuByPays(int id)
         {
             var queryDoublageLangue = from C in GetAllContenu()
                                       join CR in GetAllOffreContenu() on C.ContenuId equals CR.ContenuId
@@ -74,16 +74,16 @@ namespace NetflixPrjeq05.Service
             return db.OffrePays.Where(o => o.PaysId == id).Select(o => o.ContenuId).ToList();
         }
 
-        public List<string> getLangueDoublageByContenuId(int id)
+        public List<string> GetLangueDoublageByContenuId(int id)
         {
             return db.ContenuLangue.Where(x => x.ContenuId == id).Select(y => y.Langue.Nom).ToList();
         }
-        public List<string> getOriginePaysByContenuId(int id)
+        public List<string> GetOriginePaysByContenuId(int id)
         {
             return db.OriginePays.Where(x => x.ContenuId == id).Select(y => y.Pays.Nom).ToList();
         }
 
-        public List<string> getLangueDoublageByRegleId(int id)
+        public List<string> GetLangueDoublageByRegleId(int id)
         {
             var queryDoublageLangue = from r in GetAllReglement()
                                       join l in GetAllLangue() on r.DoublageLangueId equals l.LangueId
@@ -93,7 +93,7 @@ namespace NetflixPrjeq05.Service
             return queryDoublageLangue.ToList();
         }
 
-        public List<string> getOriginePaysByRegleId(int id)
+        public List<string> GetOriginePaysByRegleId(int id)
         {
             var queryDoublageLangue = from r in GetAllReglement()
                                       join p in GetAllPays() on r.OriginePaysId equals p.PaysId
