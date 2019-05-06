@@ -150,8 +150,7 @@ namespace NetflixPrjeq05.Controllers
             int paysId = ContenusController.currentPaysId;
             if (ModelState.IsValid)
             {
-               // db.Entry(regle).State = EntityState.Modified;
-               // db.SaveChanges();
+                service.ModifyRegle(regle);
                 return RedirectToAction("Index");
             }
             ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom");
@@ -166,12 +165,13 @@ namespace NetflixPrjeq05.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Regle regle = service.GetRegle((int)id);
+            Regle regle = service.GetRegle(id.Value);
             if (regle == null)
             {
                 return HttpNotFound();
             }
-            return View(regle);
+            service.DeleteRegle(regle);
+            return RedirectToAction("Index");
         }
         public ActionResult DeleteLangue(int? id)
         {
@@ -179,12 +179,13 @@ namespace NetflixPrjeq05.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Regle regle = service.GetRegle((int)id);
+            Regle regle = service.GetRegle(id.Value);           
             if (regle == null)
             {
                 return HttpNotFound();
             }
-            return View(regle);
+            service.DeleteRegle(regle);
+            return RedirectToAction("Index");
         }
         //// GET: Regles/Delete/5
         //public ActionResult Delete(int? id)
@@ -206,9 +207,7 @@ namespace NetflixPrjeq05.Controllers
         //[ValidateAntiForgeryToken]
         //public ActionResult DeleteConfirmed(int id)
         //{
-        //    Regle regle = db.Regle.Find(id);
-        //    db.Regle.Remove(regle);
-        //    db.SaveChanges();
+        //    Regle regle = db.Regle.Find(id);           
         //    return RedirectToAction("Index");
         //}
 

@@ -1,6 +1,7 @@
 ﻿using NetflixPrjeq05.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -144,6 +145,7 @@ namespace NetflixPrjeq05.Service
             }
             return colEpisodes;
         }
+        //============================================================================AJOUTER============================================================================
         public void AddRegle(Regle regle)
         {            
             db.Regle.Add(regle);
@@ -153,6 +155,18 @@ namespace NetflixPrjeq05.Service
         public Regle GetRegle(int id)
         {
             return db.Regle.Find(id);           
+        }
+
+        public void ModifyRegle(Regle regle)
+        {
+            db.Entry(regle).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+
+        public void DeleteRegle(Regle regle)
+        {
+            db.Regle.Remove(regle);
+            db.SaveChanges();
         }
     }
 }
