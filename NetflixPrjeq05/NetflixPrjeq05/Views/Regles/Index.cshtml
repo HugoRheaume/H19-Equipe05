@@ -38,7 +38,6 @@
 
             </th>
         </tr>
-        @*Comment*@
         @foreach (var item in Model)
         {
             if (item.DoublageLangue != string.Empty)
@@ -73,9 +72,9 @@
                     </td>
                     <td>
 
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalDel1"><i class="fas fa-trash-alt"></i></button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelLang" + item.RegleId.ToString())"><i class="fas fa-trash-alt"></i> test </button>
 
-                        <div class="modal fade" id="modalDel1" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="@Html.Raw("modalDelLang" + item.RegleId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -90,7 +89,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                        <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteOrigine", "Regles", new { id = item.RegleId })';return false;">Supprimer</button>
+                                        <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteLangue", "Regles", new { id = item.RegleId })';return false;">Supprimer</button>
                                     </div>
                                 </div>
                             </div>
@@ -170,9 +169,9 @@
                     </td>
                     <td>
 
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalDel2"><i class="fas fa-trash-alt"></i></button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelOri" + item.RegleId.ToString())"><i class="fas fa-trash-alt"></i></button>
 
-                        <div class="modal fade" id="modalDel2" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="@Html.Raw("modalDelOri" + item.RegleId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">

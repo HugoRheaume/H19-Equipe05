@@ -33,7 +33,7 @@
                 </td>
                 <td>
 
-                    Minimum @Html.RadioButtonFor(model => model.EstPlusGrand, "true", new { id = "yesNoToaster" })
+                    Minimum @Html.RadioButtonFor(model => model.EstPlusGrand, "true", new { id = "yesNoToaster", @checked = "checked" })
                     Maximum @Html.RadioButtonFor(model => model.EstPlusGrand, "false", new { id = "yesNoToaster" })
 
                     @Html.ValidationMessageFor(model => model.EstPlusGrand, "", new { @class = "text-danger" })
