@@ -167,6 +167,6 @@ namespace NetflixPrjeq05.Service
         {
             db.Regle.Remove(regle);
             db.SaveChanges();
-        }
+        }      
     }
 }
