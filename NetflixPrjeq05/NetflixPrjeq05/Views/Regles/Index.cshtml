@@ -3,16 +3,17 @@
 @{
     ViewBag.Title = "Index";
 }
-<h2>Information</h2>
-
-<h4>@Html.ActionLink("Créer une nouvelle régle", "Create", "Regles")</h4>
-<p>
+<h2>Information </h2>
+    
+<p> 
     @using (Html.BeginForm("Index", "Regles", FormMethod.Get))
     {
         @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
-
     }
 </p>
+
+
+
 
 <!--===============================================================================Langue=========================================================================================-->
 <div id="reglesDiv" style="display: flex;">
@@ -66,16 +67,38 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.DoublageLangue)
                     </td>
-                    <th>
+                    <td>
 
                         <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("EditLangue", "Regles", new { id = item.RegleId })';return false;"><i class="far fa-edit"></i></button>
-                    </th>
-                    <th>
-                        <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteLangue", "Regles", new { id = item.RegleId })';return false;"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                    <td>
 
-                    </th>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalDel1"><i class="fas fa-trash-alt"></i></button>
+
+                        <div class="modal fade" id="modalDel1" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="ModalLabel">Supprimer une règle</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Êtes-vous sûr de vouloir supprimé cette règle
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                        <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteOrigine", "Regles", new { id = item.RegleId })';return false;">Supprimer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
 
+                
             }
         }
         <tr>
@@ -141,14 +164,35 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.OriginePays)
                     </td>
-                    <th>
+                    <td>
 
                         <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("EditOrigine", "Regles", new { id = item.RegleId })';return false;"><i class="far fa-edit"></i></button>
-                    </th>
-                    <th>
-                        <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteOrigine", "Regles", new { id = item.RegleId })';return false;"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                    <td>
 
-                    </th>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalDel2"><i class="fas fa-trash-alt"></i></button>
+
+                        <div class="modal fade" id="modalDel2" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="ModalLabel">Supprimer une règle</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Êtes-vous sûr de vouloir supprimé cette règle
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                        <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteOrigine", "Regles", new { id = item.RegleId })';return false;">Supprimer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             }
 
