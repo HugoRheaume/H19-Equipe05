@@ -141,8 +141,7 @@ namespace NetflixPrjeq05.Controllers
             ViewBag.PaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
             return View(regle);
         }
-
-        
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "RegleId,PaysId,OriginePaysId,DoublageLangueId,Pourcentage,EstPlusGrand")] Regle regle)
@@ -187,29 +186,7 @@ namespace NetflixPrjeq05.Controllers
             service.DeleteRegle(regle);
             return RedirectToAction("Index");
         }
-        //// GET: Regles/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Regle regle = db.Regle.Find(id);
-        //    if (regle == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(regle);
-        //}
-
-        //// POST: Regles/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    Regle regle = db.Regle.Find(id);           
-        //    return RedirectToAction("Index");
-        //}
+        
 
         //// GET: Regles/Details/5
         //public ActionResult Details(int? id)
