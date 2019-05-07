@@ -245,6 +245,7 @@ namespace NetflixPrjeq05.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+                          
             ContenuVM contenu = m_colContenuIndisponibleCourant.Where(c => c.ContenuId == id.Value).First();
             OffrePays offrePays = new OffrePays();
             offrePays.ContenuId = id.Value;
@@ -255,11 +256,44 @@ namespace NetflixPrjeq05.Controllers
                 m_colContenuIndisponibleCourant.Remove(m_colContenuIndisponibleCourant.Where(c => c.ContenuId == id).First());
             if (m_colContenuDisponibleCourant != null)
                 m_colContenuDisponibleCourant.Add(contenu);
+            ////Administration des messages d'erreur pour pourcentages
+            //List<Regle> regles = service.GetAllReglement().Where(r => r.PaysId == currentPaysId).ToList();
+            //foreach (Regle regle in regles)
+            //{
+            //    double pourcentageFutur =  (regle.OriginePaysId != null ? service.TotalDureePaysOrigine(currentPaysId, regle.OriginePaysId.Value) 
+            //                                : service.TotalDureePaysDoublage(currentPaysId, regle.DoublageLangueId.Value)) / service.TotalDureePays(m_colContenuDisponibleCourant) * 100;
+
+            //    //if(regle.)
+            //}
             if (contenu == null)
             {
                 return HttpNotFound();
             }
             //return View();
+            ////Administration des messages d'erreur pour pourcentages
+            List<Regle> regles = service.GetAllReglementForPays(currentPaysId);
+            List<string> messages = new List<string>();
+            foreach (var regle in regles)
+            {
+                if (regle.EstPlusGrand.Value && !(regle.PourcentageReel >= regle.Pourcentage))
+                {
+                    messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
+                        "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
+                        : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
+                        + " doit être supérieur ou égal à " + regle.Pourcentage + "%"
+                        + "\n Pourcentage actuel: " + regle.PourcentageReel + "%");
+                }
+
+                if(!regle.EstPlusGrand.Value && !(regle.PourcentageReel <= regle.Pourcentage))
+                {
+                    messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
+                        "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
+                        : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
+                        + " doit être inférieur ou égal à " + regle.Pourcentage + "%" 
+                        + "\n Pourcentage actuel: " + regle.PourcentageReel + "%");
+                }
+            }
+
             return RedirectToAction("Ajouter");
         }
 
