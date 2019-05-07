@@ -1,6 +1,7 @@
 ﻿using NetflixPrjeq05.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -39,7 +40,7 @@ namespace NetflixPrjeq05.Service
         }
         public Contenu GetContenuByID(int id)
         {
-            return (Contenu)db.Contenu.Where(x => x.ContenuId==id);
+            return db.Contenu.Where(x => x.ContenuId==id).First();
         }
         public List<OffrePays> GetAllOffreContenu()
         {
@@ -59,7 +60,7 @@ namespace NetflixPrjeq05.Service
             return db.Contenu.Where(c => c.ContenuId >= debut && c.ContenuId <= fin).ToList();
         }
     
-        public List<Contenu> getAllContenuByPays(int id)
+        public List<Contenu> GetAllContenuByPays(int id)
         {
             var queryDoublageLangue = from C in GetAllContenu()
                                       join CR in GetAllOffreContenu() on C.ContenuId equals CR.ContenuId
@@ -74,16 +75,16 @@ namespace NetflixPrjeq05.Service
             return db.OffrePays.Where(o => o.PaysId == id).Select(o => o.ContenuId).ToList();
         }
 
-        public List<string> getLangueDoublageByContenuId(int id)
+        public List<string> GetLangueDoublageByContenuId(int id)
         {
             return db.ContenuLangue.Where(x => x.ContenuId == id).Select(y => y.Langue.Nom).ToList();
         }
-        public List<string> getOriginePaysByContenuId(int id)
+        public List<string> GetOriginePaysByContenuId(int id)
         {
             return db.OriginePays.Where(x => x.ContenuId == id).Select(y => y.Pays.Nom).ToList();
         }
 
-        public List<string> getLangueDoublageByRegleId(int id)
+        public List<string> GetLangueDoublageByRegleId(int id)
         {
             var queryDoublageLangue = from r in GetAllReglement()
                                       join l in GetAllLangue() on r.DoublageLangueId equals l.LangueId
@@ -93,7 +94,7 @@ namespace NetflixPrjeq05.Service
             return queryDoublageLangue.ToList();
         }
 
-        public List<string> getOriginePaysByRegleId(int id)
+        public List<string> GetOriginePaysByRegleId(int id)
         {
             var queryDoublageLangue = from r in GetAllReglement()
                                       join p in GetAllPays() on r.OriginePaysId equals p.PaysId
@@ -102,12 +103,70 @@ namespace NetflixPrjeq05.Service
 
             return queryDoublageLangue.ToList();
         }
-             
+
+        //============================================================================AJOUTER============================================================================        
         public void RemoveOffre(int id)
         {
             db.OffrePays.Remove(db.OffrePays.Find(id));
             db.SaveChanges();
         }
+   
+        public void AjouterOffre(OffrePays offre)
+        {
+            db.OffrePays.Add(offre);
+            db.SaveChanges();
+        }
 
+        public string GetSaisonNumero(int id)
+        {
+            return db.Saison.Where(s => s.SaisonId == id).Select(o => o.NoSaison).First().ToString();
+        }
+
+        public string GetSerieNom(int id)
+        {
+            int serieId = db.Saison.Where(s => s.SaisonId == id).Select(o => o.SerieId).First();
+            return db.Serie.Where(s => s.SerieId == serieId).Select(s => s.Nom).First();
+        }
+
+        public List<Contenu> GetSaisonEpisodes(int saisonId)
+        {
+            return db.Contenu.Where(c => c.SaisonId == saisonId).ToList();
+        }
+
+        public List<Contenu> GetSerieEpisodes(int saisonId)
+        {
+            List<Contenu> colEpisodes = new List<Contenu>();
+            int serieId = db.Saison.Where(s => s.SaisonId == saisonId).Select(o => o.SerieId).First();
+            List<int> saisonIds = db.Saison.Where(s => s.SerieId == serieId).Select(s => s.SaisonId).ToList();
+            foreach (int sauceId in saisonIds)
+            {
+                List<Contenu> colSaisonEpi = GetSaisonEpisodes(sauceId);
+                colEpisodes.AddRange(colSaisonEpi);
+            }
+            return colEpisodes;
+        }
+        //============================================================================AJOUTER============================================================================
+        public void AddRegle(Regle regle)
+        {            
+            db.Regle.Add(regle);
+            db.SaveChanges();
+        }
+
+        public Regle GetRegle(int id)
+        {
+            return db.Regle.Find(id);           
+        }
+
+        public void ModifyRegle(Regle regle)
+        {
+            db.Entry(regle).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+
+        public void DeleteRegle(Regle regle)
+        {
+            db.Regle.Remove(regle);
+            db.SaveChanges();
+        }      
     }
 }

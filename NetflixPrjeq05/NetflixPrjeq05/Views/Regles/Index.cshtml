@@ -3,54 +3,58 @@
 @{
     ViewBag.Title = "Index";
 }
-<h2>Information</h2>
-<p>
+<h2>Information </h2>
+    
+<p> 
     @using (Html.BeginForm("Index", "Regles", FormMethod.Get))
     {
         @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
-
     }
 </p>
 
 
-<div id="reglesDiv" style="
-    display: flex;
-">
-    @*<h3>Langue</h3>*@
-    <br />
+
+
+<!--===============================================================================Langue=========================================================================================-->
+<div id="reglesDiv" style="display: flex;">
+
     <table class="table">
         <tr>
 
             <th>
-                <!--@Html.DisplayNameFor(model => model.Pourcentage)-->
+
                 Pourcentage visé
             </th>
             <th>
-                <!--@Html.DisplayNameFor(model => model.PourcentageReel)-->
                 Pourcentage actuel
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DoublageLangue)
+                Langue de doublage
+            </th>
+            <th>
+
+            </th>
+            <th>
+
             </th>
         </tr>
-
         @foreach (var item in Model)
         {
             if (item.DoublageLangue != string.Empty)
             {
                 <tr>
                     <td>
-                        @if ((bool)item.EstPlusGrand)
+                        @if (item.EstPlusGrand.Value)
                         {
-                            <span>>=@Html.DisplayFor(modelItem => item.Pourcentage)</span>
+                            <span>Plus de @Html.DisplayFor(modelItem => item.Pourcentage)</span>
                         }
                         else
                         {
-                            <span>@Html.DisplayFor(modelItem => item.Pourcentage)<=</span>
+                            <span>Moins de @Html.DisplayFor(modelItem => item.Pourcentage)</span>
                         }
                     </td>
                     <td>
-                        @if (((bool)item.EstPlusGrand && item.PourcentageReel >= item.Pourcentage) || !((bool)item.EstPlusGrand && item.PourcentageReel <= item.Pourcentage))
+                        @if (((bool)item.EstPlusGrand && item.PourcentageReel >= item.Pourcentage) || (!item.EstPlusGrand.Value && item.PourcentageReel <= item.Pourcentage))
                         {
                             <span style="color:green;">@Html.DisplayFor(modelItem => item.PourcentageReel)</span>
                         }
@@ -62,27 +66,72 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.DoublageLangue)
                     </td>
+                    <td>
+
+                        <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("EditLangue", "Regles", new { id = item.RegleId })';return false;"><i class="far fa-edit"></i></button>
+                    </td>
+                    <td>
+
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelLang" + item.RegleId.ToString())"><i class="fas fa-trash-alt"></i></button>
+
+                        <div class="modal fade" id="@Html.Raw("modalDelLang" + item.RegleId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="ModalLabel">Supprimer une règle</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Êtes-vous sûr de vouloir supprimé cette règle
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                        <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteLangue", "Regles", new { id = item.RegleId })';return false;">Supprimer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
 
+                
             }
         }
+        <tr>
+            <td>
+                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("CreateLangue", "Regles")';return false;"><i class="fas fa-plus-circle"></i></button>
+
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
 
     </table>
     <div style="width:3px; margin: 0 20px; background-color:lightgray;"></div>
 
-    @*<h3>Origine</h3>*@
+    <!--===============================================================================Origine=========================================================================================-->
     <table class="table">
         <tr>
             <th>
-                <!--@Html.DisplayNameFor(model => model.Pourcentage)-->
                 Pourcentage visé
             </th>
             <th>
-                <!--@Html.DisplayNameFor(model => model.PourcentageReel)-->
+
                 Pourcentage actuel
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.OriginePays)
+                Pays d'origine
+            </th>
+            <th>
+
+            </th>
+            <th>
+
             </th>
         </tr>
 
@@ -92,17 +141,17 @@
             {
                 <tr>
                     <td>
-                        @if ((bool)item.EstPlusGrand)
+                        @if (item.EstPlusGrand.Value)
                         {
-                            <span>>=@Html.DisplayFor(modelItem => item.Pourcentage)</span>
+                            <span>Plus de @Html.DisplayFor(modelItem => item.Pourcentage)</span>
                         }
                         else
                         {
-                            <span>@Html.DisplayFor(modelItem => item.Pourcentage)<=</span>
+                            <span>Moins de @Html.DisplayFor(modelItem => item.Pourcentage)</span>
                         }
                     </td>
                     <td>
-                        @if (((bool)item.EstPlusGrand && item.PourcentageReel >= item.Pourcentage) || !((bool)item.EstPlusGrand && item.PourcentageReel <= item.Pourcentage))
+                        @if ((item.EstPlusGrand.Value && item.PourcentageReel >= item.Pourcentage) || (!item.EstPlusGrand.Value && item.PourcentageReel <= item.Pourcentage))
                         {
                             <span style="color:green;">@Html.DisplayFor(modelItem => item.PourcentageReel)</span>
                         }
@@ -114,10 +163,49 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.OriginePays)
                     </td>
+                    <td>
+
+                        <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("EditOrigine", "Regles", new { id = item.RegleId })';return false;"><i class="far fa-edit"></i></button>
+                    </td>
+                    <td>
+
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelOri" + item.RegleId.ToString())"><i class="fas fa-trash-alt"></i></button>
+
+                        <div class="modal fade" id="@Html.Raw("modalDelOri" + item.RegleId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="ModalLabel">Supprimer une règle</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Êtes-vous sûr de vouloir supprimé cette règle
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                        <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteOrigine", "Regles", new { id = item.RegleId })';return false;">Supprimer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             }
 
         }
+        <tr>
+            <td>
+                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("CreateOrigine", "Regles")';return false;"><i class="fas fa-plus-circle"></i></button>
+
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
 
     </table>
 </div>

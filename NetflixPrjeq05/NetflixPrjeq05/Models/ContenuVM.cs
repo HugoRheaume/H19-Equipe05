@@ -20,6 +20,7 @@ namespace NetflixPrjeq05.Models
             Duree = contenu.Duree;          
             Titre = contenu.Titre_Original;
             Affiche = contenu.Affiche;
+            SaisonId = contenu.SaisonId;
         }
 
 
@@ -48,6 +49,7 @@ namespace NetflixPrjeq05.Models
         public string Doublages { get; set; }
 
         public string Origines { get; set; }
+        public int? SaisonId { get; set; }
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -24,12 +25,16 @@ namespace NetflixPrjeq05.Controllers
             Height = Unit.Percentage(100),
         };
 
-        // GET: Regles
+        //============================================================================INDEX============================================================================
         public ActionResult Index(int? id)
-        {
+        { 
             if (id != null)
+            {
                 ContenusController.currentPaysId = id.Value;
-
+                ContenusController.m_colContenuDisponibleCourant = null;
+                ContenusController.m_colContenuIndisponibleCourant = null;
+            }
+            
             int paysId = ContenusController.currentPaysId;
             ViewBag.Pays = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
             List<RegleVM> regleVMs = new List<RegleVM>();
@@ -37,10 +42,10 @@ namespace NetflixPrjeq05.Controllers
             foreach (Regle rv in regles )
             {
                 RegleVM regleVm = new RegleVM(rv);
-                var queryDoublageLangue = service.getLangueDoublageByRegleId(regleVm.RegleId);
+                var queryDoublageLangue = service.GetLangueDoublageByRegleId(regleVm.RegleId);
                 string langues = string.Join(", ", queryDoublageLangue);
                 regleVm.DoublageLangue = langues;
-                var queryOriginePays = service.getOriginePaysByRegleId(regleVm.RegleId);
+                var queryOriginePays = service.GetOriginePaysByRegleId(regleVm.RegleId);
                 string origines = string.Join(", ", queryOriginePays);
                 regleVm.OriginePays = origines;
                 regleVMs.Add(regleVm);
@@ -78,37 +83,167 @@ namespace NetflixPrjeq05.Controllers
         //    }
         //}
 
-        //// GET: Regles/Create
-        //public ActionResult Create()
-        //{
-        //    ViewBag.DoublageLangueId = new SelectList(db.Langue, "LangueId", "Code_ISO639");
-        //    ViewBag.OriginePaysId = new SelectList(db.Pays, "PaysId", "Code_ISO3166");
-        //    ViewBag.PaysId = new SelectList(db.Pays, "PaysId", "Code_ISO3166");
-        //    return View();
-        //}
 
-        //// POST: Regles/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "RegleId,PaysId,OriginePaysId,DoublageLangueId,Pourcentage,EstPlusGrand")] Regle regle)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Regle.Add(regle);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
+        // DOUBLE FONCTIONNE PAS <--------------------------------------------------------------////////////////////////////////////////////////////////////
+        public ActionResult CreateOrigine()
+        {
+            int paysId = ContenusController.currentPaysId;
+            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom");
+            ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
+            ViewBag.PaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
+            return View();
+        }
+        public ActionResult CreateLangue()
+        {
+            int paysId = ContenusController.currentPaysId;
+            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom");
+            ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
+            ViewBag.PaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
+            return View();
+        }
 
-        //    ViewBag.DoublageLangueId = new SelectList(db.Langue, "LangueId", "Code_ISO639", regle.DoublageLangueId);
-        //    ViewBag.OriginePaysId = new SelectList(db.Pays, "PaysId", "Code_ISO3166", regle.OriginePaysId);
-        //    ViewBag.PaysId = new SelectList(db.Pays, "PaysId", "Code_ISO3166", regle.PaysId);
-        //    return View(regle);
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateOrigine([Bind(Include = "RegleId,PaysId,OriginePaysId,DoublageLangueId,Pourcentage,EstPlusGrand")] Regle regle)
+        {
+            //double? t = null;
+            //t = ToNullable<double>(regle.Pourcentage.Value.ToString().Replace(".", ","));
+            //regle.Pourcentage = t;
+            if (ModelState.IsValid)
+            {
+                regle.PaysId = ContenusController.currentPaysId;
+                regle.DateCreation = DateTime.Now;              
+                service.AddRegle(regle);
+                return RedirectToAction("Index");
+            }
+            List<Pays> allPays = service.GetAllPays();
+            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom", regle.DoublageLangueId);
+            ViewBag.OriginePaysId = new SelectList(allPays, "PaysId", "Nom", regle.OriginePaysId);
+            ViewBag.PaysId = new SelectList(allPays, "PaysId", "Nom", regle.PaysId);
+            return View(regle);
+        }
 
-        //// GET: Regles/Edit/5
-        //public ActionResult Edit(int? id)
+
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateLangue([Bind(Include = "RegleId,PaysId,OriginePaysId,DoublageLangueId,Pourcentage,EstPlusGrand")] Regle regle)
+        {
+            if (ModelState.IsValid)
+            {
+                regle.PaysId = ContenusController.currentPaysId;
+                regle.DateCreation = DateTime.Now;
+                service.AddRegle(regle);
+                return RedirectToAction("Index");
+            }
+            List<Pays> allPays = service.GetAllPays();
+            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom", regle.DoublageLangueId);
+            ViewBag.OriginePaysId = new SelectList(allPays, "PaysId", "Nom", regle.OriginePaysId);
+            ViewBag.PaysId = new SelectList(allPays, "PaysId", "Nom", regle.PaysId);
+            return View(regle);
+        }
+
+
+        //============================================================================EDIT============================================================================
+        public ActionResult EditOrigine(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Regle regle = service.GetRegle(id.Value);
+                      
+            if (regle == null)
+            {
+                return HttpNotFound();
+            }
+            int paysId = ContenusController.currentPaysId;
+            
+            ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", regle.OriginePaysId);           
+            return View(regle);
+        }
+
+        public ActionResult EditLangue(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Regle regle = service.GetRegle(id.Value);
+
+            if (regle == null)
+            {
+                return HttpNotFound();
+            }
+            int paysId = ContenusController.currentPaysId;
+            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom", regle.DoublageLangueId);
+            return View(regle);
+        }
+       
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditLangue([Bind(Include = "RegleId,PaysId,OriginePaysId,DoublageLangueId,Pourcentage,EstPlusGrand")] Regle regle)
+        {
+            int paysId = ContenusController.currentPaysId;
+            if (ModelState.IsValid)
+            {
+                regle.PaysId = ContenusController.currentPaysId;
+                regle.DateCreation = DateTime.Now;
+                service.ModifyRegle(regle);
+                return RedirectToAction("Index");
+            }
+            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom", regle.DoublageLangueId);
+            return View(regle);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditOrigine([Bind(Include = "RegleId,PaysId,OriginePaysId,DoublageLangueId,Pourcentage,EstPlusGrand")] Regle regle)
+        {
+            int paysId = ContenusController.currentPaysId;
+            if (ModelState.IsValid)
+            {
+                regle.PaysId = ContenusController.currentPaysId;
+                regle.DateCreation = DateTime.Now;
+                service.ModifyRegle(regle);
+                return RedirectToAction("Index");
+            }
+            ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", regle.OriginePaysId);
+            return View(regle);
+        }
+        //============================================================================DELETE============================================================================
+        public ActionResult DeleteOrigine(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Regle regle = service.GetRegle(id.Value);
+            if (regle == null)
+            {
+                return HttpNotFound();
+            }
+            service.DeleteRegle(regle);
+            return RedirectToAction("Index");
+        }
+        public ActionResult DeleteLangue(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Regle regle = service.GetRegle(id.Value);           
+            if (regle == null)
+            {
+                return HttpNotFound();
+            }
+            service.DeleteRegle(regle);
+            return RedirectToAction("Index");
+        }
+        
+
+        //// GET: Regles/Details/5
+        //public ActionResult Details(int? id)
         //{
         //    if (id == null)
         //    {
@@ -119,55 +254,7 @@ namespace NetflixPrjeq05.Controllers
         //    {
         //        return HttpNotFound();
         //    }
-        //    ViewBag.DoublageLangueId = new SelectList(db.Langue, "LangueId", "Code_ISO639", regle.DoublageLangueId);
-        //    ViewBag.OriginePaysId = new SelectList(db.Pays, "PaysId", "Code_ISO3166", regle.OriginePaysId);
-        //    ViewBag.PaysId = new SelectList(db.Pays, "PaysId", "Code_ISO3166", regle.PaysId);
         //    return View(regle);
-        //}
-
-        //// POST: Regles/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "RegleId,PaysId,OriginePaysId,DoublageLangueId,Pourcentage,EstPlusGrand")] Regle regle)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(regle).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    ViewBag.DoublageLangueId = new SelectList(db.Langue, "LangueId", "Code_ISO639", regle.DoublageLangueId);
-        //    ViewBag.OriginePaysId = new SelectList(db.Pays, "PaysId", "Code_ISO3166", regle.OriginePaysId);
-        //    ViewBag.PaysId = new SelectList(db.Pays, "PaysId", "Code_ISO3166", regle.PaysId);
-        //    return View(regle);
-        //}
-
-        //// GET: Regles/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Regle regle = db.Regle.Find(id);
-        //    if (regle == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(regle);
-        //}
-
-        //// POST: Regles/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    Regle regle = db.Regle.Find(id);
-        //    db.Regle.Remove(regle);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
         //}
 
         protected override void Dispose(bool disposing)

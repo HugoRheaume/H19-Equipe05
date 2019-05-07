@@ -19,6 +19,7 @@
           <Property Name="Titre_Original" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="Date_de_sortie" Type="date" />
           <Property Name="Duree" Type="int" />
+          <Property Name="SaisonId" Type="int" />
         </EntityType>
         <EntityType Name="ContenuLangue">
           <Key>
@@ -60,6 +61,21 @@
           <Property Name="Code_ISO3166" Type="nvarchar" MaxLength="3" />
           <Property Name="Nom" Type="nvarchar" MaxLength="16" />
         </EntityType>
+        <EntityType Name="Saison">
+          <Key>
+            <PropertyRef Name="SaisonId" />
+          </Key>
+          <Property Name="SaisonId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SerieId" Type="int" Nullable="false" />
+          <Property Name="NoSaison" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Serie">
+          <Key>
+            <PropertyRef Name="SerieId" />
+          </Key>
+          <Property Name="SerieId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nom" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
         <EntityType Name="Regle">
           <Key>
             <PropertyRef Name="RegleId" />
@@ -73,7 +89,7 @@
           <Property Name="EstPlusGrand" Type="bit" />
           <Property Name="PourcentageReel" Type="float" />
         </EntityType>
-        <Association Name="FK__ContenuLa__Conte__5812160E">
+        <Association Name="FK_ContenuLangue_Contenu_ContenuId">
           <End Role="Contenu" Type="Self.Contenu" Multiplicity="1" />
           <End Role="ContenuLangue" Type="Self.ContenuLangue" Multiplicity="*" />
           <ReferentialConstraint>
@@ -85,7 +101,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ContenuLa__Langu__571DF1D5">
+        <Association Name="FK_ContenuLangue_Langue_LangueId">
           <End Role="Langue" Type="Self.Langue" Multiplicity="1" />
           <End Role="ContenuLangue" Type="Self.ContenuLangue" Multiplicity="*" />
           <ReferentialConstraint>
@@ -97,7 +113,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OffrePays__Conte__5AEE82B9">
+        <Association Name="FK_OffrePays_Contenu_ContenuId">
           <End Role="Contenu" Type="Self.Contenu" Multiplicity="1" />
           <End Role="OffrePays" Type="Self.OffrePays" Multiplicity="*" />
           <ReferentialConstraint>
@@ -109,7 +125,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OffrePays__PaysI__5BE2A6F2">
+        <Association Name="FK_OffrePays_Pays_PaysId">
           <End Role="Pays" Type="Self.Pays" Multiplicity="1" />
           <End Role="OffrePays" Type="Self.OffrePays" Multiplicity="*" />
           <ReferentialConstraint>
@@ -121,7 +137,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OriginePa__Conte__5FB337D6">
+        <Association Name="FK_OriginePays_Contenu_ContenuId">
           <End Role="Contenu" Type="Self.Contenu" Multiplicity="1" />
           <End Role="OriginePays" Type="Self.OriginePays" Multiplicity="*" />
           <ReferentialConstraint>
@@ -133,7 +149,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OriginePa__PaysI__60A75C0F">
+        <Association Name="FK_OriginePays_Pays_PaysId">
           <End Role="Pays" Type="Self.Pays" Multiplicity="1" />
           <End Role="OriginePays" Type="Self.OriginePays" Multiplicity="*" />
           <ReferentialConstraint>
@@ -145,7 +161,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Regle__DoublageL__6E01572D">
+        <Association Name="FK_Regle_Langue_LangueId">
           <End Role="Langue" Type="Self.Langue" Multiplicity="0..1" />
           <End Role="Regle" Type="Self.Regle" Multiplicity="*" />
           <ReferentialConstraint>
@@ -157,7 +173,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Regle__OriginePa__6EF57B66">
+        <Association Name="FK_Regle_Pays_PaysId1">
           <End Role="Pays" Type="Self.Pays" Multiplicity="0..1" />
           <End Role="Regle" Type="Self.Regle" Multiplicity="*" />
           <ReferentialConstraint>
@@ -169,7 +185,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Regle__PaysId__6FE99F9F">
+        <Association Name="FK_Regle_Pays_PaysId2">
           <End Role="Pays" Type="Self.Pays" Multiplicity="1" />
           <End Role="Regle" Type="Self.Regle" Multiplicity="*" />
           <ReferentialConstraint>
@@ -181,6 +197,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Saison_Serie_SerieId">
+          <End Role="Serie" Type="Self.Serie" Multiplicity="1" />
+          <End Role="Saison" Type="Self.Saison" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Serie">
+              <PropertyRef Name="SerieId" />
+            </Principal>
+            <Dependent Role="Saison">
+              <PropertyRef Name="SerieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SaisonContenu">
+          <End Role="Saison" Type="Self.Saison" Multiplicity="0..1" />
+          <End Role="Contenu" Type="Self.Contenu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Saison">
+              <PropertyRef Name="SaisonId" />
+            </Principal>
+            <Dependent Role="Contenu">
+              <PropertyRef Name="SaisonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DBModelStoreContainer">
           <EntitySet Name="Contenu" EntityType="Self.Contenu" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="ContenuLangue" EntityType="Self.ContenuLangue" Schema="Contenus" store:Type="Tables" />
@@ -188,42 +228,52 @@
           <EntitySet Name="OffrePays" EntityType="Self.OffrePays" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="OriginePays" EntityType="Self.OriginePays" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="Pays" EntityType="Self.Pays" Schema="Contenus" store:Type="Tables" />
+          <EntitySet Name="Saison" EntityType="Self.Saison" Schema="Contenus" store:Type="Tables" />
+          <EntitySet Name="Serie" EntityType="Self.Serie" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="Regle" EntityType="Self.Regle" Schema="Reglementations" store:Type="Tables" />
-          <AssociationSet Name="FK__ContenuLa__Conte__5812160E" Association="Self.FK__ContenuLa__Conte__5812160E">
+          <AssociationSet Name="FK_ContenuLangue_Contenu_ContenuId" Association="Self.FK_ContenuLangue_Contenu_ContenuId">
             <End Role="Contenu" EntitySet="Contenu" />
             <End Role="ContenuLangue" EntitySet="ContenuLangue" />
           </AssociationSet>
-          <AssociationSet Name="FK__ContenuLa__Langu__571DF1D5" Association="Self.FK__ContenuLa__Langu__571DF1D5">
+          <AssociationSet Name="FK_ContenuLangue_Langue_LangueId" Association="Self.FK_ContenuLangue_Langue_LangueId">
             <End Role="Langue" EntitySet="Langue" />
             <End Role="ContenuLangue" EntitySet="ContenuLangue" />
           </AssociationSet>
-          <AssociationSet Name="FK__OffrePays__Conte__5AEE82B9" Association="Self.FK__OffrePays__Conte__5AEE82B9">
+          <AssociationSet Name="FK_OffrePays_Contenu_ContenuId" Association="Self.FK_OffrePays_Contenu_ContenuId">
             <End Role="Contenu" EntitySet="Contenu" />
             <End Role="OffrePays" EntitySet="OffrePays" />
           </AssociationSet>
-          <AssociationSet Name="FK__OffrePays__PaysI__5BE2A6F2" Association="Self.FK__OffrePays__PaysI__5BE2A6F2">
+          <AssociationSet Name="FK_OffrePays_Pays_PaysId" Association="Self.FK_OffrePays_Pays_PaysId">
             <End Role="Pays" EntitySet="Pays" />
             <End Role="OffrePays" EntitySet="OffrePays" />
           </AssociationSet>
-          <AssociationSet Name="FK__OriginePa__Conte__5FB337D6" Association="Self.FK__OriginePa__Conte__5FB337D6">
+          <AssociationSet Name="FK_OriginePays_Contenu_ContenuId" Association="Self.FK_OriginePays_Contenu_ContenuId">
             <End Role="Contenu" EntitySet="Contenu" />
             <End Role="OriginePays" EntitySet="OriginePays" />
           </AssociationSet>
-          <AssociationSet Name="FK__OriginePa__PaysI__60A75C0F" Association="Self.FK__OriginePa__PaysI__60A75C0F">
+          <AssociationSet Name="FK_OriginePays_Pays_PaysId" Association="Self.FK_OriginePays_Pays_PaysId">
             <End Role="Pays" EntitySet="Pays" />
             <End Role="OriginePays" EntitySet="OriginePays" />
           </AssociationSet>
-          <AssociationSet Name="FK__Regle__DoublageL__6E01572D" Association="Self.FK__Regle__DoublageL__6E01572D">
+          <AssociationSet Name="FK_Regle_Langue_LangueId" Association="Self.FK_Regle_Langue_LangueId">
             <End Role="Langue" EntitySet="Langue" />
             <End Role="Regle" EntitySet="Regle" />
           </AssociationSet>
-          <AssociationSet Name="FK__Regle__OriginePa__6EF57B66" Association="Self.FK__Regle__OriginePa__6EF57B66">
+          <AssociationSet Name="FK_Regle_Pays_PaysId1" Association="Self.FK_Regle_Pays_PaysId1">
             <End Role="Pays" EntitySet="Pays" />
             <End Role="Regle" EntitySet="Regle" />
           </AssociationSet>
-          <AssociationSet Name="FK__Regle__PaysId__6FE99F9F" Association="Self.FK__Regle__PaysId__6FE99F9F">
+          <AssociationSet Name="FK_Regle_Pays_PaysId2" Association="Self.FK_Regle_Pays_PaysId2">
             <End Role="Pays" EntitySet="Pays" />
             <End Role="Regle" EntitySet="Regle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Saison_Serie_SerieId" Association="Self.FK_Saison_Serie_SerieId">
+            <End Role="Serie" EntitySet="Serie" />
+            <End Role="Saison" EntitySet="Saison" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SaisonContenu" Association="Self.FK_SaisonContenu">
+            <End Role="Saison" EntitySet="Saison" />
+            <End Role="Contenu" EntitySet="Contenu" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -247,6 +297,8 @@
           <NavigationProperty Name="ContenuLangue" Relationship="DBModel.FK__ContenuLa__Conte__5812160E" FromRole="Contenu" ToRole="ContenuLangue" />
           <NavigationProperty Name="OffrePays" Relationship="DBModel.FK__OffrePays__Conte__5AEE82B9" FromRole="Contenu" ToRole="OffrePays" />
           <NavigationProperty Name="OriginePays" Relationship="DBModel.FK__OriginePa__Conte__5FB337D6" FromRole="Contenu" ToRole="OriginePays" />
+          <Property Name="SaisonId" Type="Int32" />
+          <NavigationProperty Name="Saison" Relationship="DBModel.FK_SaisonContenu" FromRole="Contenu" ToRole="Saison" />
         </EntityType>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Contenu" EntityType="Self.Contenu" />
@@ -291,6 +343,16 @@
           <AssociationSet Name="FK__Regle__PaysId__693CA210" Association="DBModel.FK__Regle__PaysId__693CA210">
             <End Role="Pays" EntitySet="Pays" />
             <End Role="Regle" EntitySet="Regle" />
+          </AssociationSet>
+          <EntitySet Name="Saison" EntityType="DBModel.Saison" />
+          <EntitySet Name="Serie" EntityType="DBModel.Serie" />
+          <AssociationSet Name="FK_SaisonContenu" Association="DBModel.FK_SaisonContenu">
+            <End Role="Saison" EntitySet="Saison" />
+            <End Role="Contenu" EntitySet="Contenu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Saison_Serie_SerieId" Association="DBModel.FK_Saison_Serie_SerieId">
+            <End Role="Serie" EntitySet="Serie" />
+            <End Role="Saison" EntitySet="Saison" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Langue">
@@ -469,6 +531,48 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Saison">
+          <Key>
+            <PropertyRef Name="SaisonId" />
+          </Key>
+          <Property Name="SaisonId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SerieId" Type="Int32" Nullable="false" />
+          <Property Name="NoSaison" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Contenu" Relationship="DBModel.FK_SaisonContenu" FromRole="Saison" ToRole="Contenu" />
+          <NavigationProperty Name="Serie" Relationship="DBModel.FK_Saison_Serie_SerieId" FromRole="Saison" ToRole="Serie" />
+        </EntityType>
+        <EntityType Name="Serie">
+          <Key>
+            <PropertyRef Name="SerieId" />
+          </Key>
+          <Property Name="SerieId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nom" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Saison" Relationship="DBModel.FK_Saison_Serie_SerieId" FromRole="Serie" ToRole="Saison" />
+        </EntityType>
+        <Association Name="FK_SaisonContenu">
+          <End Type="DBModel.Saison" Role="Saison" Multiplicity="0..1" />
+          <End Type="DBModel.Contenu" Role="Contenu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Saison">
+              <PropertyRef Name="SaisonId" />
+            </Principal>
+            <Dependent Role="Contenu">
+              <PropertyRef Name="SaisonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Saison_Serie_SerieId">
+          <End Type="DBModel.Serie" Role="Serie" Multiplicity="1" />
+          <End Type="DBModel.Saison" Role="Saison" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Serie">
+              <PropertyRef Name="SerieId" />
+            </Principal>
+            <Dependent Role="Saison">
+              <PropertyRef Name="SerieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -478,6 +582,7 @@
           <EntitySetMapping Name="Contenu">
             <EntityTypeMapping TypeName="DBModel.Contenu">
               <MappingFragment StoreEntitySet="Contenu">
+                <ScalarProperty Name="SaisonId" ColumnName="SaisonId" />
                 <ScalarProperty Name="ContenuId" ColumnName="ContenuId" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Affiche" ColumnName="Affiche" />
@@ -547,6 +652,23 @@
                 <ScalarProperty Name="OriginePaysId" ColumnName="OriginePaysId" />
                 <ScalarProperty Name="PaysId" ColumnName="PaysId" />
                 <ScalarProperty Name="RegleId" ColumnName="RegleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Saison">
+            <EntityTypeMapping TypeName="DBModel.Saison">
+              <MappingFragment StoreEntitySet="Saison">
+                <ScalarProperty Name="NoSaison" ColumnName="NoSaison" />
+                <ScalarProperty Name="SerieId" ColumnName="SerieId" />
+                <ScalarProperty Name="SaisonId" ColumnName="SaisonId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Serie">
+            <EntityTypeMapping TypeName="DBModel.Serie">
+              <MappingFragment StoreEntitySet="Serie">
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="SerieId" ColumnName="SerieId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
