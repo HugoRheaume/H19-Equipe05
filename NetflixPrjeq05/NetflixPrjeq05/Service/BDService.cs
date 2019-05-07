@@ -177,6 +177,24 @@ namespace NetflixPrjeq05.Service
             db.SaveChanges();
         }
 
+        public int TotalDureePays(int paysId)
+        {
+            throw new NotImplementedException();
+
+        }
+
+        public int TotalDureePaysDoublage(int paysId,int doublageId)
+        {
+            throw new NotImplementedException();
+
+        }
+
+        public int TotalDureePaysOrigine(int paysId, int origineId)
+        {
+            throw new NotImplementedException();
+
+        }
+
         public void DeleteRegle(Regle regle)
         {
             db.Regle.Remove(regle);
