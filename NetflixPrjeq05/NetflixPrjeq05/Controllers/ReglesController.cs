@@ -70,10 +70,7 @@ namespace NetflixPrjeq05.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateOrigine([Bind(Include = "RegleId,PaysId,OriginePaysId,DoublageLangueId,Pourcentage,EstPlusGrand")] Regle regle)
-        {
-            //double? t = null;
-            //t = ToNullable<double>(regle.Pourcentage.Value.ToString().Replace(".", ","));
-            //regle.Pourcentage = t;
+        {           
             if (ModelState.IsValid)
             {
                 regle.PaysId = ContenusController.currentPaysId;
@@ -83,13 +80,14 @@ namespace NetflixPrjeq05.Controllers
                 {                    
                     service.AddRegle(regle);
                     return RedirectToAction("Index");
-                }               
+                }      
+                else
+                    ViewBag.AfficheErreur = true;
             }
             List<Pays> allPays = service.GetAllPays();
             ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom", regle.DoublageLangueId);
             ViewBag.OriginePaysId = new SelectList(allPays, "PaysId", "Nom", regle.OriginePaysId);
-            ViewBag.PaysId = new SelectList(allPays, "PaysId", "Nom", regle.PaysId);
-            ViewBag.AfficheErreur = true;
+            ViewBag.PaysId = new SelectList(allPays, "PaysId", "Nom", regle.PaysId);           
             return View(regle);
         }
 
@@ -103,13 +101,19 @@ namespace NetflixPrjeq05.Controllers
             {
                 regle.PaysId = ContenusController.currentPaysId;
                 regle.DateCreation = DateTime.Now;
-                service.AddRegle(regle);
-                return RedirectToAction("Index");
+
+                if (!service.RegleExisteDeja(regle))
+                {
+                    service.AddRegle(regle);
+                    return RedirectToAction("Index");
+                }
+                else
+                    ViewBag.AfficheErreur = true;
             }
             List<Pays> allPays = service.GetAllPays();
             ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom", regle.DoublageLangueId);
             ViewBag.OriginePaysId = new SelectList(allPays, "PaysId", "Nom", regle.OriginePaysId);
-            ViewBag.PaysId = new SelectList(allPays, "PaysId", "Nom", regle.PaysId);
+            ViewBag.PaysId = new SelectList(allPays, "PaysId", "Nom", regle.PaysId);            
             return View(regle);
         }
 
