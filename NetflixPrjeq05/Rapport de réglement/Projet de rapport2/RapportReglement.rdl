@@ -26,21 +26,18 @@
     <DataSet Name="RéglementHistorique">
       <Query>
         <DataSourceName>RéglementHistorique</DataSourceName>
-        <CommandText>SELECT  [HistoriqueRegleId]
+        <CommandText>SELECT [HistoriqueRegleId]
       ,[RegleId]
       ,[DateCreation]
-      ,IIF([DateFin] IS NULL, getdate(),  [DateFin]) AS DateFinFilter
-,[DateFin] 
-  ,p.[Nom] AS PaysRegle
-      ,op.[Nom] AS PaysOrigine
-      ,l.Nom AS LangueDoublage
+      ,[DateFinFilter]
+      ,[DateFin]
+      ,[PaysRegle]
+      ,[PaysOrigine]
+      ,[LangueDoublage]
       ,[Pourcentage]
       ,[EstPlusGrand]
       ,[PourcentageReel]
-  FROM [H19_Projet_eq05].[Reglementations].[HistoriqueRegle] AS hr
-  JOIN Contenus.Pays AS p ON p.PaysId=hr.[PaysId]
-  LEFT JOIN Contenus.Pays AS op ON op.PaysId=hr.[OriginePaysId]
-  LEFT JOIN Contenus.Langue AS l ON l.LangueId=hr.DoublageLangueId</CommandText>
+  FROM [H19_Projet_eq05].[Reglementations].[vw_HistoriqueRegleWithContenu]</CommandText>
       </Query>
       <Fields>
         <Field Name="HistoriqueRegleId">
