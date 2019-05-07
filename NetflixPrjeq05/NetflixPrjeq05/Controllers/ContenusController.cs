@@ -377,13 +377,27 @@ namespace NetflixPrjeq05.Controllers
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }          
-            Contenu contenu = service.GetContenuByID(id.Value);            
-            if (contenu == null)
-            {
-                return HttpNotFound();
-            }                      
-            return View(contenu);
+            }
+            int offreId = service.GetAllOffreContenu().Where(o => o.ContenuId == id && o.PaysId == currentPaysId).First().OffrePaysId;
+            service.RemoveOffre(offreId);
+            //Mettre à jour les listes courantes
+            Contenu contenu = m_tousLeContenu.Where(c => c.ContenuId == id).First();
+            ContenuVM contenuVM = new ContenuVM(contenu);
+            //Doublages                                    
+            List<string> queryLangue = service.GetLangueDoublageByContenuId(contenuVM.ContenuId);
+            string langues = string.Join(", ", queryLangue.ToList());
+            contenuVM.Doublages = langues;
+            //Origines                                   
+            List<string> queryOrignine = service.GetOriginePaysByContenuId(contenuVM.ContenuId);
+            string origines = string.Join(", ", queryOrignine.ToList());
+            contenuVM.Origines = origines;
+
+            if (m_colContenuIndisponibleCourant != null)
+                m_colContenuIndisponibleCourant.Add(contenuVM);
+            if (m_colContenuDisponibleCourant != null)
+                m_colContenuDisponibleCourant.Remove(m_colContenuDisponibleCourant.Where(c => c.ContenuId == id).First());
+
+            return RedirectToAction("Contenu");
         }
 
         //========================================================================================================================================================
