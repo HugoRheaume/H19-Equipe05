@@ -8,12 +8,21 @@ using System.Web;
 using System.Web.Mvc;
 using NetflixPrjeq05.Models;
 using NetflixPrjeq05.Service;
+using Microsoft.Reporting.WebForms;
+using System.Web.UI.WebControls;
 
 namespace NetflixPrjeq05.Controllers
 {
     public class ReglesController : Controller
     {
         private BDService service = new BDService(new Entities());
+        private ReportViewer reportViewer = new ReportViewer()
+        {
+            ProcessingMode = ProcessingMode.Remote,
+            SizeToReportContent = true,
+            Width = Unit.Percentage(100),
+            Height = Unit.Percentage(100),
+        };
 
         // GET: Regles
         public ActionResult Index(int? id)
@@ -39,19 +48,34 @@ namespace NetflixPrjeq05.Controllers
             return View(regleVMs);
         }
 
-        //// GET: Regles/Details/5
-        //public ActionResult Details(int? id)
+        // GET: Regles/Details/5
+        public ActionResult Report()
+        {
+            reportViewer.ServerReport.ReportPath = "/Eq05Rapport/RapportReglement";
+            reportViewer.ServerReport.ReportServerUrl = new Uri("http://ed4sql2/ReportServer/");
+            var startDate = DateTime.Now;
+            var parameters = new List<ReportParameter>
+            { new ReportParameter("Date", startDate.ToString())};
+            reportViewer.ServerReport.SetParameters(parameters);
+            ViewBag.ReportViewer = reportViewer;
+            return View();
+
+        }
+        //protected override void OnPreRender(EventArgs e)
         //{
-        //    if (id == null)
+        //    base.OnPreRender(e);
+        //    DatePickers.Value = string.Join(",", (new List(GetDateParameters()).ToArray()));
+        ////}
+        //private IEnumerable GetDateParameters()
+        //{
+        //    // I'm assuming report view control id as reportViewer
+        //    foreach (ReportParameterInfo info in reportViewer.ServerReport.GetParameters())
         //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //        if (info.DataType == ParameterDataType.DateTime)
+        //        {
+        //            yield return string.Format("[{0}]", info.Prompt);
+        //        }
         //    }
-        //    Regle regle = db.Regle.Find(id);
-        //    if (regle == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(regle);
         //}
 
         //// GET: Regles/Create
