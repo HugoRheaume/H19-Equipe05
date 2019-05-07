@@ -2,8 +2,20 @@
 
 @{
     ViewBag.Title = "Create";
-}
 
+}
+<br />
+@{
+    bool alreadyExist = ViewBag.AfficheErreur;
+
+    if (alreadyExist)
+    {
+        <div class="alert alert-danger" role="alert">
+            Une règle identique existe déjà!
+        </div>
+    }
+
+}
 <h2>Créer une règle</h2>
 
 
@@ -33,7 +45,7 @@
                 </td>
                 <td>
 
-                    Minimum @Html.RadioButtonFor(model => model.EstPlusGrand, "true", new { id = "yesNoToaster", @checked= "checked" })
+                    Minimum @Html.RadioButtonFor(model => model.EstPlusGrand, "true", new { id = "yesNoToaster", @checked = "checked" })
                     Maximum @Html.RadioButtonFor(model => model.EstPlusGrand, "false", new { id = "yesNoToaster" })
 
                     @Html.ValidationMessageFor(model => model.EstPlusGrand, "", new { @class = "text-danger" })
