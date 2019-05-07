@@ -10,8 +10,22 @@
 <div>
     @using (Html.BeginForm("Contenu", "Contenus", FormMethod.Get))
     {
-        @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
-        @Html.TextBox("searchTitle","", new { onchange = "this.form.submit();", @class = "form-control" })
+    <div class="row">
+        <div class="col-md-8">
+            @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
+        </div>
+        <div class="col-md-4">
+            <table class="table table-borderless"><tr>
+                    <td>
+                        Rechercher
+                    </td>
+
+                    <td>
+                        @Html.TextBox("searchTitle", "", new { onchange = "this.form.submit();", @class = "form-control" })
+                    </td>
+                </tr></table>
+        </div>
+    </div>
     }
 </div>
 <p>
