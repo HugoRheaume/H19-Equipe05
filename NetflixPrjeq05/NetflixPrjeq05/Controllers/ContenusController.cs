@@ -187,6 +187,7 @@ namespace NetflixPrjeq05.Controllers
                         contenuVM.Origines = origines;
                         colContenuVM.Add(contenuVM);
                     }
+
                     if (searchTitle != null && searchTitle != string.Empty)
                         m_colContenuIndisponibleCourant = colContenuVM.Where(x => x.Titre.ToLower().Contains(searchTitle.ToLower())).ToList();
                     else
