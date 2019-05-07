@@ -281,19 +281,19 @@ namespace NetflixPrjeq05.Controllers
                         "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
                         : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
                         + " doit être supérieur ou égal à " + regle.Pourcentage + "%"
-                        + "\n Pourcentage actuel: " + regle.PourcentageReel + "%");
+                        + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2) + "%");
                 }
-
+               
                 if(!regle.EstPlusGrand.Value && !(regle.PourcentageReel <= regle.Pourcentage))
                 {
                     messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
                         "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
                         : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
                         + " doit être inférieur ou égal à " + regle.Pourcentage + "%" 
-                        + "\n Pourcentage actuel: " + regle.PourcentageReel + "%");
+                        + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2) + "%");
                 }
             }
-
+            ViewBag.MessagesErreur = messages;
             return RedirectToAction("Ajouter");
         }
 
@@ -322,12 +322,31 @@ namespace NetflixPrjeq05.Controllers
                     if (m_colContenuDisponibleCourant != null)
                         m_colContenuDisponibleCourant.Add(contenu);
                 }
+            }           
+            ////Administration des messages d'erreur pour pourcentages
+            List<Regle> regles = service.GetAllReglementForPays(currentPaysId);
+            List<string> messages = new List<string>();
+            foreach (var regle in regles)
+            {
+                if (regle.EstPlusGrand.Value && !(regle.PourcentageReel >= regle.Pourcentage))
+                {
+                    messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
+                        "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
+                        : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
+                        + " doit être supérieur ou égal à " + regle.Pourcentage + "%"
+                        + "\n Pourcentage actuel: " + regle.PourcentageReel + "%");
+                }
+
+                if (!regle.EstPlusGrand.Value && !(regle.PourcentageReel <= regle.Pourcentage))
+                {
+                    messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
+                        "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
+                        : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
+                        + " doit être inférieur ou égal à " + regle.Pourcentage + "%"
+                        + "\n Pourcentage actuel: " + regle.PourcentageReel + "%");
+                }
             }
-            //if (contenu == null)
-            //{
-            //    return HttpNotFound();
-            //}
-            //return View(contenu);            
+            ViewBag.MessagesErreur = messages;
             return RedirectToAction("Ajouter");
         }
 
@@ -359,11 +378,30 @@ namespace NetflixPrjeq05.Controllers
                         m_colContenuDisponibleCourant.Add(contenu);
                 }
             }
-            //if (contenu == null)
-            //{
-            //    return HttpNotFound();
-            //}
-            //return View(contenu);
+            ////Administration des messages d'erreur pour pourcentages
+            List<Regle> regles = service.GetAllReglementForPays(currentPaysId);
+            List<string> messages = new List<string>();
+            foreach (var regle in regles)
+            {
+                if (regle.EstPlusGrand.Value && !(regle.PourcentageReel >= regle.Pourcentage))
+                {
+                    messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
+                        "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
+                        : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
+                        + " doit être supérieur ou égal à " + regle.Pourcentage + "%"
+                        + "\n Pourcentage actuel: " + regle.PourcentageReel + "%");
+                }
+
+                if (!regle.EstPlusGrand.Value && !(regle.PourcentageReel <= regle.Pourcentage))
+                {
+                    messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
+                        "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
+                        : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
+                        + " doit être inférieur ou égal à " + regle.Pourcentage + "%"
+                        + "\n Pourcentage actuel: " + regle.PourcentageReel + "%");
+                }
+            }
+            ViewBag.MessagesErreur = messages;
             return RedirectToAction("Ajouter");
         }
 
