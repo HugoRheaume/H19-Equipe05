@@ -155,10 +155,10 @@ namespace NetflixPrjeq05.Service
         public bool RegleExisteDeja(Regle regle)
         {
             //Langue
-            if (regle.DoublageLangueId.HasValue && db.Regle.Where(r => r.DoublageLangueId == regle.DoublageLangueId && r.PaysId == regle.PaysId).Count() > 0)
+            if (regle.DoublageLangueId.HasValue && db.Regle.Where(r => r.DoublageLangueId == regle.DoublageLangueId && r.PaysId == regle.PaysId && r.EstPlusGrand == regle.EstPlusGrand).Count() > 0)
                 return true;
             //Origine
-            if (regle.OriginePaysId.HasValue && db.Regle.Where(r => r.OriginePaysId == regle.OriginePaysId && r.PaysId == regle.PaysId).Count() > 0)
+            if (regle.OriginePaysId.HasValue && db.Regle.Where(r => r.OriginePaysId == regle.OriginePaysId && r.PaysId == regle.PaysId && r.EstPlusGrand == regle.EstPlusGrand).Count() > 0)
                 return true;
 
             return false;
