@@ -22,15 +22,15 @@
 <table class="table">
     <tr>                  
         <th>
-            @*@Html.DisplayNameFor(model => model.Titre)*@
+            
             @Html.ActionLink("Titre", "Contenu", new { sortOrder = ViewBag.NameSortParm })
         </th>
         <th>
-            @*@Html.DisplayNameFor(model => model.DateSortie)*@
+           
             @Html.ActionLink("DateSortie", "Contenu", new { sortOrder = ViewBag.DateSortParm })
         </th>
         <th>
-            @*@Html.DisplayNameFor(model => model.Duree)*@
+            
             @Html.ActionLink("Duree", "Contenu", new { sortOrder = ViewBag.DureeSortParm })
         </th>
         <th>
@@ -48,7 +48,7 @@
 
     @foreach (var item in Model)
     {
-    <tr>        
+    <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Titre)
         </td>
@@ -69,8 +69,29 @@
             <img src="@Html.DisplayFor(modelItem => item.Affiche)" width="150" height="200">
         </td>
         <td>
-            
-            <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Contenus", new { id = item.ContenuId })';return false;"><i class="fas fa-trash-alt"></i></button>
+
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelContenu" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"></i></button>
+
+            <div class="modal fade" id="@Html.Raw("modalDelContenu" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="ModalLabel">Supprimer un contenu</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Êtes-vous sûr de vouloir supprimé ce contenu du pays
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                            <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Contenus", new { id = item.ContenuId })';return false;">Supprimer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </td>
     </tr>
     }
