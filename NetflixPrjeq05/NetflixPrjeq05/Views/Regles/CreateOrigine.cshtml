@@ -1,7 +1,20 @@
 ﻿@model NetflixPrjeq05.Models.Regle
 
 @{
-    ViewBag.Title = "Create";
+        ViewBag.Title = "Create";
+
+}
+<br />
+@{
+    bool alreadyExist = ViewBag.AfficheErreur;
+
+    if (alreadyExist)
+    {
+        <div class="alert alert-danger" role="alert">
+            Une règle identique existe déjà!
+        </div>
+    }
+    
 }
 
 <h2>Créer une règle</h2>

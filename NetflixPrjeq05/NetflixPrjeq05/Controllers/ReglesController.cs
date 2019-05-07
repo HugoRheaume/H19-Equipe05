@@ -17,6 +17,7 @@ namespace NetflixPrjeq05.Controllers
     public class ReglesController : Controller
     {
         private BDService service = new BDService(new Entities());
+
         private ReportViewer reportViewer = new ReportViewer()
         {
             ProcessingMode = ProcessingMode.Remote,
@@ -52,54 +53,18 @@ namespace NetflixPrjeq05.Controllers
             }
             return View(regleVMs);
         }
-
-        // GET: Regles/Details/5
-        public ActionResult Report()
-        {
-            reportViewer.ServerReport.ReportPath = "/Eq05Rapport/RapportReglement";
-            reportViewer.ServerReport.ReportServerUrl = new Uri("http://ed4sql2/ReportServer/");
-            var startDate = DateTime.Now;
-            var parameters = new List<ReportParameter>
-            { new ReportParameter("Date", startDate.ToString())};
-            reportViewer.ServerReport.SetParameters(parameters);
-            ViewBag.ReportViewer = reportViewer;
-            return View();
-
-        }
-        //protected override void OnPreRender(EventArgs e)
-        //{
-        //    base.OnPreRender(e);
-        //    DatePickers.Value = string.Join(",", (new List(GetDateParameters()).ToArray()));
-        ////}
-        //private IEnumerable GetDateParameters()
-        //{
-        //    // I'm assuming report view control id as reportViewer
-        //    foreach (ReportParameterInfo info in reportViewer.ServerReport.GetParameters())
-        //    {
-        //        if (info.DataType == ParameterDataType.DateTime)
-        //        {
-        //            yield return string.Format("[{0}]", info.Prompt);
-        //        }
-        //    }
-        //}
-
-
-        // DOUBLE FONCTIONNE PAS <--------------------------------------------------------------////////////////////////////////////////////////////////////
+                    
         public ActionResult CreateOrigine()
         {
-            int paysId = ContenusController.currentPaysId;
-            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom");
-            ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
-            ViewBag.PaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
+            int paysId = ContenusController.currentPaysId;           
+            ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);            
             ViewBag.AfficheErreur = false;
             return View();
         }
         public ActionResult CreateLangue()
         {
             int paysId = ContenusController.currentPaysId;
-            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom");
-            ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
-            ViewBag.PaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
+            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom");           
             ViewBag.AfficheErreur = false;
             return View();
         }
@@ -121,10 +86,8 @@ namespace NetflixPrjeq05.Controllers
                 else
                     ViewBag.AfficheErreur = true;
             }
-            List<Pays> allPays = service.GetAllPays();
-            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom", regle.DoublageLangueId);
-            ViewBag.OriginePaysId = new SelectList(allPays, "PaysId", "Nom", regle.OriginePaysId);
-            ViewBag.PaysId = new SelectList(allPays, "PaysId", "Nom", regle.PaysId);           
+            List<Pays> allPays = service.GetAllPays();           
+            ViewBag.OriginePaysId = new SelectList(allPays, "PaysId", "Nom", regle.OriginePaysId);            
             return View(regle);
         }
 
@@ -146,11 +109,8 @@ namespace NetflixPrjeq05.Controllers
                 }
                 else
                     ViewBag.AfficheErreur = true;
-            }
-            List<Pays> allPays = service.GetAllPays();
-            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom", regle.DoublageLangueId);
-            ViewBag.OriginePaysId = new SelectList(allPays, "PaysId", "Nom", regle.OriginePaysId);
-            ViewBag.PaysId = new SelectList(allPays, "PaysId", "Nom", regle.PaysId);            
+            }            
+            ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom", regle.DoublageLangueId);                   
             return View(regle);
         }
 
@@ -170,7 +130,8 @@ namespace NetflixPrjeq05.Controllers
             }
             int paysId = ContenusController.currentPaysId;
             
-            ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", regle.OriginePaysId);           
+            ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", regle.OriginePaysId);
+            ViewBag.AfficheErreur = false;
             return View(regle);
         }
 
@@ -188,20 +149,26 @@ namespace NetflixPrjeq05.Controllers
             }
             int paysId = ContenusController.currentPaysId;
             ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom", regle.DoublageLangueId);
+            ViewBag.AfficheErreur = false;
             return View(regle);
         }
        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditLangue([Bind(Include = "RegleId,PaysId,OriginePaysId,DoublageLangueId,Pourcentage,EstPlusGrand")] Regle regle)
-        {
-            int paysId = ContenusController.currentPaysId;
+        {           
             if (ModelState.IsValid)
             {
                 regle.PaysId = ContenusController.currentPaysId;
                 regle.DateCreation = DateTime.Now;
-                service.ModifyRegle(regle);
-                return RedirectToAction("Index");
+
+                if (!service.RegleExisteDeja(regle))
+                {
+                    service.ModifyRegle(regle);
+                    return RedirectToAction("Index");
+                }
+                else
+                    ViewBag.AfficheErreur = true;               
             }
             ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom", regle.DoublageLangueId);
             return View(regle);
@@ -210,14 +177,19 @@ namespace NetflixPrjeq05.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditOrigine([Bind(Include = "RegleId,PaysId,OriginePaysId,DoublageLangueId,Pourcentage,EstPlusGrand")] Regle regle)
-        {
-            int paysId = ContenusController.currentPaysId;
+        {           
             if (ModelState.IsValid)
             {
                 regle.PaysId = ContenusController.currentPaysId;
                 regle.DateCreation = DateTime.Now;
-                service.ModifyRegle(regle);
-                return RedirectToAction("Index");
+
+                if (!service.RegleExisteDeja(regle))
+                {
+                    service.ModifyRegle(regle);
+                    return RedirectToAction("Index");
+                }
+                else
+                    ViewBag.AfficheErreur = true;
             }
             ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", regle.OriginePaysId);
             return View(regle);
@@ -251,7 +223,35 @@ namespace NetflixPrjeq05.Controllers
             service.DeleteRegle(regle);
             return RedirectToAction("Index");
         }
-        
+        //============================================================================RAPPORT============================================================================
+        public ActionResult Report()
+        {
+            reportViewer.ServerReport.ReportPath = "/Eq05Rapport/RapportReglement";
+            reportViewer.ServerReport.ReportServerUrl = new Uri("http://ed4sql2/ReportServer/");
+            var startDate = DateTime.Now;
+            var parameters = new List<ReportParameter>
+            { new ReportParameter("Date", startDate.ToString())};
+            reportViewer.ServerReport.SetParameters(parameters);
+            ViewBag.ReportViewer = reportViewer;
+            return View();
+
+        }
+        //protected override void OnPreRender(EventArgs e)
+        //{
+        //    base.OnPreRender(e);
+        //    DatePickers.Value = string.Join(",", (new List(GetDateParameters()).ToArray()));
+        ////}
+        //private IEnumerable GetDateParameters()
+        //{
+        //    // I'm assuming report view control id as reportViewer
+        //    foreach (ReportParameterInfo info in reportViewer.ServerReport.GetParameters())
+        //    {
+        //        if (info.DataType == ParameterDataType.DateTime)
+        //        {
+        //            yield return string.Format("[{0}]", info.Prompt);
+        //        }
+        //    }
+        //}
 
         //// GET: Regles/Details/5
         //public ActionResult Details(int? id)
