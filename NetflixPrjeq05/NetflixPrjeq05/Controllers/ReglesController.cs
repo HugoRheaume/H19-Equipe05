@@ -54,6 +54,7 @@ namespace NetflixPrjeq05.Controllers
             ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom");
             ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
             ViewBag.PaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
+            ViewBag.AfficheErreur = false;
             return View();
         }
         public ActionResult CreateLangue()
@@ -62,6 +63,7 @@ namespace NetflixPrjeq05.Controllers
             ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom");
             ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
             ViewBag.PaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", paysId);
+            ViewBag.AfficheErreur = false;
             return View();
         }
 
@@ -75,14 +77,19 @@ namespace NetflixPrjeq05.Controllers
             if (ModelState.IsValid)
             {
                 regle.PaysId = ContenusController.currentPaysId;
-                regle.DateCreation = DateTime.Now;              
-                service.AddRegle(regle);
-                return RedirectToAction("Index");
+                regle.DateCreation = DateTime.Now;
+
+                if (!service.RegleExisteDeja(regle))
+                {                    
+                    service.AddRegle(regle);
+                    return RedirectToAction("Index");
+                }               
             }
             List<Pays> allPays = service.GetAllPays();
             ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom", regle.DoublageLangueId);
             ViewBag.OriginePaysId = new SelectList(allPays, "PaysId", "Nom", regle.OriginePaysId);
             ViewBag.PaysId = new SelectList(allPays, "PaysId", "Nom", regle.PaysId);
+            ViewBag.AfficheErreur = true;
             return View(regle);
         }
 
