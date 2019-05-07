@@ -10,12 +10,10 @@
 <div>
     @using (Html.BeginForm("Contenu", "Contenus", FormMethod.Get))
     {
-        @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control"})
-
+        @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
+        @Html.TextBox("searchTitle","", new { onchange = "this.form.submit();", @class = "form-control" })
     }
 </div>
-
-
 <p>
     @*Html.ActionLink("Create New", "Create")*@
 </p>

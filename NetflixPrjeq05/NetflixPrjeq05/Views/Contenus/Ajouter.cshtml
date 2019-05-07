@@ -11,7 +11,7 @@
     @using (Html.BeginForm("Ajouter", "Contenus", FormMethod.Get))
     {
         @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
-
+        @Html.TextBox("searchTitle", "", new { onchange = "this.form.submit();", @class = "form-control" })
     }
 </p>
 

@@ -36,7 +36,7 @@ namespace NetflixPrjeq05.Controllers
 
         }
         //============================================================================CONTENU============================================================================
-        public ActionResult Contenu(int? id, string sortOrder, int? page)
+        public ActionResult Contenu(int? id, string sortOrder, int? page, string searchTitle)
         {
             //Seulement effectué quand le controleur est appellé pour la première fois.
             if (m_tousLeContenu == null)
@@ -88,7 +88,12 @@ namespace NetflixPrjeq05.Controllers
                         contenuVM.Origines = origines;
                         colContenuVM.Add(contenuVM);
                     }
-                    m_colContenuDisponibleCourant = colContenuVM;
+
+                    if (searchTitle!=null && searchTitle!= string.Empty)
+                        m_colContenuDisponibleCourant = colContenuVM.Where(x => x.Titre.ToLower().Contains(searchTitle.ToLower())).ToList();
+                    else
+                        m_colContenuDisponibleCourant = colContenuVM;
+
                 }
                 //Sorting matters titre / date sortie / duree
                 switch (m_sortOrder)
@@ -121,7 +126,7 @@ namespace NetflixPrjeq05.Controllers
 
         }
         //============================================================================AJOUTER============================================================================
-        public ActionResult Ajouter(int? id, string sortOrder, int? page)
+        public ActionResult Ajouter(int? id, string sortOrder, int? page, string searchTitle)
         {
             //Seulement effectués quand le controleur est appellé pour la première fois.
             if (m_tousLesPays == null)
@@ -182,7 +187,10 @@ namespace NetflixPrjeq05.Controllers
                         contenuVM.Origines = origines;
                         colContenuVM.Add(contenuVM);
                     }
-                    m_colContenuIndisponibleCourant = colContenuVM;
+                    if (searchTitle != null && searchTitle != string.Empty)
+                        m_colContenuIndisponibleCourant = colContenuVM.Where(x => x.Titre.ToLower().Contains(searchTitle.ToLower())).ToList();
+                    else
+                        m_colContenuIndisponibleCourant = colContenuVM;
                 }                                                         
                 //Sorting matters titre / date sortie / duree
                 switch (m_sortOrder)
