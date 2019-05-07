@@ -17,6 +17,7 @@ namespace NetflixPrjeq05.Controllers
     public class ReglesController : Controller
     {
         private BDService service = new BDService(new Entities());
+
         private ReportViewer reportViewer = new ReportViewer()
         {
             ProcessingMode = ProcessingMode.Remote,
@@ -52,39 +53,7 @@ namespace NetflixPrjeq05.Controllers
             }
             return View(regleVMs);
         }
-
-        // GET: Regles/Details/5
-        public ActionResult Report()
-        {
-            reportViewer.ServerReport.ReportPath = "/Eq05Rapport/RapportReglement";
-            reportViewer.ServerReport.ReportServerUrl = new Uri("http://ed4sql2/ReportServer/");
-            var startDate = DateTime.Now;
-            var parameters = new List<ReportParameter>
-            { new ReportParameter("Date", startDate.ToString())};
-            reportViewer.ServerReport.SetParameters(parameters);
-            ViewBag.ReportViewer = reportViewer;
-            return View();
-
-        }
-        //protected override void OnPreRender(EventArgs e)
-        //{
-        //    base.OnPreRender(e);
-        //    DatePickers.Value = string.Join(",", (new List(GetDateParameters()).ToArray()));
-        ////}
-        //private IEnumerable GetDateParameters()
-        //{
-        //    // I'm assuming report view control id as reportViewer
-        //    foreach (ReportParameterInfo info in reportViewer.ServerReport.GetParameters())
-        //    {
-        //        if (info.DataType == ParameterDataType.DateTime)
-        //        {
-        //            yield return string.Format("[{0}]", info.Prompt);
-        //        }
-        //    }
-        //}
-
-
-        // DOUBLE FONCTIONNE PAS <--------------------------------------------------------------////////////////////////////////////////////////////////////
+                    
         public ActionResult CreateOrigine()
         {
             int paysId = ContenusController.currentPaysId;           
@@ -242,7 +211,35 @@ namespace NetflixPrjeq05.Controllers
             service.DeleteRegle(regle);
             return RedirectToAction("Index");
         }
-        
+        //============================================================================RAPPORT============================================================================
+        public ActionResult Report()
+        {
+            reportViewer.ServerReport.ReportPath = "/Eq05Rapport/RapportReglement";
+            reportViewer.ServerReport.ReportServerUrl = new Uri("http://ed4sql2/ReportServer/");
+            var startDate = DateTime.Now;
+            var parameters = new List<ReportParameter>
+            { new ReportParameter("Date", startDate.ToString())};
+            reportViewer.ServerReport.SetParameters(parameters);
+            ViewBag.ReportViewer = reportViewer;
+            return View();
+
+        }
+        //protected override void OnPreRender(EventArgs e)
+        //{
+        //    base.OnPreRender(e);
+        //    DatePickers.Value = string.Join(",", (new List(GetDateParameters()).ToArray()));
+        ////}
+        //private IEnumerable GetDateParameters()
+        //{
+        //    // I'm assuming report view control id as reportViewer
+        //    foreach (ReportParameterInfo info in reportViewer.ServerReport.GetParameters())
+        //    {
+        //        if (info.DataType == ParameterDataType.DateTime)
+        //        {
+        //            yield return string.Format("[{0}]", info.Prompt);
+        //        }
+        //    }
+        //}
 
         //// GET: Regles/Details/5
         //public ActionResult Details(int? id)
