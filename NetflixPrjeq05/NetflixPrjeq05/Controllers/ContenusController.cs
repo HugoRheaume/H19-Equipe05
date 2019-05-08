@@ -97,9 +97,7 @@ namespace NetflixPrjeq05.Controllers
                         contenuVM.Origines = origines;
                         colContenuVM.Add(contenuVM);
                     }
-
                      m_colContenuDisponibleCourant = colContenuVM;
-
                 }               
             }
 
@@ -131,9 +129,11 @@ namespace NetflixPrjeq05.Controllers
                     colContenuVM = colContenuVM.OrderByDescending(c => c.ContenuId).ToList();
                     break;
             }
-            //Sorting ends here            
+            //Sorting ends here     
+            ViewBag.CurrentSearch = m_searchContenuDispo;
+            ViewBag.MessagesErreur = m_listMessages;
+            m_listMessages = null;
             return View(colContenuVM.ToPagedList(pageNumber, pageSize));
-
         }
         //============================================================================AJOUTER============================================================================
         public ActionResult Ajouter(int? id, string sortOrder, int? page, string searchTitle)
@@ -239,25 +239,12 @@ namespace NetflixPrjeq05.Controllers
                     colContenuVM = colContenuVM.OrderByDescending(c => c.ContenuId).ToList();
                     break;
             }
-            //Sorting ends here 
-            //ViewBag.MessagesErreur = null;
+            //Sorting ends here            
             ViewBag.MessagesErreur = m_listMessages;
+            ViewBag.CurrentSearch = m_searchContenuIndispo;
             m_listMessages = null;
             return View(colContenuVM.ToPagedList(pageNumber, pageSize));            
-        }
-        //============================================================================INFORMATION============================================================================
-        public ActionResult Details(int? id)
-        {
-            ViewBag.Pays = new SelectList(service.GetAllPays(), "PaysId", "Nom", currentPaysId);
-            if (id.HasValue)
-            {
-                currentPaysId = id.Value;
-                m_colContenuIndisponibleCourant = null;
-                m_colContenuDisponibleCourant = null;
-            }
-            return View();
-        }
-
+        }       
         //============================================================================AJOUTER============================================================================    
         #region Ajouter
         public ActionResult AjouterContenu(int? id)
@@ -308,6 +295,7 @@ namespace NetflixPrjeq05.Controllers
                 }
             }
             //Administration des messages d'erreur pour pourcentages
+
             m_listMessages = GetMessagesPourcentages();
             return RedirectToAction("Ajouter");
         }

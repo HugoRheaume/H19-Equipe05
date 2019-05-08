@@ -31,7 +31,7 @@
                         </td>
 
                         <td>
-                            @Html.TextBox("searchTitle", "", new { onchange = "this.form.submit();", @class = "form-control" })
+                            @Html.TextBox("searchTitle", (string)ViewBag.CurrentSearch, new { onchange = "this.form.submit();", @class = "form-control" })
                         </td>
                     </tr>
                 </table>
