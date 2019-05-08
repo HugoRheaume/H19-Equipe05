@@ -280,15 +280,10 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Contenus\Create.cshtml" />
     <Content Include="Views\Contenus\Contenu.cshtml" />
     <Content Include="Views\Regles\Index.cshtml" />
     <Content Include="Views\Contenus\Ajouter.cshtml" />
     <Content Include="Views\Regles\Report.cshtml" />
-    <Content Include="Views\Home\ConfirmationAjout.cshtml" />
     <Content Include="Views\Regles\CreateOrigine.cshtml" />
     <Content Include="Views\Regles\CreateLangue.cshtml" />
     <Content Include="Views\Regles\EditLangue.cshtml" />
