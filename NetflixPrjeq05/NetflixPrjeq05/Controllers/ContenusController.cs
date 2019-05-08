@@ -77,18 +77,9 @@ namespace NetflixPrjeq05.Controllers
                     List<Contenu> colContenu = queryContenu.ToList();
                     colContenuVM.Clear();
 
-                    foreach (var item in colContenu)
+                    foreach (Contenu item in colContenu)
                     {
-                        ContenuVM contenuVM = new ContenuVM(item);
-                        //Doublages              
-                        var queryLangue = service.GetLangueDoublageByContenuId(contenuVM.ContenuId);
-                        string langues = string.Join(", ", queryLangue.ToList());
-                        contenuVM.Doublages = langues;
-                        //Origines             
-                        var queryOrigines = service.GetOriginePaysByContenuId(contenuVM.ContenuId);
-                        string origines = string.Join(", ", queryOrigines.ToList());
-                        contenuVM.Origines = origines;
-                        colContenuVM.Add(contenuVM);
+                        colContenuVM.Add(GetContenuVMFromContenu(item));
                     }
                      m_colContenuDisponibleCourant = colContenuVM;
                 }               
@@ -156,18 +147,10 @@ namespace NetflixPrjeq05.Controllers
                     colContenu = m_tousLeContenu.Where(c => !contenuPaysIds.Contains(c.ContenuId)).ToList();
                     colContenuVM.Clear();
 
-                    foreach (var item in colContenu)
+                    foreach (Contenu contenu in colContenu)
                     {
-                        ContenuVM contenuVM = new ContenuVM(item);
-                        //Doublages                                    
-                        List<string> queryLangue = service.GetLangueDoublageByContenuId(contenuVM.ContenuId);
-                        string langues = string.Join(", ", queryLangue.ToList());
-                        contenuVM.Doublages = langues;
-                        //Origines                                   
-                        List<string> queryOrignine = service.GetOriginePaysByContenuId(contenuVM.ContenuId);
-                        string origines = string.Join(", ", queryOrignine.ToList());
-                        contenuVM.Origines = origines;
-                        colContenuVM.Add(contenuVM);
+                        
+                        colContenuVM.Add(GetContenuVMFromContenu(contenu));
                     }
 
                     m_colContenuIndisponibleCourant = colContenuVM;
@@ -179,13 +162,29 @@ namespace NetflixPrjeq05.Controllers
 
             //Sorting matters titre / date sortie / duree
             colContenuVM = GetSortedContenuVM(colContenuVM);
-
+           
             //Sorting ends here            
             ViewBag.MessagesErreur = m_listMessages;
             ViewBag.CurrentSearch = m_searchContenuIndispo;
             m_listMessages = null;
             return View(colContenuVM.ToPagedList(pageNumber, pageSize));            
-        }       
+        }    
+        
+        public ContenuVM GetContenuVMFromContenu(Contenu contenu)
+        {
+            ContenuVM contenuVM = new ContenuVM(contenu);
+            //Doublages                                    
+            List<string> queryLangue = service.GetLangueDoublageByContenuId(contenuVM.ContenuId);
+            string langues = string.Join(", ", queryLangue.ToList());
+            contenuVM.Doublages = langues;
+            //Origines                                   
+            List<string> queryOrignine = service.GetOriginePaysByContenuId(contenuVM.ContenuId);
+            string origines = string.Join(", ", queryOrignine.ToList());
+            contenuVM.Origines = origines;
+
+            return contenuVM;
+        }
+
         //============================================================================AJOUTER============================================================================    
         #region Ajouter
         public ActionResult AjouterContenu(int? id)
@@ -366,19 +365,17 @@ namespace NetflixPrjeq05.Controllers
                 if (regle.EstPlusGrand.Value && !(regle.PourcentageReel >= regle.Pourcentage))
                 {
                     messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
-                        "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
-                        : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
-                        + " doit être supérieur ou égal à " + regle.Pourcentage + "%"
-                        + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2) + "%");
+                        $"de contenu provenant du pays {m_tousLesPays[regle.OriginePaysId.Value].Nom}"
+                        : $" de contenu doublé en {service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom} doit être supérieur ou égal à {regle.Pourcentage}% " +
+                        $"\n Pourcentage actuel: {Math.Round(regle.PourcentageReel.Value, 2)}%"));
                 }
 
                 if (!regle.EstPlusGrand.Value && !(regle.PourcentageReel <= regle.Pourcentage))
                 {
                     messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
-                        "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
-                        : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
-                        + " doit être inférieur ou égal à " + regle.Pourcentage + "%"
-                        + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2) + "%");
+                        $"de contenu provenant du pays {m_tousLesPays[regle.OriginePaysId.Value].Nom}" 
+                        : $" de contenu doublé en {service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom} doit être inférieur ou égal à { regle.Pourcentage} %" + 
+                        $"\n Pourcentage actuel: {Math.Round(regle.PourcentageReel.Value, 2)} %"));
                 }
             }
             return messages;

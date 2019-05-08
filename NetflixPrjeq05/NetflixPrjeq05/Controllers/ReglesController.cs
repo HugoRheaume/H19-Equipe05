@@ -27,6 +27,7 @@ namespace NetflixPrjeq05.Controllers
         };
 
         //============================================================================INDEX============================================================================
+        #region INDEX
         public ActionResult Index(int? id)
         { 
             if (id != null)
@@ -113,9 +114,10 @@ namespace NetflixPrjeq05.Controllers
             ViewBag.DoublageLangueId = new SelectList(service.GetAllLangue(), "LangueId", "Nom", regle.DoublageLangueId);                   
             return View(regle);
         }
-
+        #endregion
 
         //============================================================================EDIT============================================================================
+        #region EDIT
         public ActionResult EditOrigine(int? id)
         {
             if (id == null)
@@ -194,7 +196,10 @@ namespace NetflixPrjeq05.Controllers
             ViewBag.OriginePaysId = new SelectList(service.GetAllPays(), "PaysId", "Nom", regle.OriginePaysId);
             return View(regle);
         }
+        #endregion
+
         //============================================================================DELETE============================================================================
+        #region DELETE
         public ActionResult DeleteOrigine(int? id)
         {
             if (id == null)
@@ -223,6 +228,8 @@ namespace NetflixPrjeq05.Controllers
             service.DeleteRegle(regle);
             return RedirectToAction("Index");
         }
+        #endregion
+
         //============================================================================RAPPORT============================================================================
         public ActionResult Report()
         {
@@ -236,38 +243,6 @@ namespace NetflixPrjeq05.Controllers
             return View();
 
         }
-        //protected override void OnPreRender(EventArgs e)
-        //{
-        //    base.OnPreRender(e);
-        //    DatePickers.Value = string.Join(",", (new List(GetDateParameters()).ToArray()));
-        ////}
-        //private IEnumerable GetDateParameters()
-        //{
-        //    // I'm assuming report view control id as reportViewer
-        //    foreach (ReportParameterInfo info in reportViewer.ServerReport.GetParameters())
-        //    {
-        //        if (info.DataType == ParameterDataType.DateTime)
-        //        {
-        //            yield return string.Format("[{0}]", info.Prompt);
-        //        }
-        //    }
-        //}
-
-        //// GET: Regles/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Regle regle = db.Regle.Find(id);
-        //    if (regle == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(regle);
-        //}
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)
