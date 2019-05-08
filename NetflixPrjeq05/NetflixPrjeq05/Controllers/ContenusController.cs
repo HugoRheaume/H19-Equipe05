@@ -23,7 +23,9 @@ namespace NetflixPrjeq05.Controllers
         public static List<Contenu> m_tousLeContenu;
         public static List<Pays> m_tousLesPays;
         public static List<string> m_listMessages;
-        
+        public static string m_searchContenuDispo = "";
+        public static string m_searchContenuIndispo = "";
+
 
         //========================================================================================================================================================
         public ActionResult Index(int paysId)
@@ -45,7 +47,14 @@ namespace NetflixPrjeq05.Controllers
             if (m_tousLesPays == null)
                 m_tousLesPays = service.GetAllPays();
 
-            ViewBag.Pays = new SelectList(m_tousLesPays, "PaysId", "Nom", currentPaysId);
+            if(searchTitle != null)
+                m_searchContenuDispo = searchTitle;
+
+            m_searchContenuIndispo = "";
+            List<ContenuVM> colContenuVM = m_colContenuDisponibleCourant == null ? new List<ContenuVM>() : m_colContenuDisponibleCourant;
+
+
+            ViewBag.Pays = new SelectList(m_tousLesPays, "PaysId", "Nom", currentPaysId);           
                               
             //Pagination
             int pageSize = 3;
@@ -63,7 +72,7 @@ namespace NetflixPrjeq05.Controllers
 
             if (!page.HasValue)
             {   //Peut etre optimisé en recodant le fonctionnement de la liste courante
-                if (id.HasValue || m_colContenuDisponibleCourant == null)
+                if ((id.HasValue && id!=currentPaysId) || m_colContenuDisponibleCourant == null)
                 {
                     if (id.HasValue)
                     {
@@ -73,7 +82,7 @@ namespace NetflixPrjeq05.Controllers
                         
                     var queryContenu = service.GetAllContenuByPays(currentPaysId);
                     List<Contenu> colContenu = queryContenu.ToList();
-                    List<ContenuVM> colContenuVM = new List<ContenuVM>();
+                    colContenuVM.Clear();
 
                     foreach (var item in colContenu)
                     {
@@ -89,40 +98,41 @@ namespace NetflixPrjeq05.Controllers
                         colContenuVM.Add(contenuVM);
                     }
 
-                    if (searchTitle!=null && searchTitle!= string.Empty)
-                        m_colContenuDisponibleCourant = colContenuVM.Where(x => x.Titre.ToLower().Contains(searchTitle.ToLower())).ToList();
-                    else
-                        m_colContenuDisponibleCourant = colContenuVM;
+                     m_colContenuDisponibleCourant = colContenuVM;
 
-                }
-                //Sorting matters titre / date sortie / duree
-                switch (m_sortOrder)
-                {
-                    case "titre_desc":
-                        m_colContenuDisponibleCourant = m_colContenuDisponibleCourant.OrderByDescending(c => c.Titre).ToList();
-                        break;
-                    case "titre_asc":
-                        m_colContenuDisponibleCourant = m_colContenuDisponibleCourant.OrderBy(c => c.Titre).ToList();
-                        break;
-                    case "date_desc":
-                        m_colContenuDisponibleCourant = m_colContenuDisponibleCourant.OrderByDescending(c => c.DateSortie).ToList();
-                        break;
-                    case "date_asc":
-                        m_colContenuDisponibleCourant = m_colContenuDisponibleCourant.OrderBy(c => c.DateSortie).ToList();
-                        break;
-                    case "duree_desc":
-                        m_colContenuDisponibleCourant = m_colContenuDisponibleCourant.OrderByDescending(c => c.Duree).ToList();
-                        break;
-                    case "duree_asc":
-                        m_colContenuDisponibleCourant = m_colContenuDisponibleCourant.OrderBy(c => c.Duree).ToList();
-                        break;
-                    default:
-                        m_colContenuDisponibleCourant = m_colContenuDisponibleCourant.OrderByDescending(c => c.ContenuId).ToList();
-                        break;
-                }           
+                }               
+            }
+
+            if (m_searchContenuDispo != null && m_searchContenuDispo != string.Empty)
+                colContenuVM = colContenuVM.Where(x => x.Titre.ToLower().Contains(m_searchContenuDispo.ToLower())).ToList();
+
+            //Sorting matters titre / date sortie / duree
+            switch (m_sortOrder)
+            {
+                case "titre_desc":
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.Titre).ToList();
+                    break;
+                case "titre_asc":
+                    colContenuVM = colContenuVM.OrderBy(c => c.Titre).ToList();
+                    break;
+                case "date_desc":
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.DateSortie).ToList();
+                    break;
+                case "date_asc":
+                    colContenuVM = colContenuVM.OrderBy(c => c.DateSortie).ToList();
+                    break;
+                case "duree_desc":
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.Duree).ToList();
+                    break;
+                case "duree_asc":
+                    colContenuVM = colContenuVM.OrderBy(c => c.Duree).ToList();
+                    break;
+                default:
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.ContenuId).ToList();
+                    break;
             }
             //Sorting ends here            
-            return View(m_colContenuDisponibleCourant.ToPagedList(pageNumber, pageSize));
+            return View(colContenuVM.ToPagedList(pageNumber, pageSize));
 
         }
         //============================================================================AJOUTER============================================================================
@@ -135,10 +145,18 @@ namespace NetflixPrjeq05.Controllers
             if (m_tousLeContenu == null)
                 m_tousLeContenu = service.GetAllContenu();
 
-            ViewBag.Pays = new SelectList(m_tousLesPays, "PaysId", "Nom", currentPaysId);                      
+            if (searchTitle != null)
+                m_searchContenuIndispo = searchTitle;
+
+
+            m_searchContenuDispo = "";
+            ViewBag.Pays = new SelectList(m_tousLesPays, "PaysId", "Nom", currentPaysId);
+            List<ContenuVM> colContenuVM = m_colContenuIndisponibleCourant == null ? new List<ContenuVM>() : m_colContenuIndisponibleCourant;      
+           
             //Pagination
             int pageSize = 3;
             int pageNumber = (page ?? 1);
+
 
             //BUG: SORT_ORDER N'EST PAS PRIS EN PARAMETRE QUAND NOUS TRIONS DEPUIS AUTREPART QUE LA PAGE 1.  
             // ^ empeche aussi de 
@@ -155,7 +173,7 @@ namespace NetflixPrjeq05.Controllers
             if (!page.HasValue)
             {
                 //Pays a été modifié à partir de menu déroulant ou            
-                if (id.HasValue || m_colContenuIndisponibleCourant == null)
+                if ((id.HasValue && id != currentPaysId) || m_colContenuIndisponibleCourant == null)
                 {
                     if (id.HasValue)
                     {
@@ -165,7 +183,6 @@ namespace NetflixPrjeq05.Controllers
                         
                     List<Contenu> queryContenuPays;
                     List<Contenu> colContenu;
-                    List<ContenuVM> colContenuVM = new List<ContenuVM>();
                                     
                     //queryContenuPays = service.getAllContenuByPays(currentPaysId);
                     queryContenuPays = service.GetAllContenuByPays(currentPaysId);
@@ -173,7 +190,8 @@ namespace NetflixPrjeq05.Controllers
                     //List<int> contenuPaysIds2 = service.GetAllContenuIdsByPays(currentPaysId);
                
                     colContenu = m_tousLeContenu.Where(c => !contenuPaysIds.Contains(c.ContenuId)).ToList();
-                    
+                    colContenuVM.Clear();
+
                     foreach (var item in colContenu)
                     {
                         ContenuVM contenuVM = new ContenuVM(item);
@@ -188,44 +206,44 @@ namespace NetflixPrjeq05.Controllers
                         colContenuVM.Add(contenuVM);
                     }
 
-                    if (searchTitle != null && searchTitle != string.Empty)
-                        m_colContenuIndisponibleCourant = colContenuVM.Where(x => x.Titre.ToLower().Contains(searchTitle.ToLower())).ToList();
-                    else
-                        m_colContenuIndisponibleCourant = colContenuVM;
-                }                                                         
-                //Sorting matters titre / date sortie / duree
-                switch (m_sortOrder)
-                {
-                    case "titre_desc":
-                        m_colContenuIndisponibleCourant = m_colContenuIndisponibleCourant.OrderByDescending(c => c.Titre).ToList();
-                        break;
-                    case "titre_asc":
-                        m_colContenuIndisponibleCourant = m_colContenuIndisponibleCourant.OrderBy(c => c.Titre).ToList();
-                        break;
-                    case "date_desc":
-                        m_colContenuIndisponibleCourant = m_colContenuIndisponibleCourant.OrderByDescending(c => c.DateSortie).ToList();
-                        break;
-                    case "date_asc":
-                        m_colContenuIndisponibleCourant = m_colContenuIndisponibleCourant.OrderBy(c => c.DateSortie).ToList();
-                        break;
-                    case "duree_desc":
-                        m_colContenuIndisponibleCourant = m_colContenuIndisponibleCourant.OrderByDescending(c => c.Duree).ToList();
-                        break;
-                    case "duree_asc":
-                        m_colContenuIndisponibleCourant = m_colContenuIndisponibleCourant.OrderBy(c => c.Duree).ToList();
-                        break;
+                    m_colContenuIndisponibleCourant = colContenuVM;
+                }             
+            }
 
-                    default:
-                        m_colContenuIndisponibleCourant = m_colContenuIndisponibleCourant.OrderByDescending(c => c.ContenuId).ToList();
-                        break;
-                }
-                
+            if (m_searchContenuIndispo != null && m_searchContenuIndispo != string.Empty)
+                colContenuVM = colContenuVM.Where(x => x.Titre.ToLower().Contains(m_searchContenuIndispo.ToLower())).ToList();
+
+            //Sorting matters titre / date sortie / duree
+            switch (m_sortOrder)
+            {
+                case "titre_desc":
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.Titre).ToList();
+                    break;
+                case "titre_asc":
+                    colContenuVM = colContenuVM.OrderBy(c => c.Titre).ToList();
+                    break;
+                case "date_desc":
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.DateSortie).ToList();
+                    break;
+                case "date_asc":
+                    colContenuVM = colContenuVM.OrderBy(c => c.DateSortie).ToList();
+                    break;
+                case "duree_desc":
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.Duree).ToList();
+                    break;
+                case "duree_asc":
+                    colContenuVM = colContenuVM.OrderBy(c => c.Duree).ToList();
+                    break;
+
+                default:
+                    colContenuVM = colContenuVM.OrderByDescending(c => c.ContenuId).ToList();
+                    break;
             }
             //Sorting ends here 
             //ViewBag.MessagesErreur = null;
             ViewBag.MessagesErreur = m_listMessages;
             m_listMessages = null;
-            return View(m_colContenuIndisponibleCourant.ToPagedList(pageNumber, pageSize));            
+            return View(colContenuVM.ToPagedList(pageNumber, pageSize));            
         }
         //============================================================================INFORMATION============================================================================
         public ActionResult Details(int? id)
