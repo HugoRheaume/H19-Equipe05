@@ -42,6 +42,7 @@ namespace NetflixPrjeq05.Models
 
         public string Description { get; set; }
 
+        [DisplayName("Durée")]
         public int? Duree { get; set; }
     
         public int NbCotes { get; set; }
