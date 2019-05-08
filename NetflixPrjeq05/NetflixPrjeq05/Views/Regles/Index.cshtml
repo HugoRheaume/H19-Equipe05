@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Index";
 }
-<h2>Information </h2>
+
     
 <p> 
     @using (Html.BeginForm("Index", "Regles", FormMethod.Get))
@@ -17,8 +17,16 @@
 
 <!--===============================================================================Langue=========================================================================================-->
 <div id="reglesDiv" style="display: flex;">
-
+    
     <table class="table">
+        <tr>
+            <td colspan="4">
+                <h3>Règles de doublage</h3>
+            </td>
+            <td>
+                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("CreateLangue", "Regles")';return false;"><i class="fas fa-plus-circle"></i></button>
+            </td>
+        </tr>
         <tr>
 
             <th>
@@ -99,23 +107,21 @@
 
                 
             }
-        }
-        <tr>
-            <td>
-                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("CreateLangue", "Regles")';return false;"><i class="fas fa-plus-circle"></i></button>
-
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-
+        }       
     </table>
     <div style="width:3px; margin: 0 20px; background-color:lightgray;"></div>
 
     <!--===============================================================================Origine=========================================================================================-->
     <table class="table">
+        <tr> 
+            <td colspan="4">
+            <h3>Règles de provenance</h3>
+            </td>
+            <td>
+                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("CreateOrigine", "Regles")';return false;"><i class="fas fa-plus-circle"></i></button>
+            </td>
+        
+        </tr>
         <tr>
             <th>
                 Pourcentage visé
@@ -196,16 +202,7 @@
             }
 
         }
-        <tr>
-            <td>
-                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("CreateOrigine", "Regles")';return false;"><i class="fas fa-plus-circle"></i></button>
-
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
+        
 
     </table>
 </div>
