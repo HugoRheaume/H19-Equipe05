@@ -284,15 +284,11 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Contenus\Create.cshtml" />
-    <Content Include="Views\Contenus\Delete.cshtml" />
-    <Content Include="Views\Contenus\Details.cshtml" />
-    <Content Include="Views\Contenus\Edit.cshtml" />
     <Content Include="Views\Contenus\Contenu.cshtml" />
     <Content Include="Views\Regles\Index.cshtml" />
     <Content Include="Views\Contenus\Ajouter.cshtml" />
     <Content Include="Views\Regles\Report.cshtml" />
     <Content Include="Views\Home\ConfirmationAjout.cshtml" />
-    <Content Include="Views\Regles\Create.cshtml" />
     <Content Include="Views\Regles\CreateOrigine.cshtml" />
     <Content Include="Views\Regles\CreateLangue.cshtml" />
     <Content Include="Views\Regles\EditLangue.cshtml" />
