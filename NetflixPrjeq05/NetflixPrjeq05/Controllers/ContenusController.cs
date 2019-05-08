@@ -221,7 +221,8 @@ namespace NetflixPrjeq05.Controllers
                 }
                 
             }
-            //Sorting ends here          
+            //Sorting ends here 
+            ViewBag.MessagesErreur = null;
             return View(m_colContenuIndisponibleCourant.ToPagedList(pageNumber, pageSize));            
         }
         //============================================================================INFORMATION============================================================================
