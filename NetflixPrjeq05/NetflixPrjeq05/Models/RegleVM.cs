@@ -26,21 +26,32 @@ namespace NetflixPrjeq05.Models
             
         }
         public int RegleId { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         [DisplayName("Date de sortie")]
         public DateTime? DateCreation { get; set; }
+
         public int PaysId { get; set; }
+
         public int? OriginePaysId { get; set; }
+
         public int? DoublageLangueId { get; set; }
-        [DisplayFormat(DataFormatString = @"{0:0.00\%}")]
-        [DisplayName("Pourcentage réel")]
+
+        [Required]
+        [DisplayFormat(DataFormatString = @"{0:0.00\%}")]       
         public double?  Pourcentage { get; set; }
-        [DisplayFormat(DataFormatString = @"{0:0.00\%}")]
+
+        [DisplayName("Pourcentage actuel")]
+        [DisplayFormat(DataFormatString = @"{0:0.00\%}")]       
         public double? PourcentageReel { get; set; }
+
         [DisplayName("Langue de doublage")]
         public string DoublageLangue { get; set; }
+
         [DisplayName("Pays d'origine")]
         public string OriginePays { get; set; }
+
+        [Required]
         public bool? EstPlusGrand { get; set; }
 
     }
