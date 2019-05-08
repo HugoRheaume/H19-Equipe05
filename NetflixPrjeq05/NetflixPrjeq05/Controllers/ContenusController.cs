@@ -258,67 +258,30 @@ namespace NetflixPrjeq05.Controllers
             return View();
         }
 
-        //============================================================================AJOUTER============================================================================
-        
+        //============================================================================AJOUTER============================================================================    
+        #region Ajouter
         public ActionResult AjouterContenu(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-                          
+            }                         
             ContenuVM contenu = m_colContenuIndisponibleCourant.Where(c => c.ContenuId == id.Value).First();
             OffrePays offrePays = new OffrePays();
             offrePays.ContenuId = id.Value;
             offrePays.PaysId = currentPaysId;
             service.AjouterOffre(offrePays);
-            //Met a jour listes courantes
+            //Mettre à jour les listes courantes 
             if (m_colContenuIndisponibleCourant != null)
                 m_colContenuIndisponibleCourant.Remove(m_colContenuIndisponibleCourant.Where(c => c.ContenuId == id).First());
             if (m_colContenuDisponibleCourant != null)
                 m_colContenuDisponibleCourant.Add(contenu);
-            ////Administration des messages d'erreur pour pourcentages
-            //List<Regle> regles = service.GetAllReglement().Where(r => r.PaysId == currentPaysId).ToList();
-            //foreach (Regle regle in regles)
-            //{
-            //    double pourcentageFutur =  (regle.OriginePaysId != null ? service.TotalDureePaysOrigine(currentPaysId, regle.OriginePaysId.Value) 
-            //                                : service.TotalDureePaysDoublage(currentPaysId, regle.DoublageLangueId.Value)) / service.TotalDureePays(m_colContenuDisponibleCourant) * 100;
-
-            //    //if(regle.)
-            //}
-            if (contenu == null)
-            {
-                return HttpNotFound();
-            }
-            //return View();
-            ////Administration des messages d'erreur pour pourcentages
-            List<Regle> regles = service.GetAllReglementForPays(currentPaysId);
-            List<string> messages = new List<string>();
-            foreach (var regle in regles)
-            {
-                if (regle.EstPlusGrand.Value && !(regle.PourcentageReel >= regle.Pourcentage))
-                {
-                    messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
-                        "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
-                        : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
-                        + " doit être supérieur ou égal à " + regle.Pourcentage + "%"
-                        + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2) + "%");
-                }
-               
-                if(!regle.EstPlusGrand.Value && !(regle.PourcentageReel <= regle.Pourcentage))
-                {
-                    messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
-                        "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
-                        : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
-                        + " doit être inférieur ou égal à " + regle.Pourcentage + "%" 
-                        + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2) + "%");
-                }
-            }
-            m_listMessages = messages;
+                       
+            //Administration des messages d'erreur pour pourcentages
+            m_listMessages = GetMessagesPourcentages();
             return RedirectToAction("Ajouter");
         }
-
-       
+      
         public ActionResult AjouterSaison(int? id)
         {
             if (id == null)
@@ -337,41 +300,18 @@ namespace NetflixPrjeq05.Controllers
                     offrePays.ContenuId = episode.ContenuId;
                     offrePays.PaysId = currentPaysId;
                     service.AjouterOffre(offrePays);
-                    //Met a jour listes courantes
+                    //Mettre à jour les listes courantes 
                     if (m_colContenuIndisponibleCourant != null)
                         m_colContenuIndisponibleCourant.Remove(m_colContenuIndisponibleCourant.Where(c => c.ContenuId == episode.ContenuId).First());
                     if (m_colContenuDisponibleCourant != null)
                         m_colContenuDisponibleCourant.Add(contenu);
                 }
-            }           
-            ////Administration des messages d'erreur pour pourcentages
-            List<Regle> regles = service.GetAllReglementForPays(currentPaysId);
-            List<string> messages = new List<string>();
-            foreach (var regle in regles)
-            {
-                if (regle.EstPlusGrand.Value && !(regle.PourcentageReel >= regle.Pourcentage))
-                {
-                    messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
-                        "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
-                        : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
-                        + " doit être supérieur ou égal à " + regle.Pourcentage + "%"
-                        + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2) + "%");
-                }
-
-                if (!regle.EstPlusGrand.Value && !(regle.PourcentageReel <= regle.Pourcentage))
-                {
-                    messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
-                        "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
-                        : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
-                        + " doit être inférieur ou égal à " + regle.Pourcentage + "%"
-                        + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2) + "%");
-                }
             }
-            m_listMessages = messages;
+            //Administration des messages d'erreur pour pourcentages
+            m_listMessages = GetMessagesPourcentages();
             return RedirectToAction("Ajouter");
         }
-
-      
+     
         public ActionResult AjouterSerie(int? id)
         {
             if (id == null)
@@ -392,14 +332,77 @@ namespace NetflixPrjeq05.Controllers
                     offrePays.ContenuId = episode.ContenuId;
                     offrePays.PaysId = currentPaysId;
                     service.AjouterOffre(offrePays);
-                    //Met a jour listes courantes
+                    //Mettre à jour les listes courantes 
                     if (m_colContenuIndisponibleCourant != null)
                         m_colContenuIndisponibleCourant.Remove(m_colContenuIndisponibleCourant.Where(c => c.ContenuId == episode.ContenuId).First());
                     if (m_colContenuDisponibleCourant != null)
                         m_colContenuDisponibleCourant.Add(contenu);
                 }
             }
-            ////Administration des messages d'erreur pour pourcentages
+            //Administration des messages d'erreur pour pourcentages
+            m_listMessages = GetMessagesPourcentages();
+            return RedirectToAction("Ajouter");
+        }
+
+        #endregion
+
+        //============================================================================DELETE====================================================================
+        #region Delete
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            int offreId = service.GetAllOffreContenu().Where(o => o.ContenuId == id && o.PaysId == currentPaysId).First().OffrePaysId;
+            service.RemoveOffre(offreId);
+            //Mettre à jour les listes courantes           
+            ContenuVM contenuVM = m_colContenuDisponibleCourant.Where(c => c.ContenuId == id.Value).First();
+                      
+            if (m_colContenuIndisponibleCourant != null)
+                m_colContenuIndisponibleCourant.Add(contenuVM);
+            if (m_colContenuDisponibleCourant != null)
+                m_colContenuDisponibleCourant.Remove(m_colContenuDisponibleCourant.Where(c => c.ContenuId == id).First());
+
+            //Administration des messages d'erreur pour pourcentages
+            m_listMessages = GetMessagesPourcentages();           
+            return RedirectToAction("Contenu");
+        }
+
+        public ActionResult DeleteSaison(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            List<Contenu> colEpisodes = service.GetSaisonEpisodes(id.Value);
+            foreach (var episode in colEpisodes)
+            {
+                var contenuTest = m_colContenuDisponibleCourant.Where(c => c.ContenuId == episode.ContenuId).ToList();
+                //Vérification si episode est déja disponible
+                if (contenuTest.Count != 0)
+                {
+                    ContenuVM contenuVM = m_colContenuDisponibleCourant.Where(c => c.ContenuId == episode.ContenuId).First();
+                    int offreId = service.GetAllOffreContenu().Where(o => o.ContenuId == episode.ContenuId && o.PaysId == currentPaysId).First().OffrePaysId;
+                    service.RemoveOffre(offreId);
+                    //Met a jour listes courantes
+
+                    if (m_colContenuIndisponibleCourant != null)
+                        m_colContenuIndisponibleCourant.Add(contenuVM);
+                    if (m_colContenuDisponibleCourant != null)
+                        m_colContenuDisponibleCourant.Remove(m_colContenuDisponibleCourant.Where(c => c.ContenuId == id).First());
+                }
+            }
+            //Administration des messages d'erreur pour pourcentages
+            m_listMessages = GetMessagesPourcentages();
+            return RedirectToAction("Contenu");
+        }
+
+
+        #endregion
+        //========================================================================================================================================================       
+        public List<string> GetMessagesPourcentages()
+        {
             List<Regle> regles = service.GetAllReglementForPays(currentPaysId);
             List<string> messages = new List<string>();
             foreach (var regle in regles)
@@ -410,7 +413,7 @@ namespace NetflixPrjeq05.Controllers
                         "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
                         : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
                         + " doit être supérieur ou égal à " + regle.Pourcentage + "%"
-                        + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2)+ "%");
+                        + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2) + "%");
                 }
 
                 if (!regle.EstPlusGrand.Value && !(regle.PourcentageReel <= regle.Pourcentage))
@@ -422,112 +425,8 @@ namespace NetflixPrjeq05.Controllers
                         + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2) + "%");
                 }
             }
-            m_listMessages = messages;
-            return RedirectToAction("Ajouter");
+            return messages;
         }
-
-        public ActionResult Create()
-        {
-            return View();
-        }
-        
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "ContenuId,Description,Affiche,Cote_moyenne,Nombre_de_Cote,Status,Budget,Titre_Original,Date_de_sortie,Duree")] Contenu contenu)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Contenu.Add(contenu);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    return View(contenu);
-        //}
-
-        //========================================================================================================================================================
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Contenu contenu = service.GetContenuByID(id.Value);
-            if (contenu == null)
-            {
-                return HttpNotFound();
-            }
-            return View(contenu);
-        }
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "ContenuId,Description,Affiche,Cote_moyenne,Nombre_de_Cote,Status,Budget,Titre_Original,Date_de_sortie,Duree")] Contenu contenu)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(contenu).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(contenu);
-        //}
-        
-        //========================================================================================================================================================
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            int offreId = service.GetAllOffreContenu().Where(o => o.ContenuId == id && o.PaysId == currentPaysId).First().OffrePaysId;
-            service.RemoveOffre(offreId);
-            //Mettre à jour les listes courantes
-            Contenu contenu = m_tousLeContenu.Where(c => c.ContenuId == id).First();
-            ContenuVM contenuVM = new ContenuVM(contenu);
-            //Doublages                                    
-            List<string> queryLangue = service.GetLangueDoublageByContenuId(contenuVM.ContenuId);
-            string langues = string.Join(", ", queryLangue.ToList());
-            contenuVM.Doublages = langues;
-            //Origines                                   
-            List<string> queryOrignine = service.GetOriginePaysByContenuId(contenuVM.ContenuId);
-            string origines = string.Join(", ", queryOrignine.ToList());
-            contenuVM.Origines = origines;
-
-            if (m_colContenuIndisponibleCourant != null)
-                m_colContenuIndisponibleCourant.Add(contenuVM);
-            if (m_colContenuDisponibleCourant != null)
-                m_colContenuDisponibleCourant.Remove(m_colContenuDisponibleCourant.Where(c => c.ContenuId == id).First());
-
-            return RedirectToAction("Contenu");
-        }
-
-        //========================================================================================================================================================
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{           
-        //    int offreId = service.GetAllOffreContenu().Where(o => o.ContenuId == id && o.PaysId == currentPaysId).First().OffrePaysId;
-        //    service.RemoveOffre(offreId);
-        //    //Mettre à jour les listes courantes
-        //    Contenu contenu = m_tousLeContenu.Where(c => c.ContenuId == id).First();
-        //    ContenuVM contenuVM = new ContenuVM(contenu);
-        //    //Doublages                                    
-        //    List<string> queryLangue = service.GetLangueDoublageByContenuId(contenuVM.ContenuId);
-        //    string langues = string.Join(", ", queryLangue.ToList());
-        //    contenuVM.Doublages = langues;
-        //    //Origines                                   
-        //    List<string> queryOrignine = service.GetOriginePaysByContenuId(contenuVM.ContenuId);
-        //    string origines = string.Join(", ", queryOrignine.ToList());
-        //    contenuVM.Origines = origines;
-
-        //    if (m_colContenuIndisponibleCourant != null)
-        //        m_colContenuIndisponibleCourant.Add(contenuVM);
-        //    if (m_colContenuDisponibleCourant != null)
-        //        m_colContenuDisponibleCourant.Remove(m_colContenuDisponibleCourant.Where(c => c.ContenuId == id).First());
-            
-        //    return RedirectToAction("Contenu");
-        //}
 
         public string GetSerieNom(int id)
         {
