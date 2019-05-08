@@ -365,17 +365,17 @@ namespace NetflixPrjeq05.Controllers
                 if (regle.EstPlusGrand.Value && !(regle.PourcentageReel >= regle.Pourcentage))
                 {
                     messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
-                        $"de contenu provenant du pays {m_tousLesPays[regle.OriginePaysId.Value].Nom} "
+                        $"de contenu provenant du pays {m_tousLesPays[regle.OriginePaysId.Value - 1].Nom} "
                         : $" de contenu doublé en {service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom} ")  +
-                        $"doit être supérieur ou égal à {regle.Pourcentage}% \n Pourcentage actuel: {Math.Round(regle.PourcentageReel.Value, 2)}%");
+                        $"doit être supérieur ou égal à {regle.Pourcentage}%. Le pourcentage actuel est: {Math.Round(regle.PourcentageReel.Value, 2)}%.");
                 }
 
                 if (!regle.EstPlusGrand.Value && !(regle.PourcentageReel <= regle.Pourcentage))
                 {
                     messages.Add("Le pourcentage " + (regle.OriginePaysId.HasValue ?
-                        $"de contenu provenant du pays {m_tousLesPays[regle.OriginePaysId.Value].Nom} " 
+                        $"de contenu provenant du pays {m_tousLesPays[regle.OriginePaysId.Value - 1].Nom} " 
                         : $" de contenu doublé en {service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom} ") +
-                        $"doit être inférieur ou égal à { regle.Pourcentage}% \n Pourcentage actuel: {Math.Round(regle.PourcentageReel.Value, 2)} %");
+                        $"doit être inférieur ou égal à { regle.Pourcentage}%. Le pourcentage actuel est: {Math.Round(regle.PourcentageReel.Value, 2)}%.");
                 }
             }
             return messages;
