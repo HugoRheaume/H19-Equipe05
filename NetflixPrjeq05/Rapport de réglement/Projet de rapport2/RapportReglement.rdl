@@ -97,14 +97,14 @@
           <FilterExpression>=Parameters!Date.Value</FilterExpression>
           <Operator>GreaterThanOrEqual</Operator>
           <FilterValues>
-            <FilterValue>=Fields!DateCreation.Value</FilterValue>
+            <FilterValue DataType="DateTime">=Fields!DateCreation.Value</FilterValue>
           </FilterValues>
         </Filter>
         <Filter>
           <FilterExpression>=Parameters!Date.Value</FilterExpression>
           <Operator>LessThan</Operator>
           <FilterValues>
-            <FilterValue>=Fields!DateFinFilter.Value</FilterValue>
+            <FilterValue DataType="DateTime">=Fields!DateFinFilter.Value</FilterValue>
           </FilterValues>
         </Filter>
       </Filters>
