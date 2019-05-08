@@ -4,45 +4,56 @@
 
 @{
     ViewBag.Title = "Contenu";
-}
 
+<br />
+
+    if (ViewBag.MessagesErreur != null)
+    {
+        foreach (var item in ViewBag.MessagesErreur)
+        {
+            <div class="alert alert-danger" role="alert">
+                @item;
+            </div>
+        }
+    }
+}
 <h2>Contenu</h2>
 <div>
     @using (Html.BeginForm("Contenu", "Contenus", FormMethod.Get))
     {
-    <div class="row">
-        <div class="col-md-8">
-            @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
-        </div>
-        <div class="col-md-4">
-            <table class="table table-borderless"><tr>
-                    <td>
-                        Rechercher
-                    </td>
+        <div class="row">
+            <div class="col-md-8">
+                @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
+            </div>
+            <div class="col-md-4">
+                <table class="table table-borderless">
+                    <tr>
+                        <td>
+                            Rechercher
+                        </td>
 
-                    <td>
-                        @Html.TextBox("searchTitle", "", new { onchange = "this.form.submit();", @class = "form-control" })
-                    </td>
-                </tr></table>
+                        <td>
+                            @Html.TextBox("searchTitle", "", new { onchange = "this.form.submit();", @class = "form-control" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-    </div>
     }
 </div>
-<p>
-    @*Html.ActionLink("Create New", "Create")*@
-</p>
+
 <table class="table">
-    <tr>                  
+    <tr>
         <th>
-            
+
             @Html.ActionLink("Titre", "Contenu", new { sortOrder = ViewBag.NameSortParm })
         </th>
         <th>
-           
+
             @Html.ActionLink("DateSortie", "Contenu", new { sortOrder = ViewBag.DateSortParm })
         </th>
         <th>
-            
+
             @Html.ActionLink("Duree", "Contenu", new { sortOrder = ViewBag.DureeSortParm })
         </th>
         <th>
@@ -60,121 +71,118 @@
 
     @foreach (var item in Model)
     {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Titre)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DateSortie)
-        </td>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateSortie)
+            </td>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.Duree)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Doublages)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Origines)
-        </td>
-        <td>
-            <img src="@Html.DisplayFor(modelItem => item.Affiche)" width="150" height="200">
-        </td>
-        <td>
-            <table class="table">
-                <tr>
-                    <td>
-                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="@Html.Raw("#modalDelContenu" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"></i></button>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duree)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Doublages)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Origines)
+            </td>
+            <td>
+                <img src="@Html.DisplayFor(modelItem => item.Affiche)" width="150" height="200">
+            </td>
+            <td>
+                <table class="table">
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="@Html.Raw("#modalDelContenu" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"></i></button>
 
-                        <div class="modal fade" id="@Html.Raw("modalDelContenu" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="ModalLabel">Supprimer un contenu</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Êtes-vous sûr de vouloir supprimé : @Html.Raw(item.Titre)
+                            <div class="modal fade" id="@Html.Raw("modalDelContenu" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="ModalLabel">Supprimer un contenu</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Êtes-vous sûr de vouloir supprimé : @Html.Raw(item.Titre)
 
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                        <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Contenus", new { id = item.ContenuId })';return false;">Supprimer</button>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                            <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Contenus", new { id = item.ContenuId })';return false;">Supprimer</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
-                @{ 
-                    if(item.SaisonId != null)
-                    {
-                        <tr>
-                            <td>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelContenuSasagayo" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"> Saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId }) </i></button>
+                        </td>
+                    </tr>
+                    @{
+                        if (item.SaisonId != null)
+                        {
+                            <tr>
+                                <td>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelContenuSasagayo" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"> Saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId }) </i></button>
 
-                                <div class="modal fade" id="@Html.Raw("modalDelContenuSasagayo" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="ModalLabel">Supprimer un contenu</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Êtes-vous sûr de vouloir supprimé la saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId }) de @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })
+                                    <div class="modal fade" id="@Html.Raw("modalDelContenuSasagayo" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="ModalLabel">Supprimer un contenu</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Êtes-vous sûr de vouloir supprimé la saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId }) de @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })
 
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                                <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteSaison", "Contenus", new { id = item.ContenuId })';return false;">Supprimer</button>
-                                                
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteSaison", "Contenus", new { id = item.ContenuId })';return false;">Supprimer</button>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                    if(item.SaisonId != null)
-                    {
-                        <tr>
-                            <td>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelContenuSer" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"> Série @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })</i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelContenuSer" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"> Série @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })</i></button>
 
-                                <div class="modal fade" id="@Html.Raw("modalDelContenuSer" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="ModalLabel">Supprimer un contenu</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Êtes-vous sûr de vouloir supprimé la série @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })
+                                    <div class="modal fade" id="@Html.Raw("modalDelContenuSer" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="ModalLabel">Supprimer un contenu</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Êtes-vous sûr de vouloir supprimé la série @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })
 
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                                <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteSerie", "Contenus", new { id = item.ContenuId })';return false;">Supprimer</button>
-                                                
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteSerie", "Contenus", new { id = item.ContenuId })';return false;">Supprimer</button>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                        }
                     }
-                }
 
-            </table>
-            
-        </td>
-    </tr>
+                </table>
+
+            </td>
+        </tr>
     }
 
 </table>
@@ -184,11 +192,11 @@
 
 <!--
 <table>
-    
+
     @foreach (var item in Model)
     {
      <tr>
-    
+
         <table class="table" >
             <tr>
                 <td>
@@ -197,7 +205,7 @@
                 <td>
 
                 </td>
-            
+
                 <td>
                     <table>
                         <tr>
@@ -232,24 +240,19 @@
                             </td>
                         </tr>
                     </table>
-                    
+
                 </td>
-                
 
-                
-                
 
-                
+
+
+
+
             </tr>
         </table>
-    
+
      </tr>
     }
 </table>-->
-
-
-
-
-
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 @Html.PagedListPager(Model, page => Url.Action("Contenu", new { page = page }))
