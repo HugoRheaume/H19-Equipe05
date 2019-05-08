@@ -108,9 +108,9 @@
                         <tr>
                             <td>
 
-                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalSeason">Ajouter la saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId })</button>
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="@Html.Raw("#modalAjoutSai" + item.ContenuId.ToString())">Ajouter la saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId })</button>
 
-                                <div class="modal fade" id="modalSeason" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="@Html.Raw("modalAjoutSai" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -140,9 +140,9 @@
                     {
                         <tr>
                             <td>
-                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modelaSerie">Ajouter la série @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })</button>
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="@Html.Raw("#modalAjoutNigerundayo" + item.ContenuId.ToString())">Ajouter la série @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })</button>
 
-                                <div class="modal fade" id="modelaSerie" tabindex="-1" role="dialog" aria-labelledby="ModalLabel2" aria-hidden="true">
+                                <div class="modal fade" id="@Html.Raw("modalAjoutNigerundayo" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel2" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
