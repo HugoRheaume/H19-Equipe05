@@ -22,7 +22,7 @@ namespace NetflixPrjeq05.Controllers
         public static List<ContenuVM> m_colContenuDisponibleCourant;
         public static List<Contenu> m_tousLeContenu;
         public static List<Pays> m_tousLesPays;
-
+        public static List<string> m_listMessages;
         
 
         //========================================================================================================================================================
@@ -222,7 +222,9 @@ namespace NetflixPrjeq05.Controllers
                 
             }
             //Sorting ends here 
-            ViewBag.MessagesErreur = null;
+            //ViewBag.MessagesErreur = null;
+            ViewBag.MessagesErreur = m_listMessages;
+            m_listMessages = null;
             return View(m_colContenuIndisponibleCourant.ToPagedList(pageNumber, pageSize));            
         }
         //============================================================================INFORMATION============================================================================
@@ -294,7 +296,7 @@ namespace NetflixPrjeq05.Controllers
                         + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2) + "%");
                 }
             }
-            ViewBag.MessagesErreur = messages;
+            m_listMessages = messages;
             return RedirectToAction("Ajouter");
         }
 
@@ -335,7 +337,7 @@ namespace NetflixPrjeq05.Controllers
                         "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
                         : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
                         + " doit être supérieur ou égal à " + regle.Pourcentage + "%"
-                        + "\n Pourcentage actuel: " + regle.PourcentageReel + "%");
+                        + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2) + "%");
                 }
 
                 if (!regle.EstPlusGrand.Value && !(regle.PourcentageReel <= regle.Pourcentage))
@@ -344,10 +346,10 @@ namespace NetflixPrjeq05.Controllers
                         "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
                         : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
                         + " doit être inférieur ou égal à " + regle.Pourcentage + "%"
-                        + "\n Pourcentage actuel: " + regle.PourcentageReel + "%");
+                        + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2) + "%");
                 }
             }
-            ViewBag.MessagesErreur = messages;
+            m_listMessages = messages;
             return RedirectToAction("Ajouter");
         }
 
@@ -390,7 +392,7 @@ namespace NetflixPrjeq05.Controllers
                         "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
                         : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
                         + " doit être supérieur ou égal à " + regle.Pourcentage + "%"
-                        + "\n Pourcentage actuel: " + regle.PourcentageReel + "%");
+                        + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2)+ "%");
                 }
 
                 if (!regle.EstPlusGrand.Value && !(regle.PourcentageReel <= regle.Pourcentage))
@@ -399,10 +401,10 @@ namespace NetflixPrjeq05.Controllers
                         "de contenu provenant du pays " + m_tousLesPays[regle.OriginePaysId.Value].Nom
                         : (" de contenu doublé en " + service.GetAllLangue().Where(r => r.LangueId == regle.DoublageLangueId.Value).First().Nom))
                         + " doit être inférieur ou égal à " + regle.Pourcentage + "%"
-                        + "\n Pourcentage actuel: " + regle.PourcentageReel + "%");
+                        + "\n Pourcentage actuel: " + Math.Round(regle.PourcentageReel.Value, 2) + "%");
                 }
             }
-            ViewBag.MessagesErreur = messages;
+            m_listMessages = messages;
             return RedirectToAction("Ajouter");
         }
 

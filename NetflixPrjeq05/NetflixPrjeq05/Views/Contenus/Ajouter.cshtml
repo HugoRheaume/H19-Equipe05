@@ -5,29 +5,46 @@
 @{
     ViewBag.Title = "Ajouter du contenu";
 }
+<br />
+@{
+    if(ViewBag.MessagesErreur != null)
+    {
+        foreach(var item in ViewBag.MessagesErreur)
+        {
+            <div class="alert alert-danger" role="alert">
+               @item;
+            </div>
+        }
+    }
+    if(ViewBag.MessagesErreur == null)
+    {
+
+    }
+
+}
 
 <h2>Ajouter</h2>
 <div>
     @using (Html.BeginForm("Ajouter", "Contenus", FormMethod.Get))
     {
-    <div class="row">
-        <div class="col-md-8">
-            @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
-        </div>
-        <div class="col-md-4">
-            <table class="table table-borderless">
-                <tr>
-                    <td>
-                        Rechercher
-                    </td>
+        <div class="row">
+            <div class="col-md-8">
+                @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
+            </div>
+            <div class="col-md-4">
+                <table class="table table-borderless">
+                    <tr>
+                        <td>
+                            Rechercher
+                        </td>
 
-                    <td>
-                        @Html.TextBox("searchTitle", "", new { onchange = "this.form.submit();", @class = "form-control" })
-                    </td>
-                </tr>
-            </table>
+                        <td>
+                            @Html.TextBox("searchTitle", "", new { onchange = "this.form.submit();", @class = "form-control" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
-    </div>
     }
 </div>
 
@@ -95,30 +112,30 @@
                     {
                         <tr>
                             <td>
-                                
-                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalSeason">Ajouter la saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId })</button>
 
-                                    <div class="modal fade" id="modalSeason" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="ModalLabel">Ajouter une saison</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Êtes-vous sûr vouloir ajouter la saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId }) de la série @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId }) ?
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalSeason">Ajouter la saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId })</button>
 
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                                    <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("AjouterSaison", "Contenus", new { id = item.SaisonId })';return false;">Ajouter</button>
-                                                </div>
+                                <div class="modal fade" id="modalSeason" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="ModalLabel">Ajouter une saison</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Êtes-vous sûr vouloir ajouter la saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId }) de la série @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId }) ?
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                <button type="button" class="btn btn-success" onclick="location.href='@Url.Action("AjouterSaison", "Contenus", new { id = item.SaisonId })';return false;">Ajouter</button>
                                             </div>
                                         </div>
                                     </div>
-                                
+                                </div>
+
                             </td>
                         </tr>
                     }
@@ -129,7 +146,7 @@
                         <tr>
                             <td>
                                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modelaSerie">Ajouter la série @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })</button>
-        
+
                                 <div class="modal fade" id="modelaSerie" tabindex="-1" role="dialog" aria-labelledby="ModalLabel2" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
