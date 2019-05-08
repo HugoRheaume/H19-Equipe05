@@ -124,9 +124,9 @@
                         {
                             <tr>
                                 <td>
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelContenuSasagayo" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"> Saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId }) </i></button>
+                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelContenuSasageyo" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"> Saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId }) </i></button>
 
-                                    <div class="modal fade" id="@Html.Raw("modalDelContenuSasagayo" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="@Html.Raw("modalDelContenuSasageyo" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -178,18 +178,11 @@
                             </tr>
                         }
                     }
-
                 </table>
-
             </td>
         </tr>
     }
-
 </table>
-
-
-
-
 <!--
 <table>
 

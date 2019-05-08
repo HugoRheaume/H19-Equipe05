@@ -4,9 +4,7 @@
 
 @{
     ViewBag.Title = "Ajouter du contenu";
-}
 <br />
-@{
     if(ViewBag.MessagesErreur != null)
     {
         foreach(var item in ViewBag.MessagesErreur)
@@ -17,7 +15,6 @@
         }
     }
 }
-
 <h2>Ajouter du contenu</h2>
 <div>
     @using (Html.BeginForm("Ajouter", "Contenus", FormMethod.Get))
