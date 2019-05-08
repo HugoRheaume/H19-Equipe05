@@ -390,7 +390,7 @@ namespace NetflixPrjeq05.Controllers
                     if (m_colContenuIndisponibleCourant != null)
                         m_colContenuIndisponibleCourant.Add(contenuVM);
                     if (m_colContenuDisponibleCourant != null)
-                        m_colContenuDisponibleCourant.Remove(m_colContenuDisponibleCourant.Where(c => c.ContenuId == id).First());
+                        m_colContenuDisponibleCourant.Remove(m_colContenuDisponibleCourant.Where(c => c.ContenuId == episode.ContenuId).First());
                 }
             }
             //Administration des messages d'erreur pour pourcentages
@@ -398,7 +398,34 @@ namespace NetflixPrjeq05.Controllers
             return RedirectToAction("Contenu");
         }
 
+        public ActionResult DeleteSerie(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            List<Contenu> colEpisodes = service.GetSerieEpisodes(id.Value);
+            foreach (var episode in colEpisodes)
+            {
+                var contenuTest = m_colContenuDisponibleCourant.Where(c => c.ContenuId == episode.ContenuId).ToList();
+                //Vérification si episode est déja disponible
+                if (contenuTest.Count != 0)
+                {
+                    ContenuVM contenuVM = m_colContenuDisponibleCourant.Where(c => c.ContenuId == episode.ContenuId).First();
+                    int offreId = service.GetAllOffreContenu().Where(o => o.ContenuId == episode.ContenuId && o.PaysId == currentPaysId).First().OffrePaysId;
+                    service.RemoveOffre(offreId);
+                    //Met a jour listes courantes
 
+                    if (m_colContenuIndisponibleCourant != null)
+                        m_colContenuIndisponibleCourant.Add(contenuVM);
+                    if (m_colContenuDisponibleCourant != null)
+                        m_colContenuDisponibleCourant.Remove(m_colContenuDisponibleCourant.Where(c => c.ContenuId == episode.ContenuId).First());
+                }
+            }
+            //Administration des messages d'erreur pour pourcentages
+            m_listMessages = GetMessagesPourcentages();
+            return RedirectToAction("Contenu");
+        }
         #endregion
         //========================================================================================================================================================       
         public List<string> GetMessagesPourcentages()
