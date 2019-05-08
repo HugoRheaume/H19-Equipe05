@@ -24,19 +24,9 @@ namespace NetflixPrjeq05.Controllers
         public static List<Pays> m_tousLesPays;
         public static List<string> m_listMessages;
         public static string m_searchContenuDispo = "";
-        public static string m_searchContenuIndispo = "";
+        public static string m_searchContenuIndispo = "";       
 
 
-        //========================================================================================================================================================
-        public ActionResult Index(int paysId)
-        {
-            ViewBag.Region = new List<string>() { "Ca", "Fr", "Eu" };
-            var queryContenu = service.GetAllContenuByPays(paysId);
-
-            List<Contenu> colContenu = queryContenu.ToList();
-            return View(colContenu);
-
-        }
         //============================================================================CONTENU============================================================================
         public ActionResult Contenu(int? id, string sortOrder, int? page, string searchTitle)
         {
@@ -52,13 +42,16 @@ namespace NetflixPrjeq05.Controllers
 
             m_searchContenuIndispo = "";
             List<ContenuVM> colContenuVM = m_colContenuDisponibleCourant == null ? new List<ContenuVM>() : m_colContenuDisponibleCourant;
-
-
             ViewBag.Pays = new SelectList(m_tousLesPays, "PaysId", "Nom", currentPaysId);           
                               
             //Pagination
             int pageSize = 3;
             int pageNumber = (page ?? 1);
+
+            if (sortOrder != null)
+                m_sortOrder = sortOrder;
+            else if (m_colContenuDisponibleCourant != null)
+                m_sortOrder = null;
 
             if (sortOrder != null)
                 m_sortOrder = sortOrder;
@@ -105,30 +98,8 @@ namespace NetflixPrjeq05.Controllers
                 colContenuVM = colContenuVM.Where(x => x.Titre.ToLower().Contains(m_searchContenuDispo.ToLower())).ToList();
 
             //Sorting matters titre / date sortie / duree
-            switch (m_sortOrder)
-            {
-                case "titre_desc":
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.Titre).ToList();
-                    break;
-                case "titre_asc":
-                    colContenuVM = colContenuVM.OrderBy(c => c.Titre).ToList();
-                    break;
-                case "date_desc":
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.DateSortie).ToList();
-                    break;
-                case "date_asc":
-                    colContenuVM = colContenuVM.OrderBy(c => c.DateSortie).ToList();
-                    break;
-                case "duree_desc":
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.Duree).ToList();
-                    break;
-                case "duree_asc":
-                    colContenuVM = colContenuVM.OrderBy(c => c.Duree).ToList();
-                    break;
-                default:
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.ContenuId).ToList();
-                    break;
-            }
+            colContenuVM = GetSortedContenuVM(colContenuVM);
+            
             //Sorting ends here     
             ViewBag.CurrentSearch = m_searchContenuDispo;
             ViewBag.MessagesErreur = m_listMessages;
@@ -147,8 +118,7 @@ namespace NetflixPrjeq05.Controllers
 
             if (searchTitle != null)
                 m_searchContenuIndispo = searchTitle;
-
-
+        
             m_searchContenuDispo = "";
             ViewBag.Pays = new SelectList(m_tousLesPays, "PaysId", "Nom", currentPaysId);
             List<ContenuVM> colContenuVM = m_colContenuIndisponibleCourant == null ? new List<ContenuVM>() : m_colContenuIndisponibleCourant;      
@@ -156,10 +126,7 @@ namespace NetflixPrjeq05.Controllers
             //Pagination
             int pageSize = 3;
             int pageNumber = (page ?? 1);
-
-
-            //BUG: SORT_ORDER N'EST PAS PRIS EN PARAMETRE QUAND NOUS TRIONS DEPUIS AUTREPART QUE LA PAGE 1.  
-            // ^ empeche aussi de 
+           
             if (sortOrder != null)
                 m_sortOrder = sortOrder;
             else if (m_colContenuIndisponibleCourant != null)
@@ -183,12 +150,9 @@ namespace NetflixPrjeq05.Controllers
                         
                     List<Contenu> queryContenuPays;
                     List<Contenu> colContenu;
-                                    
-                    //queryContenuPays = service.getAllContenuByPays(currentPaysId);
+                                                        
                     queryContenuPays = service.GetAllContenuByPays(currentPaysId);
-                    List<int> contenuPaysIds = queryContenuPays.Select(c => c.ContenuId).ToList();
-                    //List<int> contenuPaysIds2 = service.GetAllContenuIdsByPays(currentPaysId);
-               
+                    List<int> contenuPaysIds = queryContenuPays.Select(c => c.ContenuId).ToList();                   
                     colContenu = m_tousLeContenu.Where(c => !contenuPaysIds.Contains(c.ContenuId)).ToList();
                     colContenuVM.Clear();
 
@@ -214,31 +178,8 @@ namespace NetflixPrjeq05.Controllers
                 colContenuVM = colContenuVM.Where(x => x.Titre.ToLower().Contains(m_searchContenuIndispo.ToLower())).ToList();
 
             //Sorting matters titre / date sortie / duree
-            switch (m_sortOrder)
-            {
-                case "titre_desc":
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.Titre).ToList();
-                    break;
-                case "titre_asc":
-                    colContenuVM = colContenuVM.OrderBy(c => c.Titre).ToList();
-                    break;
-                case "date_desc":
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.DateSortie).ToList();
-                    break;
-                case "date_asc":
-                    colContenuVM = colContenuVM.OrderBy(c => c.DateSortie).ToList();
-                    break;
-                case "duree_desc":
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.Duree).ToList();
-                    break;
-                case "duree_asc":
-                    colContenuVM = colContenuVM.OrderBy(c => c.Duree).ToList();
-                    break;
+            colContenuVM = GetSortedContenuVM(colContenuVM);
 
-                default:
-                    colContenuVM = colContenuVM.OrderByDescending(c => c.ContenuId).ToList();
-                    break;
-            }
             //Sorting ends here            
             ViewBag.MessagesErreur = m_listMessages;
             ViewBag.CurrentSearch = m_searchContenuIndispo;
@@ -441,6 +382,27 @@ namespace NetflixPrjeq05.Controllers
                 }
             }
             return messages;
+        }
+
+        public List<ContenuVM> GetSortedContenuVM(List<ContenuVM> colContenuVM)
+        {
+            switch (m_sortOrder)
+            {
+                case "titre_desc":
+                    return  colContenuVM.OrderByDescending(c => c.Titre).ToList();
+                case "titre_asc":
+                    return colContenuVM.OrderBy(c => c.Titre).ToList();
+                case "date_desc":
+                    return colContenuVM.OrderByDescending(c => c.DateSortie).ToList();
+                case "date_asc":
+                    return colContenuVM.OrderBy(c => c.DateSortie).ToList();
+                case "duree_desc":
+                    return colContenuVM.OrderByDescending(c => c.Duree).ToList();
+                case "duree_asc":
+                    return colContenuVM.OrderBy(c => c.Duree).ToList();
+                default:
+                    return colContenuVM.OrderByDescending(c => c.ContenuId).ToList();                   
+            }
         }
 
         public string GetSerieNom(int id)
