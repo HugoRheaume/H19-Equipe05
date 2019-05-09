@@ -7,25 +7,29 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using NetflixPrjeq05.Models;
+using NetflixPrjeq05.Service;
 
 namespace NetflixPrjeq05.Controllers
 {
     public class ActeursController : Controller
-    {
-        private Entities db = new Entities();
+    {       
+        private BDService service = new BDService(new Entities());
 
         // GET: Acteurs
-        public ActionResult Index()
+        public ActionResult Index(int? id)
         {
+            if (ContenusController.m_tousLesPays == null)
+                ContenusController.m_tousLesPays = service.GetAllPays();
+
             ViewBag.Pays = new SelectList(ContenusController.m_tousLesPays, "PaysId", "Nom", ContenusController.currentPaysId);
-            return View(db.Acteur.ToList());
+            return View(service.GetAllActeurs());
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                service.Dispose();
             }
             base.Dispose(disposing);
         }
