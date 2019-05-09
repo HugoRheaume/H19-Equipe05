@@ -17,7 +17,7 @@ namespace NetflixPrjeq05.Controllers
         // GET: Acteurs
         public ActionResult Index()
         {
-            ViewBag.Pays = ContenusController.m_tousLesPays;
+            ViewBag.Pays = new SelectList(ContenusController.m_tousLesPays, "PaysId", "Nom", ContenusController.currentPaysId);
             return View(db.Acteur.ToList());
         }
 

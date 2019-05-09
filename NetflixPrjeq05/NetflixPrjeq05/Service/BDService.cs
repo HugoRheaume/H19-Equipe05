@@ -179,7 +179,7 @@ namespace NetflixPrjeq05.Service
         {
             return db.Regle.Find(id);           
         }
-
+    
         public void ModifyRegle(Regle regle)
         {
             db.Entry(regle).State = EntityState.Modified;
@@ -208,6 +208,16 @@ namespace NetflixPrjeq05.Service
         {
             db.Regle.Remove(regle);
             db.SaveChanges();
-        }      
+        }
+        //============================================================================ACTEUR============================================================================
+        public List<Acteur> GetAllActeurs()
+        {
+            return db.Acteur.ToList();
+        }
+
+        public List<Acteur> GetAllActeursOffrePays()
+        {
+            return db.Acteur.ToList();
+        }
     }
 }
