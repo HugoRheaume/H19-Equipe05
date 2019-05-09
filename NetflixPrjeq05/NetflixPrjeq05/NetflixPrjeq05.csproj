@@ -179,6 +179,7 @@
     <Compile Include="Models\Acteur.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ActeurVM.cs" />
     <Compile Include="Models\Contenu.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>

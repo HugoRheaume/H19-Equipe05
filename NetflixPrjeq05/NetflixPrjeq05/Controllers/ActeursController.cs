@@ -22,7 +22,14 @@ namespace NetflixPrjeq05.Controllers
                 ContenusController.m_tousLesPays = service.GetAllPays();
 
             ViewBag.Pays = new SelectList(ContenusController.m_tousLesPays, "PaysId", "Nom", ContenusController.currentPaysId);
-            return View(service.GetAllActeurs());
+            List<Acteur> acteurs = service.GetAllActeurs();
+            List<Acteur> acteurVMs = new List<Acteur>();
+
+            foreach (var acteur in acteurs)
+            {
+                acteurVMs.Add(acteur);
+            }
+            return View(acteurVMs);
         }
 
         protected override void Dispose(bool disposing)
