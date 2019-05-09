@@ -20,6 +20,8 @@ namespace NetflixPrjeq05.Models
             this.ContenuLangue = new HashSet<ContenuLangue>();
             this.OffrePays = new HashSet<OffrePays>();
             this.OriginePays = new HashSet<OriginePays>();
+            this.ContenuActeur = new HashSet<ContenuActeur>();
+            this.Vue = new HashSet<Vue>();
         }
     
         public int ContenuId { get; set; }
@@ -41,5 +43,9 @@ namespace NetflixPrjeq05.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OriginePays> OriginePays { get; set; }
         public virtual Saison Saison { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ContenuActeur> ContenuActeur { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Vue> Vue { get; set; }
     }
 }

@@ -34,5 +34,8 @@ namespace NetflixPrjeq05.Models
         public virtual DbSet<Regle> Regle { get; set; }
         public virtual DbSet<Saison> Saison { get; set; }
         public virtual DbSet<Serie> Serie { get; set; }
+        public virtual DbSet<Acteur> Acteur { get; set; }
+        public virtual DbSet<ContenuActeur> ContenuActeur { get; set; }
+        public virtual DbSet<Vue> Vue { get; set; }
     }
 }

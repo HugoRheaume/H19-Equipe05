@@ -25,6 +25,13 @@
         <EntityTypeShape EntityType="DBModel.Serie" Width="1.5" PointX="0.75" PointY="12.125" />
         <AssociationConnector Association="DBModel.FK_SaisonContenu" />
         <AssociationConnector Association="DBModel.FK_Saison_Serie_SerieId" />
+        <EntityTypeShape EntityType="DBModel.Acteur" Width="1.5" PointX="8.375" PointY="8.875" />
+        <EntityTypeShape EntityType="DBModel.ContenuActeur" Width="1.5" PointX="3.375" PointY="8" />
+        <EntityTypeShape EntityType="DBModel.Vue" Width="1.5" PointX="10.625" PointY="0.875" />
+        <AssociationConnector Association="DBModel.FK_ContenuActeur_Acteur_ActeurId" />
+        <AssociationConnector Association="DBModel.FK_ContenuActeur_Contenu_ContenuId" />
+        <AssociationConnector Association="DBModel.FK_Vue_Contenu_ContenuId" />
+        <AssociationConnector Association="DBModel.FK_Vue_Pays_PaysId" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

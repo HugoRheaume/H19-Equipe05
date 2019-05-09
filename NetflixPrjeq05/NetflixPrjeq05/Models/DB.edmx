@@ -5,6 +5,13 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Acteur">
+          <Key>
+            <PropertyRef Name="ActeurId" />
+          </Key>
+          <Property Name="ActeurId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nom" Type="nvarchar" MaxLength="25" Nullable="false" />
+        </EntityType>
         <EntityType Name="Contenu">
           <Key>
             <PropertyRef Name="ContenuId" />
@@ -20,6 +27,14 @@
           <Property Name="Date_de_sortie" Type="date" />
           <Property Name="Duree" Type="int" />
           <Property Name="SaisonId" Type="int" />
+        </EntityType>
+        <EntityType Name="ContenuActeur">
+          <Key>
+            <PropertyRef Name="ContenuActeurId" />
+          </Key>
+          <Property Name="ContenuActeurId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContenuId" Type="int" Nullable="false" />
+          <Property Name="ActeurId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ContenuLangue">
           <Key>
@@ -76,6 +91,16 @@
           <Property Name="SerieId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nom" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
+        <EntityType Name="Vue">
+          <Key>
+            <PropertyRef Name="VueId" />
+          </Key>
+          <Property Name="VueId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContenuId" Type="int" Nullable="false" />
+          <Property Name="PaysId" Type="int" Nullable="false" />
+          <Property Name="NbVue" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+        </EntityType>
         <EntityType Name="Regle">
           <Key>
             <PropertyRef Name="RegleId" />
@@ -89,6 +114,30 @@
           <Property Name="EstPlusGrand" Type="bit" />
           <Property Name="PourcentageReel" Type="float" />
         </EntityType>
+        <Association Name="FK_ContenuActeur_Acteur_ActeurId">
+          <End Role="Acteur" Type="Self.Acteur" Multiplicity="1" />
+          <End Role="ContenuActeur" Type="Self.ContenuActeur" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Acteur">
+              <PropertyRef Name="ActeurId" />
+            </Principal>
+            <Dependent Role="ContenuActeur">
+              <PropertyRef Name="ActeurId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContenuActeur_Contenu_ContenuId">
+          <End Role="Contenu" Type="Self.Contenu" Multiplicity="1" />
+          <End Role="ContenuActeur" Type="Self.ContenuActeur" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contenu">
+              <PropertyRef Name="ContenuId" />
+            </Principal>
+            <Dependent Role="ContenuActeur">
+              <PropertyRef Name="ContenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ContenuLangue_Contenu_ContenuId">
           <End Role="Contenu" Type="Self.Contenu" Multiplicity="1" />
           <End Role="ContenuLangue" Type="Self.ContenuLangue" Multiplicity="*" />
@@ -221,8 +270,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Vue_Contenu_ContenuId">
+          <End Role="Contenu" Type="Self.Contenu" Multiplicity="1" />
+          <End Role="Vue" Type="Self.Vue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contenu">
+              <PropertyRef Name="ContenuId" />
+            </Principal>
+            <Dependent Role="Vue">
+              <PropertyRef Name="ContenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vue_Pays_PaysId">
+          <End Role="Pays" Type="Self.Pays" Multiplicity="1" />
+          <End Role="Vue" Type="Self.Vue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pays">
+              <PropertyRef Name="PaysId" />
+            </Principal>
+            <Dependent Role="Vue">
+              <PropertyRef Name="PaysId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DBModelStoreContainer">
+          <EntitySet Name="Acteur" EntityType="Self.Acteur" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="Contenu" EntityType="Self.Contenu" Schema="Contenus" store:Type="Tables" />
+          <EntitySet Name="ContenuActeur" EntityType="Self.ContenuActeur" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="ContenuLangue" EntityType="Self.ContenuLangue" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="Langue" EntityType="Self.Langue" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="OffrePays" EntityType="Self.OffrePays" Schema="Contenus" store:Type="Tables" />
@@ -230,7 +305,16 @@
           <EntitySet Name="Pays" EntityType="Self.Pays" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="Saison" EntityType="Self.Saison" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="Serie" EntityType="Self.Serie" Schema="Contenus" store:Type="Tables" />
+          <EntitySet Name="Vue" EntityType="Self.Vue" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="Regle" EntityType="Self.Regle" Schema="Reglementations" store:Type="Tables" />
+          <AssociationSet Name="FK_ContenuActeur_Acteur_ActeurId" Association="Self.FK_ContenuActeur_Acteur_ActeurId">
+            <End Role="Acteur" EntitySet="Acteur" />
+            <End Role="ContenuActeur" EntitySet="ContenuActeur" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContenuActeur_Contenu_ContenuId" Association="Self.FK_ContenuActeur_Contenu_ContenuId">
+            <End Role="Contenu" EntitySet="Contenu" />
+            <End Role="ContenuActeur" EntitySet="ContenuActeur" />
+          </AssociationSet>
           <AssociationSet Name="FK_ContenuLangue_Contenu_ContenuId" Association="Self.FK_ContenuLangue_Contenu_ContenuId">
             <End Role="Contenu" EntitySet="Contenu" />
             <End Role="ContenuLangue" EntitySet="ContenuLangue" />
@@ -275,6 +359,14 @@
             <End Role="Saison" EntitySet="Saison" />
             <End Role="Contenu" EntitySet="Contenu" />
           </AssociationSet>
+          <AssociationSet Name="FK_Vue_Contenu_ContenuId" Association="Self.FK_Vue_Contenu_ContenuId">
+            <End Role="Contenu" EntitySet="Contenu" />
+            <End Role="Vue" EntitySet="Vue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vue_Pays_PaysId" Association="Self.FK_Vue_Pays_PaysId">
+            <End Role="Pays" EntitySet="Pays" />
+            <End Role="Vue" EntitySet="Vue" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -299,6 +391,8 @@
           <NavigationProperty Name="OriginePays" Relationship="DBModel.FK__OriginePa__Conte__5FB337D6" FromRole="Contenu" ToRole="OriginePays" />
           <Property Name="SaisonId" Type="Int32" />
           <NavigationProperty Name="Saison" Relationship="DBModel.FK_SaisonContenu" FromRole="Contenu" ToRole="Saison" />
+          <NavigationProperty Name="ContenuActeur" Relationship="DBModel.FK_ContenuActeur_Contenu_ContenuId" FromRole="Contenu" ToRole="ContenuActeur" />
+          <NavigationProperty Name="Vue" Relationship="DBModel.FK_Vue_Contenu_ContenuId" FromRole="Contenu" ToRole="Vue" />
         </EntityType>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Contenu" EntityType="Self.Contenu" />
@@ -353,6 +447,25 @@
           <AssociationSet Name="FK_Saison_Serie_SerieId" Association="DBModel.FK_Saison_Serie_SerieId">
             <End Role="Serie" EntitySet="Serie" />
             <End Role="Saison" EntitySet="Saison" />
+          </AssociationSet>
+          <EntitySet Name="Acteur" EntityType="DBModel.Acteur" />
+          <EntitySet Name="ContenuActeur" EntityType="DBModel.ContenuActeur" />
+          <EntitySet Name="Vue" EntityType="DBModel.Vue" />
+          <AssociationSet Name="FK_ContenuActeur_Acteur_ActeurId" Association="DBModel.FK_ContenuActeur_Acteur_ActeurId">
+            <End Role="Acteur" EntitySet="Acteur" />
+            <End Role="ContenuActeur" EntitySet="ContenuActeur" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ContenuActeur_Contenu_ContenuId" Association="DBModel.FK_ContenuActeur_Contenu_ContenuId">
+            <End Role="Contenu" EntitySet="Contenu" />
+            <End Role="ContenuActeur" EntitySet="ContenuActeur" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vue_Contenu_ContenuId" Association="DBModel.FK_Vue_Contenu_ContenuId">
+            <End Role="Contenu" EntitySet="Contenu" />
+            <End Role="Vue" EntitySet="Vue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vue_Pays_PaysId" Association="DBModel.FK_Vue_Pays_PaysId">
+            <End Role="Pays" EntitySet="Pays" />
+            <End Role="Vue" EntitySet="Vue" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Langue">
@@ -454,6 +567,7 @@
           <NavigationProperty Name="OriginePays" Relationship="DBModel.FK__OriginePa__PaysI__60A75C0F" FromRole="Pays" ToRole="OriginePays" />
           <NavigationProperty Name="Regle" Relationship="DBModel.FK__Regle__OriginePa__6A30C649" FromRole="Pays" ToRole="Regle" />
           <NavigationProperty Name="Regle1" Relationship="DBModel.FK__Regle__PaysId__693CA210" FromRole="Pays" ToRole="Regle" />
+          <NavigationProperty Name="Vue" Relationship="DBModel.FK_Vue_Pays_PaysId" FromRole="Pays" ToRole="Vue" />
         </EntityType>
         <Association Name="FK__OffrePays__PaysI__5BE2A6F2">
           <End Type="DBModel.Pays" Role="Pays" Multiplicity="1" />
@@ -573,6 +687,84 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Acteur">
+          <Key>
+            <PropertyRef Name="ActeurId" />
+          </Key>
+          <Property Name="ActeurId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nom" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ContenuActeur" Relationship="DBModel.FK_ContenuActeur_Acteur_ActeurId" FromRole="Acteur" ToRole="ContenuActeur" />
+        </EntityType>
+        <EntityType Name="ContenuActeur">
+          <Key>
+            <PropertyRef Name="ContenuActeurId" />
+          </Key>
+          <Property Name="ContenuActeurId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContenuId" Type="Int32" Nullable="false" />
+          <Property Name="ActeurId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Acteur" Relationship="DBModel.FK_ContenuActeur_Acteur_ActeurId" FromRole="ContenuActeur" ToRole="Acteur" />
+          <NavigationProperty Name="Contenu" Relationship="DBModel.FK_ContenuActeur_Contenu_ContenuId" FromRole="ContenuActeur" ToRole="Contenu" />
+        </EntityType>
+        <EntityType Name="Vue">
+          <Key>
+            <PropertyRef Name="VueId" />
+          </Key>
+          <Property Name="VueId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContenuId" Type="Int32" Nullable="false" />
+          <Property Name="PaysId" Type="Int32" Nullable="false" />
+          <Property Name="NbVue" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Contenu" Relationship="DBModel.FK_Vue_Contenu_ContenuId" FromRole="Vue" ToRole="Contenu" />
+          <NavigationProperty Name="Pays" Relationship="DBModel.FK_Vue_Pays_PaysId" FromRole="Vue" ToRole="Pays" />
+        </EntityType>
+        <Association Name="FK_ContenuActeur_Acteur_ActeurId">
+          <End Type="DBModel.Acteur" Role="Acteur" Multiplicity="1" />
+          <End Type="DBModel.ContenuActeur" Role="ContenuActeur" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Acteur">
+              <PropertyRef Name="ActeurId" />
+            </Principal>
+            <Dependent Role="ContenuActeur">
+              <PropertyRef Name="ActeurId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ContenuActeur_Contenu_ContenuId">
+          <End Type="DBModel.Contenu" Role="Contenu" Multiplicity="1" />
+          <End Type="DBModel.ContenuActeur" Role="ContenuActeur" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contenu">
+              <PropertyRef Name="ContenuId" />
+            </Principal>
+            <Dependent Role="ContenuActeur">
+              <PropertyRef Name="ContenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vue_Contenu_ContenuId">
+          <End Type="DBModel.Contenu" Role="Contenu" Multiplicity="1" />
+          <End Type="DBModel.Vue" Role="Vue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contenu">
+              <PropertyRef Name="ContenuId" />
+            </Principal>
+            <Dependent Role="Vue">
+              <PropertyRef Name="ContenuId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vue_Pays_PaysId">
+          <End Type="DBModel.Pays" Role="Pays" Multiplicity="1" />
+          <End Type="DBModel.Vue" Role="Vue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pays">
+              <PropertyRef Name="PaysId" />
+            </Principal>
+            <Dependent Role="Vue">
+              <PropertyRef Name="PaysId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -669,6 +861,34 @@
               <MappingFragment StoreEntitySet="Serie">
                 <ScalarProperty Name="Nom" ColumnName="Nom" />
                 <ScalarProperty Name="SerieId" ColumnName="SerieId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Acteur">
+            <EntityTypeMapping TypeName="DBModel.Acteur">
+              <MappingFragment StoreEntitySet="Acteur">
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="ActeurId" ColumnName="ActeurId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ContenuActeur">
+            <EntityTypeMapping TypeName="DBModel.ContenuActeur">
+              <MappingFragment StoreEntitySet="ContenuActeur">
+                <ScalarProperty Name="ActeurId" ColumnName="ActeurId" />
+                <ScalarProperty Name="ContenuId" ColumnName="ContenuId" />
+                <ScalarProperty Name="ContenuActeurId" ColumnName="ContenuActeurId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vue">
+            <EntityTypeMapping TypeName="DBModel.Vue">
+              <MappingFragment StoreEntitySet="Vue">
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="NbVue" ColumnName="NbVue" />
+                <ScalarProperty Name="PaysId" ColumnName="PaysId" />
+                <ScalarProperty Name="ContenuId" ColumnName="ContenuId" />
+                <ScalarProperty Name="VueId" ColumnName="VueId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
