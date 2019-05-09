@@ -207,6 +207,20 @@ namespace NetflixPrjeq05.Service
             return db.ContenuActeur.ToList();
         }
 
+        public List<ActeurVM> GetTop10ActeursPays(int paysId)
+        {
+            List<usp_GetTop10Acteurs_Result> t = new List<usp_GetTop10Acteurs_Result>();
+            List<ActeurVM> acteurVMs = new List<ActeurVM>();
+            var queryTop10Acteurs = db.usp_GetTop10Acteurs(paysId);
+            int score = 1;
+            foreach (var item in queryTop10Acteurs)
+            {
+                acteurVMs.Add(new ActeurVM(item.Nom, item.Affiche, item.TotalVues.Value, score));
+                score++;
+            }
+            return acteurVMs;
+        }
+
         //public List<Acteur> GetVuesActeursPays(int paysId)
         //{
         //    var queryActeurs = from v in GetAllVues()

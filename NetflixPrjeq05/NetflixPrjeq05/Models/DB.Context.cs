@@ -12,6 +12,8 @@ namespace NetflixPrjeq05.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class Entities : DbContext
     {
@@ -37,5 +39,14 @@ namespace NetflixPrjeq05.Models
         public virtual DbSet<Acteur> Acteur { get; set; }
         public virtual DbSet<ContenuActeur> ContenuActeur { get; set; }
         public virtual DbSet<Vue> Vue { get; set; }
+    
+        public virtual ObjectResult<usp_GetTop10Acteurs_Result> usp_GetTop10Acteurs(Nullable<int> paysId)
+        {
+            var paysIdParameter = paysId.HasValue ?
+                new ObjectParameter("paysId", paysId) :
+                new ObjectParameter("paysId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_GetTop10Acteurs_Result>("usp_GetTop10Acteurs", paysIdParameter);
+        }
     }
 }

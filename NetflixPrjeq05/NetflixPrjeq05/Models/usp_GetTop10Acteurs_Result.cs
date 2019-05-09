@@ -10,21 +10,11 @@
 namespace NetflixPrjeq05.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Acteur
+    public partial class usp_GetTop10Acteurs_Result
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Acteur()
-        {
-            this.ContenuActeur = new HashSet<ContenuActeur>();
-        }
-    
-        public int ActeurId { get; set; }
+        public Nullable<int> TotalVues { get; set; }
         public string Nom { get; set; }
         public string Affiche { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ContenuActeur> ContenuActeur { get; set; }
     }
 }

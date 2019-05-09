@@ -21,14 +21,14 @@ namespace NetflixPrjeq05.Controllers
             if (ContenusController.m_tousLesPays == null)
                 ContenusController.m_tousLesPays = service.GetAllPays();
 
-            ViewBag.Pays = new SelectList(ContenusController.m_tousLesPays, "PaysId", "Nom", ContenusController.currentPaysId);
-            List<Acteur> acteurs = service.GetAllActeurs();
-            List<Acteur> acteurVMs = new List<Acteur>();
-
-            foreach (var acteur in acteurs)
+            if (id.HasValue)
             {
-                acteurVMs.Add(acteur);
+                ContenusController.currentPaysId = id.Value;
             }
+
+            ViewBag.Pays = new SelectList(ContenusController.m_tousLesPays, "PaysId", "Nom", ContenusController.currentPaysId);
+            List<ActeurVM> acteurVMs = service.GetTop10ActeursPays(ContenusController.currentPaysId);
+            
             return View(acteurVMs);
         }
 

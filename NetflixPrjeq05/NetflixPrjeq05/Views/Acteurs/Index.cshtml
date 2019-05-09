@@ -1,4 +1,4 @@
-﻿@model IEnumerable<NetflixPrjeq05.Models.Acteur>
+﻿@model IEnumerable<NetflixPrjeq05.Models.ActeurVM>
 
 @{
     ViewBag.Title = "Index";
@@ -33,18 +33,17 @@
         {
             <tr>
                 <td>
-                    @cpt
+                    @Html.DisplayFor(modelItem => item.Score)
                 </td>
                 <td>
-                   <!-- <img src="https://image.tmdb.org/t/p/ @*Html.DisplayFor(modelItem => item.Affiche)*@" width="150" height="200">-->
+                   <img src=@Html.DisplayFor(modelItem => item.Affiche) width="150" height="200">
                     
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Nom)
                 </td>
                 <td>
-                    0
-                    @*Html.DisplayFor(modelItem => item.NbVue)*@
+                    @Html.DisplayFor(modelItem => item.TotalVues)
                 </td>
             </tr>
             cpt++;

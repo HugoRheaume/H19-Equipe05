@@ -11,6 +11,7 @@
           </Key>
           <Property Name="ActeurId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nom" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="Affiche" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Contenu">
           <Key>
@@ -294,6 +295,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="usp_GetTop10Acteurs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="Contenus">
+          <Parameter Name="paysId" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="DBModelStoreContainer">
           <EntitySet Name="Acteur" EntityType="Self.Acteur" Schema="Contenus" store:Type="Tables" />
           <EntitySet Name="Contenu" EntityType="Self.Contenu" Schema="Contenus" store:Type="Tables" />
@@ -467,6 +471,9 @@
             <End Role="Pays" EntitySet="Pays" />
             <End Role="Vue" EntitySet="Vue" />
           </AssociationSet>
+          <FunctionImport Name="usp_GetTop10Acteurs" ReturnType="Collection(DBModel.usp_GetTop10Acteurs_Result)">
+            <Parameter Name="paysId" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="Langue">
           <Key>
@@ -694,6 +701,7 @@
           <Property Name="ActeurId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nom" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ContenuActeur" Relationship="DBModel.FK_ContenuActeur_Acteur_ActeurId" FromRole="Acteur" ToRole="ContenuActeur" />
+          <Property Name="Affiche" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ContenuActeur">
           <Key>
@@ -765,6 +773,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="usp_GetTop10Acteurs_Result">
+          <Property Type="Int32" Name="TotalVues" Nullable="true" />
+          <Property Type="String" Name="Nom" Nullable="false" MaxLength="25" />
+          <Property Type="String" Name="Affiche" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -867,6 +880,7 @@
           <EntitySetMapping Name="Acteur">
             <EntityTypeMapping TypeName="DBModel.Acteur">
               <MappingFragment StoreEntitySet="Acteur">
+                <ScalarProperty Name="Affiche" ColumnName="Affiche" />
                 <ScalarProperty Name="Nom" ColumnName="Nom" />
                 <ScalarProperty Name="ActeurId" ColumnName="ActeurId" />
               </MappingFragment>
@@ -892,6 +906,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetTop10Acteurs" FunctionName="DBModel.Store.usp_GetTop10Acteurs">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBModel.usp_GetTop10Acteurs_Result">
+                <ScalarProperty Name="TotalVues" ColumnName="TotalVues" />
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="Affiche" ColumnName="Affiche" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

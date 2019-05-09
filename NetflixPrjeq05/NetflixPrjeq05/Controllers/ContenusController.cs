@@ -29,7 +29,7 @@ namespace NetflixPrjeq05.Controllers
 
         //============================================================================CONTENU============================================================================
         public ActionResult Contenu(int? id, string sortOrder, int? page, string searchTitle)
-        {
+        {          
             //Seulement effectué quand le controleur est appellé pour la première fois.
             if (m_tousLeContenu == null)
                 m_tousLeContenu = service.GetAllContenu();
