@@ -45,7 +45,7 @@ namespace NetflixPrjeq05.Controllers
             ViewBag.Pays = new SelectList(m_tousLesPays, "PaysId", "Nom", currentPaysId);           
                               
             //Pagination
-            int pageSize = 3;
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
 
             if (sortOrder != null)
@@ -115,7 +115,7 @@ namespace NetflixPrjeq05.Controllers
             List<ContenuVM> colContenuVM = m_colContenuIndisponibleCourant == null ? new List<ContenuVM>() : m_colContenuIndisponibleCourant;      
            
             //Pagination
-            int pageSize = 3;
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
            
             if (sortOrder != null)
