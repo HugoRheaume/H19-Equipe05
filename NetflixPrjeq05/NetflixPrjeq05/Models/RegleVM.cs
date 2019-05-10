@@ -38,6 +38,7 @@ namespace NetflixPrjeq05.Models
         public int? DoublageLangueId { get; set; }
 
         [Required]
+        [DisplayName("Pourcentage visé")]
         [DisplayFormat(DataFormatString = @"{0:0.00\%}")]       
         public double?  Pourcentage { get; set; }
 
@@ -45,13 +46,14 @@ namespace NetflixPrjeq05.Models
         [DisplayFormat(DataFormatString = @"{0:0.00\%}")]       
         public double? PourcentageReel { get; set; }
 
-        [DisplayName("Langue de doublage")]
+        [DisplayName("Langue visé")]
         public string DoublageLangue { get; set; }
 
-        [DisplayName("Pays d'origine")]
+        [DisplayName("Pays visé")]
         public string OriginePays { get; set; }
 
         [Required]
+        [DisplayName("Limite")]
         public bool? EstPlusGrand { get; set; }
 
     }

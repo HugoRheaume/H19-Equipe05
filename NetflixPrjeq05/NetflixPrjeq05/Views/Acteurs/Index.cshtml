@@ -15,20 +15,19 @@
 <table class="table">
     <tr>
         <th>
-            Position
+            @Html.DisplayNameFor(Model => Model.Score)
         </th>
         <th>
-            Affiche
+            @Html.DisplayNameFor(Model => Model.Affiche)
         </th>
         <th>
-            Nom
+            @Html.DisplayNameFor(Model => Model.Nom)
         </th>
         <th>
-            Nombre de vues
+            @Html.DisplayNameFor(Model => Model.TotalVues)
         </th>
     </tr>
-    @{
-        int cpt = 1;
+    @{       
         foreach (var item in Model)
         {
             <tr>

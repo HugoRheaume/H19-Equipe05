@@ -1,4 +1,4 @@
-﻿@model NetflixPrjeq05.Models.Regle
+﻿@model NetflixPrjeq05.Models.RegleVM
 
 @{
     ViewBag.Title = "Create";
@@ -30,9 +30,9 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <table class="table">
             <tr>
-                <td>Doublage</td>
-                <td>Pourcentage visé</td>
-                <td>Plus grand ou plus petit</td>
+                <td>@Html.DisplayNameFor(Model => Model.DoublageLangue)</td>
+                <td>@Html.DisplayNameFor(Model => Model.Pourcentage)</td>
+                <td>@Html.DisplayNameFor(Model => Model.EstPlusGrand)</td>
             </tr>
             <tr>
                 <td>

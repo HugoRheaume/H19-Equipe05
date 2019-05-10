@@ -1,4 +1,4 @@
-﻿@model NetflixPrjeq05.Models.Regle
+﻿@model NetflixPrjeq05.Models.RegleVM
 
 <br />
 @{
@@ -27,9 +27,9 @@
 
         <table class="table">
             <tr>
-                <td>Origine du pays</td>
-                <td>Pourcentage visé</td>
-                <td>Plus grand ou plus petit</td>
+                <td>@Html.DisplayNameFor(Model => Model.OriginePays)</td>
+                <td>@Html.DisplayNameFor(Model => Model.Pourcentage)</td>
+                <td>@Html.DisplayNameFor(Model => Model.EstPlusGrand)</td>
             </tr>
             <tr>
                 <td>
