@@ -231,7 +231,7 @@ namespace NetflixPrjeq05.Controllers
         #endregion
 
         //============================================================================RAPPORT============================================================================
-        public ActionResult Report()
+        public ActionResult ReportReglement()
         {
             reportViewer.ServerReport.ReportPath = "/Eq05Rapport/RapportReglement";
             reportViewer.ServerReport.ReportServerUrl = new Uri("http://ed4sql2/ReportServer/");
@@ -239,6 +239,30 @@ namespace NetflixPrjeq05.Controllers
             var parameters = new List<ReportParameter>
             { new ReportParameter("Date", startDate.ToString())};
             reportViewer.ServerReport.SetParameters(parameters);
+            ViewBag.ReportViewer = reportViewer;
+            return View();
+
+        }
+        public ActionResult ReportVueMois()
+        {
+            reportViewer.ServerReport.ReportPath = "/Eq05Rapport/RapportVueMois";
+            reportViewer.ServerReport.ReportServerUrl = new Uri("http://ed4sql2/ReportServer/");
+            var startDate = DateTime.Now;
+          //  var parameters = new List<ReportParameter>
+            //{ new ReportParameter("Date", startDate.ToString())};
+            //reportViewer.ServerReport.SetParameters(parameters);
+            ViewBag.ReportViewer = reportViewer;
+            return View();
+
+        }
+        public ActionResult ReportVueSemaine()
+        {
+            reportViewer.ServerReport.ReportPath = "/Eq05Rapport/ReportVueSemaine";
+            reportViewer.ServerReport.ReportServerUrl = new Uri("http://ed4sql2/ReportServer/");
+            var startDate = DateTime.Now;
+           // var parameters = new List<ReportParameter>
+            //{ new ReportParameter("Date", startDate.ToString())};
+            //reportViewer.ServerReport.SetParameters(parameters);
             ViewBag.ReportViewer = reportViewer;
             return View();
 

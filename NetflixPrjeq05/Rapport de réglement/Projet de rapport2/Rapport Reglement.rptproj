@@ -50,6 +50,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Report Include="RapportReglement.rdl" />
+    <Report Include="RapportVueMois.rdl" />
+    <Report Include="ReportVueSemaine.rdl" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
 </Project>

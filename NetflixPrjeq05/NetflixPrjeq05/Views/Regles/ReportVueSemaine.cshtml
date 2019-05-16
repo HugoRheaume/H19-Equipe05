@@ -1,0 +1,13 @@
+﻿@model IEnumerable<NetflixPrjeq05.Models.Regle>
+
+@using ReportViewerForMvc;
+@{
+    ViewBag.Title = "Rapport des vues par semaine";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+@Html.ReportViewer(ViewBag.ReportViewer as Microsoft.Reporting.WebForms.ReportViewer, new { scrolling = "Yes" })
+@section Scripts
+{
+}

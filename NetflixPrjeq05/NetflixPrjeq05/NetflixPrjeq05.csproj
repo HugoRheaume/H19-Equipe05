@@ -293,12 +293,14 @@
     <Content Include="Views\Contenus\Contenu.cshtml" />
     <Content Include="Views\Regles\Index.cshtml" />
     <Content Include="Views\Contenus\Ajouter.cshtml" />
-    <Content Include="Views\Regles\Report.cshtml" />
+    <Content Include="Views\Regles\ReportReglement.cshtml" />
     <Content Include="Views\Regles\CreateOrigine.cshtml" />
     <Content Include="Views\Regles\CreateLangue.cshtml" />
     <Content Include="Views\Regles\EditLangue.cshtml" />
     <Content Include="Views\Regles\EditOrigine.cshtml" />
     <Content Include="Views\Acteurs\Index.cshtml" />
+    <Content Include="Views\Regles\ReportVueMois.cshtml" />
+    <Content Include="Views\Regles\ReportVueSemaine.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

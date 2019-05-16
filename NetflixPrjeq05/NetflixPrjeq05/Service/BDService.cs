@@ -56,7 +56,7 @@ namespace NetflixPrjeq05.Service
             return db.Pays.ToList();
         }
 
-
+       
         //Langue
         public List<Langue> GetAllLangue()
         {
