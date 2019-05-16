@@ -19,10 +19,15 @@
 <div>
     @using (Html.BeginForm("Ajouter", "Contenus", FormMethod.Get))
     {
-        <div class="row">
-            <div class="col-md-8">
-                @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
-            </div>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
+        </div>
+        <div class="col-md-5">
+            <h4>
+                Trier par @Html.ActionLink("Titre", "Ajouter", new { sortOrder = ViewBag.NameSortParm }),  @Html.ActionLink("DateSortie", "Ajouter", new { sortOrder = ViewBag.DateSortParm }), @Html.ActionLink("Duree", "Ajouter", new { sortOrder = ViewBag.DureeSortParm })
+            </h4>
+        </div>
             <div class="col-md-4">
                 <table class="table table-borderless">
                     <tr>
@@ -37,9 +42,10 @@
                 </table>
             </div>
         </div>
-    }
-</div>
-
+        }
+    </div>
+<br />
+<!--
 <table class="table">
     <tr>
         <th>
@@ -62,7 +68,7 @@
         </th>
         <th></th>
     </tr>
-    <!--
+    
     @foreach (var item in Model)
     {
         <tr>

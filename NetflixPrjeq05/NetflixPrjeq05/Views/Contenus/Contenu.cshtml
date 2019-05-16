@@ -21,32 +21,26 @@
 <div>
     @using (Html.BeginForm("Contenu", "Contenus", FormMethod.Get))
     {
-        <div class="row">
-            <div class="col-md-8">
-                @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
-            </div>
-            <div class="col-md-4">
-                <table class="table table-borderless">
-                    <tr>
-                        <td>
-                            Rechercher
-                        </td>
-
-                        <td>
-                            @Html.TextBox("searchTitle", (string)ViewBag.CurrentSearch, new { onchange = "this.form.submit();", @class = "form-control" })
-                        </td>
-                    </tr>
-                </table>
-            </div>
+    <div class="row">
+        <div class="col-md-3">
+            @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })
         </div>
+        <div class="col-md-5"><h4>Trier par  @Html.ActionLink("Titre", "Contenu", new { sortOrder = ViewBag.NameSortParm }), @Html.ActionLink("DateSortie", "Contenu", new { sortOrder = ViewBag.DateSortParm }), @Html.ActionLink("Duree", "Contenu", new { sortOrder = ViewBag.DureeSortParm })</h4></div>
+        <div class="col-md-4">
+            <table class="table table-borderless">
+                <tr>
+                    <td>
+                        Rechercher
+                    </td>
+
+                    <td>
+                        @Html.TextBox("searchTitle", (string)ViewBag.CurrentSearch, new { onchange = "this.form.submit();", @class = "form-control" })
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
     }
-</div>
-
-
-
-<div class="row">
-    <div class="col-md-4">Trier par  @Html.ActionLink("Titre", "Contenu", new { sortOrder = ViewBag.NameSortParm }), @Html.ActionLink("DateSortie", "Contenu", new { sortOrder = ViewBag.DateSortParm }), @Html.ActionLink("Duree", "Contenu", new { sortOrder = ViewBag.DureeSortParm })</div>
-    
 </div>
 <br />
 <!--
