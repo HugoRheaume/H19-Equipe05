@@ -42,11 +42,19 @@
     }
 </div>
 
+
+
+<div class="row">
+    <div class="col-md-4">Trier par  @Html.ActionLink("Titre", "Contenu", new { sortOrder = ViewBag.NameSortParm }), @Html.ActionLink("DateSortie", "Contenu", new { sortOrder = ViewBag.DateSortParm }), @Html.ActionLink("Duree", "Contenu", new { sortOrder = ViewBag.DureeSortParm })</div>
+    
+</div>
+<br />
+<!--
 <table class="table">
     <tr>
         <th>
 
-            @Html.ActionLink("Titre", "Contenu", new { sortOrder = ViewBag.NameSortParm })
+
         </th>
         <th>
 
@@ -68,7 +76,7 @@
 
         <th></th>
     </tr>
-    <!--
+
     @foreach (var item in Model)
     {
         <tr>
@@ -181,160 +189,160 @@
                 </table>
             </td>
         </tr>
-    } 
+    }
         -->
 </table>
-        
+
 
 <!---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 <div class="row">
-@foreach (var item in Model)
-{
-    <div class="col-md-6" >
-        <table class="table">
-            <tr>
-                <td style="width:150px;">
-                    <img src="@Html.DisplayFor(modelItem => item.Affiche)" width="150" height="200">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-6">
+            <table class="table">
+                <tr>
+                    <td style="width:150px;">
+                        <img src="@Html.DisplayFor(modelItem => item.Affiche)" width="150" height="200">
 
-                </td>
-                <td>
-                    <table>
-                        <tr>
-                            <td>
-                                <h3>@Html.DisplayFor(modelItem => item.Titre) </h3>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Date de Sortie : @Html.DisplayFor(modelItem => item.DateSortie)
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Durée : @Html.DisplayFor(modelItem => item.Duree)
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Doublages : @Html.DisplayFor(modelItem => item.Doublages)
-                            </td>
-                        </tr>
-                        <tr>
+                    </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>
+                                    <h3>@Html.DisplayFor(modelItem => item.Titre) </h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Date de Sortie : @Html.DisplayFor(modelItem => item.DateSortie)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Durée : @Html.DisplayFor(modelItem => item.Duree)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Doublages : @Html.DisplayFor(modelItem => item.Doublages)
+                                </td>
+                            </tr>
+                            <tr>
 
-                            <td>
-                                Origine : @Html.DisplayFor(modelItem => item.Origines)
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-                <td>
-                    <table class="table table-borderless">
-                        <tr>
-                            <td>
-                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="@Html.Raw("#modalDelContenu" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"></i></button>
+                                <td>
+                                    Origine : @Html.DisplayFor(modelItem => item.Origines)
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="table table-borderless">
+                            <tr>
+                                <td>
+                                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="@Html.Raw("#modalDelContenu" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"></i></button>
 
-                                <div class="modal fade popup" id="@Html.Raw("modalDelContenu" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="ModalLabel">Supprimer un contenu</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Êtes-vous sûr de vouloir supprimé : @Html.Raw(item.Titre)
+                                    <div class="modal fade popup" id="@Html.Raw("modalDelContenu" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="ModalLabel">Supprimer un contenu</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Êtes-vous sûr de vouloir supprimé : @Html.Raw(item.Titre)
 
-                                            </div>
-                                            <div class="modal-footer">
-
-
-                                                @if (item.SaisonId != null)
-                                                {
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                                    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Contenus", new { id = item.ContenuId })';return false;">Supprimer l'épisode</button>
-                                                }
-                                                else
-                                                {
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                                    <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Contenus", new { id = item.ContenuId })';return false;">Supprimer</button>
-                                                }
+                                                </div>
+                                                <div class="modal-footer">
 
 
+                                                    @if (item.SaisonId != null)
+                                                    {
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                        <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Contenus", new { id = item.ContenuId })';return false;">Supprimer l'épisode</button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                        <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("Delete", "Contenus", new { id = item.ContenuId })';return false;">Supprimer</button>
+                                                    }
+
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                        @{
-                            if (item.SaisonId != null)
-                            {
-                                <tr>
-                                    <td>
-                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelContenuSasageyo" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"> Saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId }) </i></button>
+                                </td>
+                            </tr>
+                            @{
+                                if (item.SaisonId != null)
+                                {
+                                    <tr>
+                                        <td>
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelContenuSasageyo" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"> Saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId }) </i></button>
 
-                                        <div class="modal fade popup" id="@Html.Raw("modalDelContenuSasageyo" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="ModalLabel">Supprimer un contenu</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Êtes-vous sûr de vouloir supprimé la saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId }) de @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })
+                                            <div class="modal fade popup" id="@Html.Raw("modalDelContenuSasageyo" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="ModalLabel">Supprimer un contenu</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Êtes-vous sûr de vouloir supprimé la saison @Html.Action("GetSaisonNumero", "Contenus", new { id = item.SaisonId }) de @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })
 
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                                        <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteSaison", "Contenus", new { id = item.SaisonId })';return false;">Supprimer</button>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                            <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteSaison", "Contenus", new { id = item.SaisonId })';return false;">Supprimer</button>
 
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelContenuSer" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"> Série @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })</i></button>
-
-                                        <div class="modal fade popup" id="@Html.Raw("modalDelContenuSer" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="ModalLabel">Supprimer un contenu</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Êtes-vous sûr de vouloir supprimé la série @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })
-
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                                                        <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteSerie", "Contenus", new { id = item.SaisonId })';return false;">Supprimer</button>
-
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@Html.Raw("#modalDelContenuSer" + item.ContenuId.ToString())"><i class="fas fa-trash-alt"> Série @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })</i></button>
+
+                                            <div class="modal fade popup" id="@Html.Raw("modalDelContenuSer" + item.ContenuId.ToString())" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="ModalLabel">Supprimer un contenu</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Êtes-vous sûr de vouloir supprimé la série @Html.Action("GetSerieNom", "Contenus", new { id = item.SaisonId })
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                            <button type="button" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteSerie", "Contenus", new { id = item.SaisonId })';return false;">Supprimer</button>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
                             }
-                        }
-                    </table>
-                </td>
+                        </table>
+                    </td>
 
-            </tr>
+                </tr>
 
-        </table>
+            </table>
 
-    </div>
-}
+        </div>
+    }
 </div>
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 @Html.PagedListPager(Model, page => Url.Action("Contenu", new { page = page }))
