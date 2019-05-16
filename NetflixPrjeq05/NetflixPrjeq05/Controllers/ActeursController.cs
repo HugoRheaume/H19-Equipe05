@@ -21,8 +21,15 @@ namespace NetflixPrjeq05.Controllers
             if (ContenusController.m_tousLesPays == null)
                 ContenusController.m_tousLesPays = service.GetAllPays();
 
+            if (id.HasValue)
+            {
+                ContenusController.currentPaysId = id.Value;
+            }
+
             ViewBag.Pays = new SelectList(ContenusController.m_tousLesPays, "PaysId", "Nom", ContenusController.currentPaysId);
-            return View(service.GetAllActeurs());
+            List<ActeurVM> acteurVMs = service.GetTop10ActeursPays(ContenusController.currentPaysId);
+            
+            return View(acteurVMs);
         }
 
         protected override void Dispose(bool disposing)

@@ -30,14 +30,13 @@
         <tr>
 
             <th>
-
-                Pourcentage visé
+                @Html.DisplayNameFor(Model => Model.Pourcentage)
             </th>
             <th>
-                Pourcentage actuel
+                @Html.DisplayNameFor(Model => Model.PourcentageReel)
             </th>
-            <th>
-                Langue de doublage
+            <th>                
+                @Html.DisplayNameFor(Model => Model.DoublageLangue)
             </th>
             <th>
 
@@ -54,11 +53,11 @@
                     <td>
                         @if (item.EstPlusGrand.Value)
                         {
-                            <span>Plus de @Html.DisplayFor(modelItem => item.Pourcentage)</span>
+                            <span>Au moins @Html.DisplayFor(modelItem => item.Pourcentage)</span>
                         }
                         else
                         {
-                            <span>Moins de @Html.DisplayFor(modelItem => item.Pourcentage)</span>
+                            <span>Au plus @Html.DisplayFor(modelItem => item.Pourcentage)</span>
                         }
                     </td>
                     <td>
@@ -124,14 +123,13 @@
         </tr>
         <tr>
             <th>
-                Pourcentage visé
+                @Html.DisplayNameFor(Model => Model.Pourcentage)
             </th>
             <th>
-
-                Pourcentage actuel
+                @Html.DisplayNameFor(Model => Model.PourcentageReel)
             </th>
             <th>
-                Pays d'origine
+                @Html.DisplayNameFor(Model => Model.OriginePays)
             </th>
             <th>
 
@@ -149,11 +147,11 @@
                     <td>
                         @if (item.EstPlusGrand.Value)
                         {
-                            <span>Plus de @Html.DisplayFor(modelItem => item.Pourcentage)</span>
+                            <span>Au moins @Html.DisplayFor(modelItem => item.Pourcentage)</span>
                         }
                         else
                         {
-                            <span>Moins de @Html.DisplayFor(modelItem => item.Pourcentage)</span>
+                            <span>Au plus @Html.DisplayFor(modelItem => item.Pourcentage)</span>
                         }
                     </td>
                     <td>

@@ -179,6 +179,7 @@
     <Compile Include="Models\Acteur.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ActeurVM.cs" />
     <Compile Include="Models\Contenu.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
@@ -224,6 +225,9 @@
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Serie.cs">
+      <DependentUpon>DB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\usp_GetTop10Acteurs_Result.cs">
       <DependentUpon>DB.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Vue.cs">

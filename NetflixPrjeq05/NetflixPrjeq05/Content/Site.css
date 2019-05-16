@@ -1,6 +1,8 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: #353535;
+    color: white;
 }
 
 #reglesDiv{
@@ -44,4 +46,21 @@ textarea {
 .table-borderless > thead > tr > td,
 .table-borderless > thead > tr > th {
     border: none;
+    background-color: #353535;
+}
+.popup
+{
+    color: white;
+}
+.form-control {
+    background-color: #353535;
+    color: white;
+}
+.modal-content 
+{
+    background-color: #353535;
+    color: white;
+}
+.modal-backdrop {
+    
 }

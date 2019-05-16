@@ -186,24 +186,6 @@ namespace NetflixPrjeq05.Service
             db.SaveChanges();
         }
 
-        public int TotalDureePays(int paysId)
-        {
-            throw new NotImplementedException();
-
-        }
-
-        public int TotalDureePaysDoublage(int paysId,int doublageId)
-        {
-            throw new NotImplementedException();
-
-        }
-
-        public int TotalDureePaysOrigine(int paysId, int origineId)
-        {
-            throw new NotImplementedException();
-
-        }
-
         public void DeleteRegle(Regle regle)
         {
             db.Regle.Remove(regle);
@@ -215,9 +197,47 @@ namespace NetflixPrjeq05.Service
             return db.Acteur.ToList();
         }
 
-        public List<Acteur> GetAllActeursOffrePays()
+        public List<Vue> GetAllVues()
         {
-            return db.Acteur.ToList();
+            return db.Vue.ToList();
         }
+
+        public List<ContenuActeur> GetAllContenuActeurs()
+        {
+            return db.ContenuActeur.ToList();
+        }
+
+        public List<ActeurVM> GetTop10ActeursPays(int paysId)
+        {
+            List<usp_GetTop10Acteurs_Result> t = new List<usp_GetTop10Acteurs_Result>();
+            List<ActeurVM> acteurVMs = new List<ActeurVM>();
+            var queryTop10Acteurs = db.usp_GetTop10Acteurs(paysId);
+            int score = 1;
+            foreach (var item in queryTop10Acteurs)
+            {
+                acteurVMs.Add(new ActeurVM(item.Nom, item.Affiche, item.TotalVues.Value, score));
+                score++;
+            }
+            return acteurVMs;
+        }
+
+        //public List<Acteur> GetVuesActeursPays(int paysId)
+        //{
+        //    var queryActeurs = from v in GetAllVues()
+        //                       join c in GetAllContenu() on v.ContenuId equals c.ContenuId
+        //                       join ca in GetAllContenuActeurs() on c.ContenuId equals ca.ContenuId
+        //                       join a in GetAllActeurs() on ca.ActeurId equals a.ActeurId
+        //                       where v.PaysId == paysId
+        //                       select v;
+
+        //     var result = queryActeurs
+        //       //.Where(item => item.VisitingDate >= beginDate && item.VisitingDate < endDate)
+        //       .GroupBy(a => a.id)
+        //       .Select(e => new EmployeeCount
+        //       {
+        //           employee = e.Key,
+        //           count = e.Count()
+        //       }).ToList();
+        //}
     }
 }

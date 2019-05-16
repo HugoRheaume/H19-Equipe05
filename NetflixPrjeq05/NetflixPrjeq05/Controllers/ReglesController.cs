@@ -54,7 +54,9 @@ namespace NetflixPrjeq05.Controllers
             }
             return View(regleVMs);
         }
-                    
+        #endregion
+        //============================================================================CREATE============================================================================
+        #region CREATE
         public ActionResult CreateOrigine()
         {
             int paysId = ContenusController.currentPaysId;           
@@ -115,7 +117,6 @@ namespace NetflixPrjeq05.Controllers
             return View(regle);
         }
         #endregion
-
         //============================================================================EDIT============================================================================
         #region EDIT
         public ActionResult EditOrigine(int? id)
@@ -124,8 +125,8 @@ namespace NetflixPrjeq05.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Regle regle = service.GetRegle(id.Value);
-                      
+            RegleVM regle = new RegleVM(service.GetRegle(id.Value));
+
             if (regle == null)
             {
                 return HttpNotFound();
@@ -143,7 +144,7 @@ namespace NetflixPrjeq05.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Regle regle = service.GetRegle(id.Value);
+            RegleVM regle = new RegleVM(service.GetRegle(id.Value));
 
             if (regle == null)
             {
@@ -197,7 +198,6 @@ namespace NetflixPrjeq05.Controllers
             return View(regle);
         }
         #endregion
-
         //============================================================================DELETE============================================================================
         #region DELETE
         public ActionResult DeleteOrigine(int? id)
@@ -229,7 +229,6 @@ namespace NetflixPrjeq05.Controllers
             return RedirectToAction("Index");
         }
         #endregion
-
         //============================================================================RAPPORT============================================================================
         public ActionResult ReportReglement()
         {

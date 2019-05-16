@@ -1,33 +1,50 @@
-﻿@model IEnumerable<NetflixPrjeq05.Models.Acteur>
+﻿@model IEnumerable<NetflixPrjeq05.Models.ActeurVM>
 
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+<div>
+    @using (Html.BeginForm("Index", "Acteurs", FormMethod.Get))
+    {
+        @Html.DropDownList("id", ViewBag.Pays as SelectList, new { onchange = "this.form.submit();", @class = "form-control" })        
+    }
+</div>
+<br />
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Nom)
+            @Html.DisplayNameFor(Model => Model.Score)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.Affiche)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.Nom)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.TotalVues)
+        </th>
     </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Nom)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ActeurId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ActeurId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ActeurId })
-        </td>
-    </tr>
-}
-
+    @{       
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Score)
+                </td>
+                <td>
+                   <img src=@Html.DisplayFor(modelItem => item.Affiche) width="150" height="200">
+                    
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalVues)
+                </td>
+            </tr>            
+        }
+    }   
 </table>
