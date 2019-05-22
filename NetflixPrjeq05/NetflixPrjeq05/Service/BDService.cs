@@ -14,7 +14,6 @@ namespace NetflixPrjeq05.Service
         }
 
         //Reglement
-
         public List<Regle> GetAllReglement()
         {
             return db.Regle.ToList();
@@ -24,32 +23,37 @@ namespace NetflixPrjeq05.Service
         {
             return db.Regle.Where(x => x.PaysId==paysId).ToList();
         }
+       
+        //============================================================================CONTENU OPTIMISÉ============================================================================
+        public List<ContenuVM> GetContenuDisponible(int paysId)
+        {
+            List<usp_GetContenuDisponible_Result> t = new List<usp_GetContenuDisponible_Result>();
+            List<ContenuVM> contenuVMs = new List<ContenuVM>();
+            var queryContenu = db.usp_GetContenuDisponible(paysId);
+            foreach (var item in queryContenu)
+            {
+                contenuVMs.Add(new ContenuVM(item.ContenuId.Value, item.Date_de_sortie, item.Duree.Value, item.Titre_Original, item.Affiche, item.SaisonId, item.Languages, item.Origines));
+            }
+            return contenuVMs;
+        }
 
-        //Contenu
+        public List<ContenuVM> GetContenuIndisponible(int paysId)
+        {
+            List<usp_GetContenuIndisponible_Result> t = new List<usp_GetContenuIndisponible_Result>();
+            List<ContenuVM> contenuVMs = new List<ContenuVM>();
+            var queryContenu = db.usp_GetContenuIndisponible(paysId);
+            foreach (var item in queryContenu)
+            {
+                contenuVMs.Add(new ContenuVM(item.ContenuId, item.Date_de_sortie, item.Duree.Value, item.Titre_Original, item.Affiche, item.SaisonId, item.Languages, item.Origines));
+            }
+            return contenuVMs;
+        }
 
         public List<Contenu> GetAllContenu()
         {
             return db.Contenu.ToList();
         }
-        public Contenu GetContenuByID(int id)
-        {
-            return db.Contenu.Where(x => x.ContenuId == id).First();
-        }
-        //public List<Contenu> GetContenuBetween(int debut, int fin)
-        //{
-        //    return db.Contenu.Where(c => c.ContenuId >= debut && c.ContenuId <= fin).ToList();
-        //}
-
-        public List<Contenu> GetAllContenuByPays(int id)
-        {
-            var queryDoublageLangue = from C in GetAllContenu()
-                                      join CR in GetAllOffreContenu() on C.ContenuId equals CR.ContenuId
-                                      where CR.PaysId == id
-                                      select C;
-
-            return queryDoublageLangue.ToList();
-        }
-
+              
         //PAYS
         public List<Pays> GetAllPays()
         {
@@ -69,16 +73,8 @@ namespace NetflixPrjeq05.Service
         {
             return db.OffrePays.ToList();
         }
-        public List<int> GetAllContenuIdsByPays(int id)
-        {
-            return db.OffrePays.Where(o => o.PaysId == id).Select(o => o.ContenuId).ToList();
-        }
-
-        //OrigineContenu
-        public List<OriginePays> GetAllOrigineContenu()
-        {
-            return db.OriginePays.ToList();
-        }
+        
+        //OrigineContenu       
         public List<string> GetOriginePaysByContenuId(int id)
         {
             return db.OriginePays.Where(x => x.ContenuId == id).Select(y => y.Pays.Nom).ToList();
@@ -93,11 +89,7 @@ namespace NetflixPrjeq05.Service
             return queryDoublageLangue.ToList();
         }
 
-        //ContenuLangue
-        public List<ContenuLangue> GetAllContenuLangue()
-        {
-            return db.ContenuLangue.ToList();
-        }
+        //ContenuLangue      
         public List<string> GetLangueDoublageByContenuId(int id)
         {
             return db.ContenuLangue.Where(x => x.ContenuId == id).Select(y => y.Langue.Nom).ToList();
@@ -191,22 +183,7 @@ namespace NetflixPrjeq05.Service
             db.Regle.Remove(regle);
             db.SaveChanges();
         }
-        //============================================================================ACTEUR============================================================================
-        public List<Acteur> GetAllActeurs()
-        {
-            return db.Acteur.ToList();
-        }
-
-        public List<Vue> GetAllVues()
-        {
-            return db.Vue.ToList();
-        }
-
-        public List<ContenuActeur> GetAllContenuActeurs()
-        {
-            return db.ContenuActeur.ToList();
-        }
-
+        //============================================================================ACTEUR============================================================================        
         public List<ActeurVM> GetTop10ActeursPays(int paysId)
         {
             List<usp_GetTop10Acteurs_Result> t = new List<usp_GetTop10Acteurs_Result>();
@@ -219,25 +196,6 @@ namespace NetflixPrjeq05.Service
                 score++;
             }
             return acteurVMs;
-        }
-
-        //public List<Acteur> GetVuesActeursPays(int paysId)
-        //{
-        //    var queryActeurs = from v in GetAllVues()
-        //                       join c in GetAllContenu() on v.ContenuId equals c.ContenuId
-        //                       join ca in GetAllContenuActeurs() on c.ContenuId equals ca.ContenuId
-        //                       join a in GetAllActeurs() on ca.ActeurId equals a.ActeurId
-        //                       where v.PaysId == paysId
-        //                       select v;
-
-        //     var result = queryActeurs
-        //       //.Where(item => item.VisitingDate >= beginDate && item.VisitingDate < endDate)
-        //       .GroupBy(a => a.id)
-        //       .Select(e => new EmployeeCount
-        //       {
-        //           employee = e.Key,
-        //           count = e.Count()
-        //       }).ToList();
-        //}
+        }       
     }
 }

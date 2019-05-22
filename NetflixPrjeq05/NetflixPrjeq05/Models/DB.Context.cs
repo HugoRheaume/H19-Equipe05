@@ -48,5 +48,23 @@ namespace NetflixPrjeq05.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_GetTop10Acteurs_Result>("usp_GetTop10Acteurs", paysIdParameter);
         }
+    
+        public virtual ObjectResult<usp_GetContenuDisponible_Result> usp_GetContenuDisponible(Nullable<int> paysId)
+        {
+            var paysIdParameter = paysId.HasValue ?
+                new ObjectParameter("paysId", paysId) :
+                new ObjectParameter("paysId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_GetContenuDisponible_Result>("usp_GetContenuDisponible", paysIdParameter);
+        }
+    
+        public virtual ObjectResult<usp_GetContenuIndisponible_Result> usp_GetContenuIndisponible(Nullable<int> paysId)
+        {
+            var paysIdParameter = paysId.HasValue ?
+                new ObjectParameter("paysId", paysId) :
+                new ObjectParameter("paysId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_GetContenuIndisponible_Result>("usp_GetContenuIndisponible", paysIdParameter);
+        }
     }
 }

@@ -23,6 +23,18 @@ namespace NetflixPrjeq05.Models
             SaisonId = contenu.SaisonId;
         }
 
+        public ContenuVM(int contenuId, DateTime? date, int duree, string titre, string affiche, int? saisonId, string doublages, string origines)
+        {
+            ContenuId = contenuId;
+            DateSortie = date == null ? new DateTime() : date.Value;
+            Duree = duree;
+            Titre = titre;
+            Affiche = affiche;
+            SaisonId = saisonId;
+            Doublages = doublages;
+            Origines = origines;
+        }
+
 
         public int ContenuId { get; set; }      
         

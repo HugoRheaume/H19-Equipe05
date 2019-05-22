@@ -295,6 +295,12 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="usp_GetContenuDisponible" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="Contenus">
+          <Parameter Name="paysId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_GetContenuIndisponible" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="Contenus">
+          <Parameter Name="paysId" Type="int" Mode="In" />
+        </Function>
         <Function Name="usp_GetTop10Acteurs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="Contenus">
           <Parameter Name="paysId" Type="int" Mode="In" />
         </Function>
@@ -472,6 +478,12 @@
             <End Role="Vue" EntitySet="Vue" />
           </AssociationSet>
           <FunctionImport Name="usp_GetTop10Acteurs" ReturnType="Collection(DBModel.usp_GetTop10Acteurs_Result)">
+          <Parameter Name="paysId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetContenuDisponible" ReturnType="Collection(DBModel.usp_GetContenuDisponible_Result)">
+            <Parameter Name="paysId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetContenuIndisponible" ReturnType="Collection(DBModel.usp_GetContenuIndisponible_Result)">
             <Parameter Name="paysId" Mode="In" Type="Int32" />
           </FunctionImport>
           </EntityContainer>
@@ -778,6 +790,26 @@
           <Property Type="String" Name="Nom" Nullable="false" MaxLength="25" />
           <Property Type="String" Name="Affiche" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="usp_GetContenuDisponible_Result">
+          <Property Type="Int32" Name="ContenuId" Nullable="true" />
+          <Property Type="String" Name="Titre_Original" Nullable="true" MaxLength="255" />
+          <Property Type="DateTime" Name="Date_de_sortie" Nullable="true" />
+          <Property Type="String" Name="Affiche" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="Duree" Nullable="true" />
+          <Property Type="Int32" Name="SaisonId" Nullable="true" />
+          <Property Type="String" Name="Languages" Nullable="true" />
+          <Property Type="String" Name="Origines" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="usp_GetContenuIndisponible_Result">
+          <Property Type="Int32" Name="ContenuId" Nullable="false" />
+          <Property Type="String" Name="Titre_Original" Nullable="false" MaxLength="255" />
+          <Property Type="DateTime" Name="Date_de_sortie" Nullable="true" />
+          <Property Type="String" Name="Affiche" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="Duree" Nullable="true" />
+          <Property Type="Int32" Name="SaisonId" Nullable="true" />
+          <Property Type="String" Name="Languages" Nullable="true" />
+          <Property Type="String" Name="Origines" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -912,6 +944,34 @@
                 <ScalarProperty Name="TotalVues" ColumnName="TotalVues" />
                 <ScalarProperty Name="Nom" ColumnName="Nom" />
                 <ScalarProperty Name="Affiche" ColumnName="Affiche" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetContenuDisponible" FunctionName="DBModel.Store.usp_GetContenuDisponible">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBModel.usp_GetContenuDisponible_Result">
+                <ScalarProperty Name="ContenuId" ColumnName="ContenuId" />
+                <ScalarProperty Name="Titre_Original" ColumnName="Titre_Original" />
+                <ScalarProperty Name="Date_de_sortie" ColumnName="Date_de_sortie" />
+                <ScalarProperty Name="Affiche" ColumnName="Affiche" />
+                <ScalarProperty Name="Duree" ColumnName="Duree" />
+                <ScalarProperty Name="SaisonId" ColumnName="SaisonId" />
+                <ScalarProperty Name="Languages" ColumnName="Languages" />
+                <ScalarProperty Name="Origines" ColumnName="Origines" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetContenuIndisponible" FunctionName="DBModel.Store.usp_GetContenuIndisponible">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="DBModel.usp_GetContenuIndisponible_Result">
+                <ScalarProperty Name="ContenuId" ColumnName="ContenuId" />
+                <ScalarProperty Name="Titre_Original" ColumnName="Titre_Original" />
+                <ScalarProperty Name="Date_de_sortie" ColumnName="Date_de_sortie" />
+                <ScalarProperty Name="Affiche" ColumnName="Affiche" />
+                <ScalarProperty Name="Duree" ColumnName="Duree" />
+                <ScalarProperty Name="SaisonId" ColumnName="SaisonId" />
+                <ScalarProperty Name="Languages" ColumnName="Languages" />
+                <ScalarProperty Name="Origines" ColumnName="Origines" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

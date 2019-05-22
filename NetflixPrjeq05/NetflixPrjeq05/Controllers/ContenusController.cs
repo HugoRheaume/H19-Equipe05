@@ -72,15 +72,8 @@ namespace NetflixPrjeq05.Controllers
                         currentPaysId = id.Value;
                         m_colContenuIndisponibleCourant = null;
                     }
-                        
-                    var queryContenu = service.GetAllContenuByPays(currentPaysId);
-                    List<Contenu> colContenu = queryContenu.ToList();
-                    colContenuVM.Clear();
-
-                    foreach (Contenu item in colContenu)
-                    {
-                        colContenuVM.Add(GetContenuVMFromContenu(item));
-                    }
+              
+                     colContenuVM = service.GetContenuDisponible(currentPaysId); //<--
                      m_colContenuDisponibleCourant = colContenuVM;
                 }               
             }
@@ -138,21 +131,8 @@ namespace NetflixPrjeq05.Controllers
                         currentPaysId = id.Value;
                         m_colContenuDisponibleCourant = null;
                     }
-                        
-                    List<Contenu> queryContenuPays;
-                    List<Contenu> colContenu;
-                                                        
-                    queryContenuPays = service.GetAllContenuByPays(currentPaysId);
-                    List<int> contenuPaysIds = queryContenuPays.Select(c => c.ContenuId).ToList();                   
-                    colContenu = m_tousLeContenu.Where(c => !contenuPaysIds.Contains(c.ContenuId)).ToList();
-                    colContenuVM.Clear();
 
-                    foreach (Contenu contenu in colContenu)
-                    {
-                        
-                        colContenuVM.Add(GetContenuVMFromContenu(contenu));
-                    }
-
+                    colContenuVM = service.GetContenuIndisponible(currentPaysId);//<--
                     m_colContenuIndisponibleCourant = colContenuVM;
                 }             
             }
@@ -169,22 +149,7 @@ namespace NetflixPrjeq05.Controllers
             m_listMessages = null;
             return View(colContenuVM.ToPagedList(pageNumber, pageSize));            
         }    
-        
-        public ContenuVM GetContenuVMFromContenu(Contenu contenu)
-        {
-            ContenuVM contenuVM = new ContenuVM(contenu);
-            //Doublages                                    
-            List<string> queryLangue = service.GetLangueDoublageByContenuId(contenuVM.ContenuId);
-            string langues = string.Join(", ", queryLangue.ToList());
-            contenuVM.Doublages = langues;
-            //Origines                                   
-            List<string> queryOrignine = service.GetOriginePaysByContenuId(contenuVM.ContenuId);
-            string origines = string.Join(", ", queryOrignine.ToList());
-            contenuVM.Origines = origines;
-
-            return contenuVM;
-        }
-
+              
         //============================================================================AJOUTER============================================================================    
         #region Ajouter
         public ActionResult AjouterContenu(int? id)
@@ -273,7 +238,6 @@ namespace NetflixPrjeq05.Controllers
         }
 
         #endregion
-
         //============================================================================DELETE====================================================================
         #region Delete
         public ActionResult Delete(int? id)
